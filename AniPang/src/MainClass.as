@@ -19,6 +19,7 @@ package
 			if(_playView == null)
 				_playView = new PlayView();
 			
+			addChild(_playView);
 		}		
 		
 	}
