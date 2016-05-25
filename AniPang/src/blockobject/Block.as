@@ -11,6 +11,8 @@ package blockobject
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	
+	import util.BlockTypeSetting;
 
 	public class Block extends Sprite
 	{
