@@ -1,5 +1,7 @@
 package util
 {
+	import gameview.PlayView;
+
 	public class UtilFunction
 	{
 		public function UtilFunction() { throw new Error("Abstract Class"); }
@@ -7,7 +9,6 @@ package util
 		private static var _minimum : Number;
 		private static var _maximum : Number;
 		private static var _roundTolnerval : Number;
-		private static var _randomArray : Array;
 		
 		/**
 		 * @param minimum 큰 수
@@ -29,25 +30,32 @@ package util
 		 * 
 		 * @param randomArray 셔플을 적용 할 배열
 		 * @param maxNum 셔플을 적용 할 값으 최대 값
-		 * @return 셔플이 완료 된 배열
 		 * 배열의 값들을 랜덤하게 섞어 줍니다.
 		 */		
-		public static function shuffle(randomArray : Array, maxNum : Number) : Array
+		public static function shuffle(blockArray : Array, maxNum : Number) : void
 		{
-			_randomArray = randomArray;
+			var ny :Number;
+			var nx : Number;
 			
-			var n :Number;
 			var nTmp : Number;
 			
-			for(var i : Number = maxNum-1; i >= 0; --i)
+			while(true)
 			{
-				n = random(0,4,1);
-				nTmp = _randomArray[i];
-				_randomArray[i] = _randomArray[n];
-				_randomArray[n] = nTmp;
+				for(var i : Number = maxNum-1; i > 0; --i)
+				{
+					for(var j : Number = maxNum-1; j > 0; --j)
+					{
+						ny = random(1,7,1);
+						nx = random(1,7,1);
+						
+						nTmp = blockArray[i][j].blockType;
+						blockArray[i][j].blockType = blockArray[ny][nx].blockType;
+						blockArray[ny][nx].blockType = nTmp;
+					}
+				}
+				//섞인 블록들 중에 팡이 되는 경우가 있는지 검사합니다.
+				if(BlockTypeSetting.checkEmptyPang(blockArray) == true) break;
 			}
-			
-			return _randomArray;
 		}
 									
 		private static function section():Number
