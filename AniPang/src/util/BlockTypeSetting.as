@@ -3,20 +3,24 @@ package util
 	import flash.geom.Point;
 	
 	import blockobject.Block;
-	import blockobject.pattern;
 	import blockobject.blocktype.GeneralTypeBlock;
 	
 	import gameview.PlayView;
 
 	public class BlockTypeSetting
 	{
+		//힌트팡의 위치를 저장
 		private static var _hintPang : GeneralTypeBlock;
 		
 		public function BlockTypeSetting(){throw new Error("Abstract Class");}
 		
+		/**
+		 * @param blockTypeArray : 게임 시작 블록 타입을 저장 할 배열
+		 * 게임 시작전 블록의 타입을 설정하여 그 타입에 맞게 그려줍니다 
+		 * 팡되는 경우를 제외 합니다.
+		 */		
 		public static function startBlockSetting(blockTypeArray : Array) : void
 		{
-			
 			for(var i : int = 0; i < Block.MAX_COL; i++)
 			{
 				for(var j : int = 0; j < Block.MAX_ROW; j++)
@@ -30,8 +34,6 @@ package util
 					while(true)
 					{
 						blockTypeArray[i][j] = UtilFunction.random(1, 7, 1);
-							
-						if(i - 2 <= 0 && j - 2 <= 0) break;
 							
 						if(i - 2 > 0)
 						{
@@ -53,6 +55,41 @@ package util
 			}
 		}
 		
+		/**
+		 * 팡이 되는 경우가 있는 지 검사 합니다.
+		 * @param blockArray 게임 블록의 배열
+		 * @return 검사 여부 
+		 */		
+		public static function checkEmptyPang(blockArray : Array) : Boolean
+		{
+			for(var i : int = 1; i < Block.MAX_COL-1; i++)
+			{
+				for(var j : int = 1; j < Block.MAX_ROW-1; j++)
+				{
+					if(i - 2 > 0)
+					{
+						if(blockArray[i-1][j].blockType == blockArray[i][j].blockType 
+							&& blockArray[i-2][j].blockType == blockArray[i][j].blockType) 
+							return false;
+					}
+					
+					if(j - 2 > 0)
+					{
+						if(blockArray[i][j-1].blockType == blockArray[i][j].blockType 
+							&& blockArray[i][j-2].blockType == blockArray[i][j].blockType) 
+							return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		/**
+		 * 한 번의 움직임으로 팡의 가능 여부를 검사합니다. (총 16가지의 패턴검사)
+		 * @param blockArray 블록의 배열
+		 * @return 팡가능 여부 리턴
+		 * 
+		 */		
 		public static function checkPossiblePang(blockArray : Array) : Boolean
 		{
 			for(var i : int = 1; i < Block.MAX_COL-1; i++)
@@ -63,6 +100,7 @@ package util
 					
 					if(pattern.checkAllPattern(blockArray,index))
 					{
+						//한 번의 움직임으로 팡이 가능 할 경우의 블록을 힌트블록에 담습니다.
 						_hintPang = blockArray[j][i];
 						return true;
 					}
@@ -75,7 +113,16 @@ package util
 			return false;
 		}
 		
-		public static function checkPang(curBlock : Block, targetBlock : Block, blockArray : Array, moveDirect : int) : Boolean
+		/**
+		 * 사용자가 움직인 블록의 방향에 따라 팡을 체크하고 팡이 될 경우 제거 합니다.
+		 * @param curBlock 		사용자가 움직인 블록
+		 * @param targetBlock	사용자가 움직인 방향에 있는 블록
+		 * @param blockArray    게임내 블록 배열
+		 * @param moveDirect    움직인 방향
+		 * @return 
+		 * 
+		 */		
+		public static function checkMovePang(curBlock : Block, targetBlock : Block, blockArray : Array, moveDirect : int) : Boolean
 		{
 			var curBlockX : int = curBlock.blockX;
 			var curBlockY : int= curBlock.blockY;
@@ -127,6 +174,10 @@ package util
 				return false;
 		}
 		
+		/**
+		 * @param removecurBlockVector		사용자가 움직인 블록을 기준으로 팡이 되어서 사라질 블록들
+		 * @param removetargetBlockVector   사용자가 움직인 곳에 있던 블록의 팡이 되어서 사라질 블록들
+		 */		
 		private static function romoveBlock(removecurBlockVector : Vector.<Block>, removetargetBlockVector : Vector.<Block>) : void
 		{
 			if(removecurBlockVector != null)
@@ -147,6 +198,14 @@ package util
 			removetargetBlockVector = null;
 		}
 		
+		/**
+		 * 사용자가 블록을 움직인 방향이 수평일 경우
+		 * @param block			사용자가 선택 한 블록
+		 * @param blockArray	게임내 블록
+		 * @param moveDirect    왼쪽, 오른쪽
+		 * @return 
+		 * 
+		 */		
 		private static function horizonMoveCheck(block : Block, blockArray : Array, moveDirect : Number) : Vector.<Block>
 		{
 			var blockY : int = block.blockY;
@@ -229,6 +288,14 @@ package util
 				return null;
 		}
 		
+		/**
+		 * 사용자가 블록을 움직인 방향이 수직인 경우
+		 * @param block			사용자가 선택 한 블록
+		 * @param blockArray	게임내 블록
+		 * @param moveDirect    위쪽, 아래쪽
+		 * @return 
+		 * 
+		 */	
 		private static function verticalMoveCheck(block : Block, blockArray : Array, moveDirect : Number) : Vector.<Block>
 		{
 			var blockY : int = block.blockY;
