@@ -71,9 +71,10 @@ package loader
 				var xmlName:String = textureName.substring(0, textureName.lastIndexOf(".")) + ".xml";
 				if(checkXml(xmlName))
 				{
-					_atlasTextureDictionary[textureName] = new TextureAtlas(_textureDictionary[textureName], _xmlDictionary[xmlName]);
+					_atlasTextureDictionary[textureName] = new TextureAtlas(_textureDictionary[textureName], XML(_xmlDictionary[xmlName]));
 				}
 			}
+			_created = true;
 		}
 		
 		//이미지와 이름이 같은 xml이 존재하는지 검사합니다.
