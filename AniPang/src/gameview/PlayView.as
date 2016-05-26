@@ -4,8 +4,11 @@ package gameview
 	
 	import loader.TextureManager;
 	
+	import object.GameTextField.ComboTextField;
 	import object.Block.Block;
 	import object.Block.Cell;
+	
+	import score.ScoreManager;
 	
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -15,6 +18,7 @@ package gameview
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
 	
 	import timer.Timer;
@@ -57,6 +61,9 @@ package gameview
 		
 		private var _timer : Timer;
 		
+		private var _scoreTextField : TextField;
+		private var _comboTextField : ComboTextField;
+		
 		public function PlayView()
 		{
 			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
@@ -85,7 +92,7 @@ package gameview
 			//아래쪽 패널을 초기화 합니다.
 			initDownPannel();
 			//게임 화면을 초기화 합니다.
-			ininMainPannel();
+			initMainPannel();
 			
 			addChild(_upPannel);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -93,14 +100,17 @@ package gameview
 		
 		private function onEnterFrame():void
 		{
+			_scoreTextField.text = String(ScoreManager.instance.scoreCnt);
+			
 			//한 번의 움직으로 팡이 가능여부 판단
 			if(BlockTypeSetting.checkPossiblePang(_cellArray) == true)
 			{
 				var curHintTimer : Number = getTimer();
 				
-				//팡이 가능 하면 힌트 팡 2초마다 출력 (현재 테스트로 0.2초)
-				if(curHintTimer - _preHintTimer > 2000)
+				//팡이 가능 하면 힌트 팡 3초마다 출력
+				if(curHintTimer - _preHintTimer > 2400)
 				{
+					ScoreManager.instance.comboCnt = 0;
 					BlockTypeSetting.hintPang.block.showCryState();
 				}
 				
@@ -213,8 +223,9 @@ package gameview
 		/** 
 		 * 실제 게임을 하는 중앙 화면
 		 */		
-		private function ininMainPannel():void
+		private function initMainPannel():void
 		{
+			_comboTextField = new ComboTextField(AniPang.stageWidth/3,AniPang.stageHeight/10);
 
 			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
 			{
@@ -225,6 +236,9 @@ package gameview
 					_cellArray[i][j].addEventListener(TouchEvent.TOUCH, onBlockClicked);
 				}
 			}
+			_comboTextField.x = AniPang.stageWidth*0.15;
+			_comboTextField.y = AniPang.stageHeight*0.15;
+			addChild(_comboTextField);
 		}
 		
 		/**
@@ -300,6 +314,9 @@ package gameview
 				
 		}
 		
+		/** 
+		 * 랜덤판 클릭 했을 경우 랜덤으로 한 종류 모두 파괴
+		 */		
 		private function clickedRandomBlock():void
 		{
 			var randomValue : int = UtilFunction.random(1,7,1);
@@ -338,6 +355,8 @@ package gameview
 			}
 			else
 			{
+				ScoreManager.instance.comboCnt++;
+				_comboTextField.showCombo("Combo "+String(ScoreManager.instance.comboCnt));
 				BlockTypeSetting.hintPang.block.showIdleState();
 				_preHintTimer = getTimer();
 			}
@@ -385,9 +404,14 @@ package gameview
 			_pauseImage.x = _upPannelImage.width - _pauseImage.width*1.5;
 			_pauseImage.y = _fireBlockAnimaiton.y;
 			
+			_scoreTextField = new TextField(_upPannelImage.width, _upPannelImage.height, "0");
+			_scoreTextField.format.color = 0xffffff;
+			_scoreTextField.format.size = _upPannelImage.height*0.3;
+			
 			_upPannel.addChild(_pauseImage);
 			_upPannel.addChild(_upPannelImage);
 			_upPannel.addChild(_fireBlockAnimaiton);
+			_upPannel.addChild(_scoreTextField);
 		}
 		
 		/** 
