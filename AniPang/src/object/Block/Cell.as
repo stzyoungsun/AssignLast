@@ -135,8 +135,8 @@ package object.Block
 			_cellType = value;
 			if(_block != null)
 			{
-				_block.blockType = _cellType;
 				checkcellType();
+				_block.blockType = _cellType;
 				_block.frames = _frame;
 				_block.drawFlag = true;
 			}
