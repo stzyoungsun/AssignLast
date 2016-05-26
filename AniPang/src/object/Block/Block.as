@@ -2,6 +2,8 @@ package object.Block
 {
 	import flash.utils.getTimer;
 	
+	import score.ScoreManager;
+	
 	import starling.core.Starling;
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
@@ -40,9 +42,11 @@ package object.Block
 			super(frame);
 			_cell = cell;
 			_frames = frame;
+			
 			this.width = AniPang.stageWidth/7;
 			this.height = AniPang.stageHeight*2/21;
 			this.stop();
+			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
@@ -58,7 +62,7 @@ package object.Block
 		
 		private function onEnterFrame():void
 		{
-			if(this.visible == false) return;
+			if(this.visible == false){return;}
 			
 			if(_drawFlag == true)
 				drawBlock();
@@ -106,6 +110,9 @@ package object.Block
 						Starling.juggler.add(this);
 						this.play();
 						_pangStartFlag = true;
+						
+						ScoreManager.instance.scoreCnt = 10;
+						
 					}
 					
 					if(this.currentFrame >= 2)
