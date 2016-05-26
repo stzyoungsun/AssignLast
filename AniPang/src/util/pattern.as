@@ -2,7 +2,7 @@ package util
 {
 	import flash.geom.Point;
 	
-	import object.Cell;
+	import object.Block.Cell;
 
 	public class pattern
 	{

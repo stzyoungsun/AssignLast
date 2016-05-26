@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="gameView.png">
+   <SubTexture name="background" x="0" y="201" width="641" height="46" />
+   <SubTexture name="bar" x="0" y="248" width="641" height="46" />
+   <SubTexture name="fire1" x="642" y="201" width="68" height="68" />
+   <SubTexture name="fire2" x="801" y="101" width="68" height="68" />
+   <SubTexture name="fire3" x="902" y="0" width="68" height="68" />
+   <SubTexture name="gaze1" x="0" y="295" width="394" height="31" />
+   <SubTexture name="gaze10" x="0" y="327" width="394" height="31" />
+   <SubTexture name="gaze2" x="0" y="359" width="394" height="31" />
+   <SubTexture name="gaze3" x="0" y="391" width="394" height="31" />
+   <SubTexture name="gaze4" x="0" y="423" width="394" height="31" />
+   <SubTexture name="gaze5" x="395" y="295" width="394" height="31" />
+   <SubTexture name="gaze6" x="395" y="327" width="394" height="31" />
+   <SubTexture name="gaze7" x="395" y="359" width="394" height="31" />
+   <SubTexture name="gaze8" x="395" y="391" width="394" height="31" />
+   <SubTexture name="gaze9" x="395" y="423" width="394" height="31" />
+   <SubTexture name="statusbar" x="0" y="0" width="800" height="200" />
+   <SubTexture name="stopbtn" x="801" y="0" width="100" height="100" />
+</TextureAtlas>
