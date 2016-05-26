@@ -1,4 +1,4 @@
-package object
+package object.Block
 {
 	import flash.utils.getTimer;
 	
