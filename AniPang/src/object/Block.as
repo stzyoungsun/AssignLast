@@ -58,11 +58,6 @@ package object
 		
 		private function onEnterFrame():void
 		{
-			if(this.isPlaying == true)
-			{
-				trace(_blockType);
-			}
-			
 			if(this.visible == false) return;
 			
 			if(_drawFlag == true)
@@ -86,8 +81,6 @@ package object
 		
 		private function AnimationPang():void
 		{
-			
-			
 			switch(_blockType)
 			{
 				case BLOCK_RANDOM:
@@ -103,7 +96,6 @@ package object
 						_randomFlag = true;
 						break;
 					}
-				
 				}
 					
 				case BLOCK_PANG:
@@ -123,13 +115,10 @@ package object
 					break;
 				}
 			}
-			
 		}
 		
 		private function drawBlock() : void
 		{
-			if(_blockType == 9)
-				trace("123");
 			var frameCount : int = _frames.length;
 			while(this.numFrames <  _frames.length)
 			{
