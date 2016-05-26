@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TextureAtlas imagePath="block.png">
-   <SubTexture name="cat1.png" x="0" y="0" width="80" height="80" />
-   <SubTexture name="cat2.png" x="81" y="0" width="80" height="80" />
-   <SubTexture name="chick1.png" x="162" y="0" width="80" height="80" />
-   <SubTexture name="chick2.png" x="0" y="81" width="80" height="80" />
-   <SubTexture name="dog1.png" x="81" y="81" width="80" height="80" />
-   <SubTexture name="dog2.png" x="0" y="162" width="80" height="80" />
-   <SubTexture name="monkey1.png" x="81" y="162" width="80" height="80" />
-   <SubTexture name="monkey2.png" x="162" y="81" width="80" height="80" />
-   <SubTexture name="pig1.png" x="162" y="162" width="80" height="80" />
-   <SubTexture name="pig2.png" x="243" y="0" width="80" height="80" />
-   <SubTexture name="rabbit1.png" x="243" y="81" width="80" height="80" />
-   <SubTexture name="rabbit2.png" x="324" y="0" width="80" height="80" />
-   <SubTexture name="rat1.png" x="243" y="162" width="80" height="80" />
-   <SubTexture name="rat2.png" x="324" y="81" width="80" height="80" />
+   <SubTexture name="cat1" x="121" y="121" width="80" height="80" />
+   <SubTexture name="cat2" x="242" y="0" width="80" height="80" />
+   <SubTexture name="chick1" x="242" y="81" width="80" height="80" />
+   <SubTexture name="chick2" x="323" y="0" width="80" height="80" />
+   <SubTexture name="dog1" x="404" y="0" width="80" height="80" />
+   <SubTexture name="dog2" x="323" y="81" width="80" height="80" />
+   <SubTexture name="fire1" x="81" y="283" width="68" height="68" />
+   <SubTexture name="fire2" x="81" y="352" width="68" height="68" />
+   <SubTexture name="fire3" x="150" y="283" width="68" height="68" />
+   <SubTexture name="monkey1" x="202" y="162" width="80" height="80" />
+   <SubTexture name="monkey2" x="283" y="162" width="80" height="80" />
+   <SubTexture name="pang1" x="0" y="0" width="120" height="120" />
+   <SubTexture name="pang2" x="121" y="0" width="120" height="120" />
+   <SubTexture name="pang3" x="0" y="121" width="120" height="120" />
+   <SubTexture name="pig1" x="404" y="81" width="80" height="80" />
+   <SubTexture name="pig2" x="364" y="162" width="80" height="80" />
+   <SubTexture name="rabbit1" x="0" y="242" width="80" height="80" />
+   <SubTexture name="rabbit2" x="121" y="202" width="80" height="80" />
+   <SubTexture name="random1" x="219" y="243" width="68" height="68" />
+   <SubTexture name="random2" x="81" y="421" width="68" height="68" />
+   <SubTexture name="rat1" x="0" y="323" width="80" height="80" />
+   <SubTexture name="rat2" x="0" y="404" width="80" height="80" />
 </TextureAtlas>
