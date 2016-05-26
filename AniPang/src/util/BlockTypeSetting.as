@@ -4,8 +4,8 @@ package util
 	
 	import gameview.PlayView;
 	
-	import object.Block;
-	import object.Cell;
+	import object.Block.Block;
+	import object.Block.Cell;
 
 	public class BlockTypeSetting
 	{
@@ -188,7 +188,7 @@ package util
 			if(removecurCellVector != null)
 			{
 				var curlenght : int = removecurCellVector.length;
-				if(curlenght == 4)
+				if(curlenght  >= 4)
 				{
 					removecurCellVector.pop().cellType = Block.BLOCK_RANDOM;
 					curlenght--;
@@ -199,7 +199,15 @@ package util
 			
 			if(removetargetCellVector != null)
 			{
+				
 				var targetlenght : int = removetargetCellVector.length;
+				
+				if(targetlenght  >= 4)
+				{
+					removetargetCellVector.pop().cellType = Block.BLOCK_RANDOM;
+					targetlenght--; 
+				}
+				
 				for(var j : int = 0; j < targetlenght; j ++)
 					removetargetCellVector.pop().cellType = Block.BLOCK_PANG;
 			}
