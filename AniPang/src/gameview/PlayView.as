@@ -4,21 +4,27 @@ package gameview
 	
 	import loader.TextureManager;
 	
-	import object.Block;
-	import object.Cell;
+	import object.Block.Block;
+	import object.Block.Cell;
 	
+	import starling.core.Starling;
 	import starling.display.Image;
+	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.textures.TextureAtlas;
+	
+	import timer.Timer;
 	
 	import util.BlockTypeSetting;
 	import util.UtilFunction;
 
 	public class PlayView extends Sprite
 	{
+		private var _gameViewAtlas : TextureAtlas;
 		private var _cellArray : Array = new Array();
 		
 		private var _upPannel : Sprite = new Sprite();
@@ -44,9 +50,17 @@ package gameview
 		private var _backGround : Image;
 		private var _gameWindowImage : Image;
 		private var _gameWindow : Sprite;
+		
+		private var _upPannelImage : Image;
+		private var _fireBlockAnimaiton : MovieClip;
+		private var _pauseImage : Image;
+		
+		private var _timer : Timer;
+		
 		public function PlayView()
 		{
-
+			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
+			
 			_backGround = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_backGround.width = AniPang.stageWidth;
 			_backGround.height = AniPang.stageHeight;
@@ -73,6 +87,7 @@ package gameview
 			//게임 화면을 초기화 합니다.
 			ininMainPannel();
 			
+			addChild(_upPannel);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
@@ -336,8 +351,12 @@ package gameview
 		 */		
 		private function initDownPannel():void
 		{
-		
+			_timer = new Timer();
+			_timer.timeInit(0, AniPang.stageHeight*0.92, AniPang.stageWidth, AniPang.stageHeight*0.05);
+			_timer.start();
 			
+			_timer.addEventListener("exit", onExit);
+			addChild(_timer);
 		}
 		
 		/** 
@@ -345,8 +364,30 @@ package gameview
 		 */		
 		private function initUpPannel():void
 		{
+			_upPannel.x = 0;
+			_upPannel.y = AniPang.stageHeight/30;
+				
+			_upPannelImage = new Image(_gameViewAtlas.getTexture("statusbar"));
+			_upPannelImage.width = AniPang.stageWidth;
+			_upPannelImage.height = AniPang.stageHeight/6;
 			
+			_fireBlockAnimaiton = new MovieClip(_gameViewAtlas.getTextures("fire"),5);
+			_fireBlockAnimaiton.width = _upPannelImage.height/2;
+			_fireBlockAnimaiton.height = _upPannelImage.height/2;
+			_fireBlockAnimaiton.x = _fireBlockAnimaiton.width*0.42;
+			_fireBlockAnimaiton.y = _fireBlockAnimaiton.height*0.42;
+			_fireBlockAnimaiton.play();
+			Starling.juggler.add(_fireBlockAnimaiton);
 			
+			_pauseImage = new Image(_gameViewAtlas.getTexture("stopbtn"));
+			_pauseImage.width = _fireBlockAnimaiton.width;
+			_pauseImage.height = _fireBlockAnimaiton.height;
+			_pauseImage.x = _upPannelImage.width - _pauseImage.width*1.5;
+			_pauseImage.y = _fireBlockAnimaiton.y;
+			
+			_upPannel.addChild(_pauseImage);
+			_upPannel.addChild(_upPannelImage);
+			_upPannel.addChild(_fireBlockAnimaiton);
 		}
 		
 		/** 
@@ -362,10 +403,16 @@ package gameview
 					//블록의 타입 배열에 따라 객체 생성
 					_cellArray[i][j] = new Cell();
 					_cellArray[i][j].initCell(i, j);
-
 				}
 			}
 			BlockTypeSetting.startBlockSetting(_cellArray);
+		}
+		
+		private function onExit():void
+		{
+			_timer.stop();
+			
+			trace("종료");
 		}
 	}
 }
