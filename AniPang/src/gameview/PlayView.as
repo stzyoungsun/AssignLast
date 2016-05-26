@@ -101,7 +101,6 @@ package gameview
 				if(checkFull() == true)
 				{
 					//블록을 랜덤으로 섞음
-					trace("터질 꺼 없음");
 					_preHintTimer = getTimer();
 					BlockTypeSetting.hintPang.block.showIdleState();
 					UtilFunction.shuffle(_cellArray, 8);
@@ -226,6 +225,14 @@ package gameview
 				{
 					case TouchPhase.BEGAN:
 					{
+						if((event.currentTarget as Cell).cellType == Block.BLOCK_RANDOM)
+						{
+							BlockTypeSetting.hintPang.block.showIdleState();
+							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
+							clickedRandomBlock();
+							return;
+						}
+							
 						//전에 클릭 된 블록이 있을 경우 전에 클릭 된 블록은 일반 상태로 변경
 						if(_clickedCell.length != 0)
 						{
@@ -276,6 +283,19 @@ package gameview
 				}
 			}
 				
+		}
+		
+		private function clickedRandomBlock():void
+		{
+			var randomValue : int = UtilFunction.random(1,7,1);
+			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
+			{
+				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
+				{
+					if(_cellArray[i][j].cellType == randomValue)
+						_cellArray[i][j].cellType = Block.BLOCK_PANG;
+				}
+			}
 		}
 		
 		/**
