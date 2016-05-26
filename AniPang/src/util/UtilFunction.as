@@ -32,7 +32,7 @@ package util
 		 * @param maxNum 셔플을 적용 할 값으 최대 값
 		 * 배열의 값들을 랜덤하게 섞어 줍니다.
 		 */		
-		public static function shuffle(blockArray : Array, maxNum : Number) : void
+		public static function shuffle(cellArray : Array, maxNum : Number) : void
 		{
 			var ny :Number;
 			var nx : Number;
@@ -48,13 +48,13 @@ package util
 						ny = random(1,7,1);
 						nx = random(1,7,1);
 						
-						nTmp = blockArray[i][j].blockType;
-						blockArray[i][j].blockType = blockArray[ny][nx].blockType;
-						blockArray[ny][nx].blockType = nTmp;
+						nTmp = cellArray[i][j].cellType;
+						cellArray[i][j].cellType = cellArray[ny][nx].cellType;
+						cellArray[ny][nx].cellType = nTmp;
 					}
 				}
 				//섞인 블록들 중에 팡이 되는 경우가 있는지 검사합니다.
-				if(BlockTypeSetting.checkEmptyPang(blockArray) == true) break;
+				if(BlockTypeSetting.checkEmptyPang(cellArray) == true) break;
 			}
 		}
 									
