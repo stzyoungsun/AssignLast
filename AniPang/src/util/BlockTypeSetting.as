@@ -4,8 +4,10 @@ package util
 	
 	import gameview.PlayView;
 	
-	import object.Block;
-	import object.Cell;
+	import object.Block.Block;
+	import object.Block.Cell;
+	
+	import score.ScoreManager;
 
 	public class BlockTypeSetting
 	{
@@ -23,6 +25,7 @@ package util
 		{
 			for(var i : int = 0; i < Cell.MAX_COL; i++)
 			{
+				
 				for(var j : int = 0; j < Cell.MAX_ROW; j++)
 				{
 					if(i == 0 || i == Cell.MAX_COL-1 || j == 0 || j == Cell.MAX_ROW-1)
@@ -188,11 +191,13 @@ package util
 			if(removecurCellVector != null)
 			{
 				var curlenght : int = removecurCellVector.length;
-				if(curlenght == 4)
+				
+				if(curlenght >= 4)
 				{
 					removecurCellVector.pop().cellType = Block.BLOCK_RANDOM;
 					curlenght--;
 				}
+				
 				for(var i : int = 0; i < curlenght; i ++)
 					removecurCellVector.pop().cellType = Block.BLOCK_PANG;
 			}
@@ -200,6 +205,13 @@ package util
 			if(removetargetCellVector != null)
 			{
 				var targetlenght : int = removetargetCellVector.length;
+				
+				if(targetlenght >= 4)
+				{
+					removetargetCellVector.pop().cellType = Block.BLOCK_RANDOM;
+					targetlenght--;
+				}
+				
 				for(var j : int = 0; j < targetlenght; j ++)
 					removetargetCellVector.pop().cellType = Block.BLOCK_PANG;
 			}
