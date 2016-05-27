@@ -4,9 +4,10 @@ package gameview
 	
 	import loader.TextureManager;
 	
-	import object.GameTextField.ComboTextField;
 	import object.Block.Block;
 	import object.Block.Cell;
+	import object.GameTextField.ComboTextField;
+	import object.Progress.Progress;
 	
 	import score.ScoreManager;
 	
@@ -55,8 +56,11 @@ package gameview
 		private var _gameWindowImage : Image;
 		private var _gameWindow : Sprite;
 		
+		private static const FIRE_DRAW_CONUT : Number = 50;
+		
 		private var _upPannelImage : Image;
 		private var _fireBlockAnimaiton : MovieClip;
+		private var _fireProgress : Progress;
 		private var _pauseImage : Image;
 		
 		private var _timer : Timer;
@@ -96,11 +100,14 @@ package gameview
 			
 			addChild(_upPannel);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		
 		}
 		
 		private function onEnterFrame():void
 		{
-			_scoreTextField.text = String(ScoreManager.instance.scoreCnt);
+			
+			_scoreTextField.text = UtilFunction.makeCurrency(String(ScoreManager.instance.scoreCnt));
+			drawFirePang();
 			
 			//한 번의 움직으로 팡이 가능여부 판단
 			if(BlockTypeSetting.checkPossiblePang(_cellArray) == true)
@@ -108,7 +115,7 @@ package gameview
 				var curHintTimer : Number = getTimer();
 				
 				//팡이 가능 하면 힌트 팡 3초마다 출력
-				if(curHintTimer - _preHintTimer > 2400)
+				if(curHintTimer - _preHintTimer > 2000)
 				{
 					ScoreManager.instance.comboCnt = 0;
 					BlockTypeSetting.hintPang.block.showCryState();
@@ -146,6 +153,22 @@ package gameview
 		}
 		
 		/**
+		 * 1만점 당 파이어 팡 하나를 생성합니다.
+		 */		
+		private function drawFirePang():void
+		{
+			var randomX : int = UtilFunction.random(1,7,1);
+			var randomY : int = UtilFunction.random(1,7,1);
+			
+			_fireProgress.calcValue(FIRE_DRAW_CONUT,ScoreManager.instance.pangCount);
+			
+			if(ScoreManager.instance.pangCount > FIRE_DRAW_CONUT)
+			{
+				ScoreManager.instance.fireInit();
+				_cellArray[randomY][randomX].cellType = Block.BLOCK_FIRE;
+			}
+		}
+		/**
 		 * 블록을 랜덤하게 생성 후 아래쪽 팡여부 체크
 		 */		
 		private function createRandomBlock(rowValue : int):void
@@ -166,7 +189,7 @@ package gameview
 				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
 				{
 					if(_cellArray[i][j].cellType == Block.BLOCK_REMOVE
-						||_cellArray[i][j].cellType == Block.BLOCK_PANG)
+					  || _cellArray[i][j].cellType == Block.BLOCK_PANG)
 						return false;
 				}
 			}
@@ -200,7 +223,6 @@ package gameview
 					if(_cellArray[i+1][j].cellType == Block.BLOCK_REMOVE)
 					{
 						_cellArray[i][j].y += AniPang.stageHeight/30;
-						BlockTypeSetting.hintPang.block.showIdleState();
 						if(_cellArray[i][j].y >= _cellArray[i+1][j].y)
 						{
 							_cellArray[i][j].y = _cellArray[i+1][j].y - _cellArray[i][j].height;
@@ -210,7 +232,7 @@ package gameview
 							_cellArray[i+1][j].cellType = swapTemp;
 							
 							if(_cellArray[i+2][j].cellType != Block.BLOCK_REMOVE 
-								|| _cellArray[i+2][j].cellType != Block.BLOCK_PANG)	
+								&&_cellArray[i+2][j].cellType != Block.BLOCK_PANG)	
 							{
 								BlockTypeSetting.checkMovePang(_cellArray[i+1][j], null, _cellArray, DOWN_MOVE);
 							}	
@@ -256,12 +278,18 @@ package gameview
 					{
 						if((event.currentTarget as Cell).cellType == Block.BLOCK_RANDOM)
 						{
-							BlockTypeSetting.hintPang.block.showIdleState();
 							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
 							clickedRandomBlock();
 							return;
 						}
-							
+						
+						if((event.currentTarget as Cell).cellType == Block.BLOCK_FIRE)
+						{
+							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
+							clickedFireBlock(event.currentTarget as Cell);
+							return;
+						}
+						
 						//전에 클릭 된 블록이 있을 경우 전에 클릭 된 블록은 일반 상태로 변경
 						if(_clickedCell.length != 0)
 						{
@@ -285,6 +313,7 @@ package gameview
 						{
 							if(intervalX <= 0)
 							{
+								_clickedCell[0].block.moveState = Block.LEFT_MOVE;
 								swapCell(_clickedCell[0], _cellArray[_clickedCell[0].cellY][_clickedCell[0].cellX-1], LEFT_MOVE);
 							}
 							else
@@ -314,11 +343,23 @@ package gameview
 				
 		}
 		
+		private function clickedFireBlock(cell : Cell):void
+		{
+			_preHintTimer = getTimer();
+			var randomValue : int = UtilFunction.random(1,7,1);
+			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
+			{
+				_cellArray[cell.cellY][i].cellType = Block.BLOCK_PANG;
+				_cellArray[i][cell.cellX].cellType = Block.BLOCK_PANG;
+			}
+		}
+		
 		/** 
 		 * 랜덤판 클릭 했을 경우 랜덤으로 한 종류 모두 파괴
 		 */		
 		private function clickedRandomBlock():void
 		{
+			_preHintTimer = getTimer();
 			var randomValue : int = UtilFunction.random(1,7,1);
 			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
 			{
@@ -357,8 +398,7 @@ package gameview
 			{
 				ScoreManager.instance.comboCnt++;
 				_comboTextField.showCombo("Combo "+String(ScoreManager.instance.comboCnt));
-				BlockTypeSetting.hintPang.block.showIdleState();
-				_preHintTimer = getTimer();
+
 			}
 			
 			curCell.block.showIdleState();
@@ -406,12 +446,17 @@ package gameview
 			
 			_scoreTextField = new TextField(_upPannelImage.width, _upPannelImage.height, "0");
 			_scoreTextField.format.color = 0xffffff;
-			_scoreTextField.format.size = _upPannelImage.height*0.3;
+			_scoreTextField.format.size = _upPannelImage.height*0.2;
+			
+			_fireProgress = new Progress();
+			_fireProgress.ProgressInit(_fireBlockAnimaiton.x,_fireBlockAnimaiton.y + _fireBlockAnimaiton.height, _fireBlockAnimaiton.width, _fireBlockAnimaiton.height/3);
+			_fireProgress.calcValue(FIRE_DRAW_CONUT,0);
 			
 			_upPannel.addChild(_pauseImage);
 			_upPannel.addChild(_upPannelImage);
 			_upPannel.addChild(_fireBlockAnimaiton);
 			_upPannel.addChild(_scoreTextField);
+			_upPannel.addChild(_fireProgress);
 		}
 		
 		/** 
@@ -427,15 +472,23 @@ package gameview
 					//블록의 타입 배열에 따라 객체 생성
 					_cellArray[i][j] = new Cell();
 					_cellArray[i][j].initCell(i, j);
+					_cellArray[i][j].addEventListener("hintInit", onHintInit);
 				}
 			}
 			BlockTypeSetting.startBlockSetting(_cellArray);
 		}
 		
+		private function onHintInit():void
+		{
+			_preHintTimer = getTimer();
+			BlockTypeSetting.hintPang.block.showIdleState();
+		}
+		
 		private function onExit():void
 		{
 			_timer.stop();
-			
+			removeEventListeners();
+			//removeChildren(); 
 			trace("종료");
 		}
 	}

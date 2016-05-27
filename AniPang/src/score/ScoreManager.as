@@ -23,6 +23,7 @@ package score
 		
 		private var _comboCnt : int = 0;
 		private var _scoreCnt : int = 0;
+		private var _pangCount : int = 0;
 		private var _preTimer : int = 0;
 		public function get scoreCnt():int
 		{
@@ -31,7 +32,7 @@ package score
 		
 		public function set scoreCnt(value:int):void
 		{
-			_scoreCnt =_scoreCnt + value*((comboCnt+1)*1.3);
+			_scoreCnt =_scoreCnt + value*(Math.pow(2,(comboCnt+1)));
 		}
 		
 		public function get comboCnt():int
@@ -44,5 +45,18 @@ package score
 			_comboCnt = value;
 			trace(_comboCnt);
 		}
+		
+		public function fireInit() : void
+		{
+			_pangCount = 0;
+		}
+		
+		public function set pangCount(value:int):void
+		{
+			_pangCount+=value;
+		}
+		
+		public function get pangCount():int{return _pangCount;}
+		
 	}
 }
