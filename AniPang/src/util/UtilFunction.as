@@ -78,5 +78,24 @@ package util
 			
 			return Math.floor(nRandomNumber / _roundTolnerval) * _roundTolnerval;
 		}
+		
+		/** 
+		 * @param str 숫자를 담은 문자열
+		 * @return 콤마 정리가 된 문자열
+		 * 천단위에 콤마를 삽입하는 문자열
+		 */		
+		public static function makeCurrency(str:String):String
+		{
+			var arr:Array = str.split("");
+			var len:uint = arr.length;
+			
+			for(var i:int=len-1, cnt:int=1; i>0; i--, cnt++){
+				if((cnt % 3)==0){
+					arr[i] = "," + arr[i];
+				}
+			}
+			str = arr.join("");
+			return str;
+		}
 	}
 }
