@@ -140,35 +140,35 @@ package util
 			
 			switch(moveDirect)
 			{
-				case PlayView.UP_MOVE:
+				case Block.UP_MOVE:
 				{
-					removecurCellVector = verticalMoveCheck(curCell, cellArray, PlayView.UP_MOVE);
+					removecurCellVector = verticalMoveCheck(curCell, cellArray, Block.UP_MOVE);
 					if(targetCell != null)
-						removetargetCellVector = verticalMoveCheck(targetCell, cellArray, PlayView.DOWN_MOVE);
+						removetargetCellVector = verticalMoveCheck(targetCell, cellArray, Block.DOWN_MOVE);
 					break;
 				}
 				
-				case PlayView.DOWN_MOVE:
+				case Block.DOWN_MOVE:
 				{
-					removecurCellVector = verticalMoveCheck(curCell, cellArray, PlayView.DOWN_MOVE);
+					removecurCellVector = verticalMoveCheck(curCell, cellArray, Block.DOWN_MOVE);
 					if(targetCell != null)
-						removetargetCellVector = verticalMoveCheck(targetCell, cellArray, PlayView.UP_MOVE);
+						removetargetCellVector = verticalMoveCheck(targetCell, cellArray, Block.UP_MOVE);
 					break;
 				}
 					
-				case PlayView.LEFT_MOVE:
+				case Block.LEFT_MOVE:
 				{
-					removecurCellVector = horizonMoveCheck(curCell, cellArray, PlayView.LEFT_MOVE);
+					removecurCellVector = horizonMoveCheck(curCell, cellArray, Block.LEFT_MOVE);
 					if(targetCell != null)
-						removetargetCellVector = horizonMoveCheck(targetCell, cellArray, PlayView.RIGHT_MOVE);
+						removetargetCellVector = horizonMoveCheck(targetCell, cellArray, Block.RIGHT_MOVE);
 					break;
 				}
 					
-				case PlayView.RIGHT_MOVE:
+				case Block.RIGHT_MOVE:
 				{
-					removecurCellVector = horizonMoveCheck(curCell, cellArray, PlayView.RIGHT_MOVE);
+					removecurCellVector = horizonMoveCheck(curCell, cellArray, Block.RIGHT_MOVE);
 					if(targetCell != null)
-						removetargetCellVector = horizonMoveCheck(targetCell, cellArray, PlayView.LEFT_MOVE);
+						removetargetCellVector = horizonMoveCheck(targetCell, cellArray, Block.LEFT_MOVE);
 					break;
 				}
 			}
@@ -269,7 +269,7 @@ package util
 				removeBlockVector = new Vector.<Cell>;	
 			}
 			
-			if(moveDirect == PlayView.RIGHT_MOVE)
+			if(moveDirect == Block.RIGHT_MOVE)
 			{
 				while(cellX <= Cell.MAX_ROW - 1)
 				{
@@ -359,7 +359,7 @@ package util
 				removeBlockVector = new Vector.<Cell>;	
 			}
 			
-			if(moveDirect == PlayView.UP_MOVE)
+			if(moveDirect == Block.UP_MOVE)
 			{
 				while(cellY >= 2)
 				{

@@ -2,10 +2,10 @@ package object.Block
 {
 	import loader.TextureManager;
 	
-	
+	import starling.core.Starling;
 	import starling.display.Sprite;
-	import starling.textures.TextureAtlas;
 	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
 
 	public class Cell extends Sprite
 	{
@@ -42,8 +42,8 @@ package object.Block
 		{
 			checkcellType();
 			_block = new Block(_frame, this);
+			Starling.juggler.add(_block);
 			_block.blockType = cellType;
-			
 			this.x = (_cellX-1)*_block.width;
 			this.y = (_cellY-1)*_block.height;
 			
@@ -135,6 +135,7 @@ package object.Block
 			_cellType = value;
 			if(_block != null)
 			{
+				_block.stop();
 				checkcellType();
 				_block.blockType = _cellType;
 				_block.frames = _frame;
