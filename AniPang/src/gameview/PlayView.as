@@ -29,45 +29,44 @@ package gameview
 
 	public class PlayView extends Sprite
 	{
+		//파이어팡이 등장하는 블록 제거 개수
+		private static const FIRE_DRAW_CONUT : Number = 50;
+		//게임 텍스쳐 아틀라스
 		private var _gameViewAtlas : TextureAtlas;
+		//블록을 담고 있는 셀의 배열
 		private var _cellArray : Array = new Array();
-		
+		//화면을 3부분으로 나눔
 		private var _upPannel : Sprite = new Sprite();
 		private var _downPannel : Sprite = new Sprite();
 		private var _mainPannel : Sprite = new Sprite();
-		
+		//클릭 된 셀
 		private var _clickedCell : Vector.<Cell> = new Vector.<Cell>;
-		
-		public static const UP_MOVE : int = 0;
-		public static const DOWN_MOVE : int = 1;
-		public static const LEFT_MOVE : int = 2;
-		public static const RIGHT_MOVE : int = 3;
-		
-		private static const DOWN_START : Number = 0;
-		private static const DOWN_MOVING : Number = 1;
-		private static const DOWN_COMPLETE : Number = 2;
 		
 		private var _globalX : Number;
 		private var _globalY : Number;
-	
+		//힌트 시간
 		private var _preHintTimer : Number = 0;
-		
+		//배경 화면 이미지
 		private var _backGround : Image;
+		//게임 판 이미지
 		private var _gameWindowImage : Image;
+		//게임 판의 스프라이트
 		private var _gameWindow : Sprite;
-		
-		private static const FIRE_DRAW_CONUT : Number = 50;
-		
+		//위쪽 화면 이미지
 		private var _upPannelImage : Image;
+		//파이어 팡 게이지 및 애니메이션
 		private var _fireBlockAnimaiton : MovieClip;
 		private var _fireProgress : Progress;
+		//정지 이미지
 		private var _pauseImage : Image;
 		
 		private var _timer : Timer;
-		
+		//점수 텍스트 필드
 		private var _scoreTextField : TextField;
+		//콤보 텍스트 필드
 		private var _comboTextField : ComboTextField;
 		
+		private var _findFlag : Boolean  = false;
 		public function PlayView()
 		{
 			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
@@ -100,12 +99,11 @@ package gameview
 			
 			addChild(_upPannel);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		
 		}
 		
 		private function onEnterFrame():void
 		{
-			
+			//점수텍스터 필드에 변화되는 점수를 계속 출력 합니다.
 			_scoreTextField.text = UtilFunction.makeCurrency(String(ScoreManager.instance.scoreCnt));
 			drawFirePang();
 			
@@ -147,13 +145,39 @@ package gameview
 				createRandomBlock(rowValue);
 			}
 			
-			//블록에 빈공간이 있을 경우 다운
-			if(checkFull() == false)
-				downMovingBlock();
+			//블록이 사라 졋을 경우
+			if(_findFlag == true)
+			{
+				//블록에 빈공간이 있을 경우 다운
+				if(checkFull() == false)
+					downMovingBlock();
+				//블록에 빈공간이 없을 경우 제거 할 블록 체크
+				else
+					pangCheck();
+			}
 		}
 		
 		/**
-		 * 1만점 당 파이어 팡 하나를 생성합니다.
+		 * 모든 블록을 순회하면서 제거 할 부분을 찾습니다.
+		 */		
+		private function pangCheck():void
+		{
+			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
+			{
+				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
+				{
+					BlockTypeSetting.checkMovePang(_cellArray[i][j], null, _cellArray, Block.DOWN_MOVE);
+					BlockTypeSetting.checkMovePang(_cellArray[i][j], null, _cellArray, Block.UP_MOVE);
+					BlockTypeSetting.checkMovePang(_cellArray[i][j], null, _cellArray, Block.LEFT_MOVE);
+					BlockTypeSetting.checkMovePang(_cellArray[i][j], null, _cellArray, Block.RIGHT_MOVE);
+				}
+			}
+			
+			_findFlag = true;
+		}
+		
+		/**
+		 * 블록 파괴 개수가 50개가 될 경우 파이어 팡을 생성합니다.
 		 */		
 		private function drawFirePang():void
 		{
@@ -168,6 +192,7 @@ package gameview
 				_cellArray[randomY][randomX].cellType = Block.BLOCK_FIRE;
 			}
 		}
+		
 		/**
 		 * 블록을 랜덤하게 생성 후 아래쪽 팡여부 체크
 		 */		
@@ -175,7 +200,7 @@ package gameview
 		{
 			var randomType : int = UtilFunction.random(1,7,1);
 			_cellArray[1][rowValue].cellType = randomType;
-			BlockTypeSetting.checkMovePang(_cellArray[1][rowValue], null, _cellArray, DOWN_MOVE);	
+			//BlockTypeSetting.checkMovePang(_cellArray[1][rowValue], null, _cellArray, Block.DOWN_MOVE);	
 		}
 		
 		/**
@@ -230,12 +255,6 @@ package gameview
 							var swapTemp : int = _cellArray[i][j].cellType;
 							_cellArray[i][j].cellType = _cellArray[i+1][j].cellType;
 							_cellArray[i+1][j].cellType = swapTemp;
-							
-							if(_cellArray[i+2][j].cellType != Block.BLOCK_REMOVE 
-								&&_cellArray[i+2][j].cellType != Block.BLOCK_PANG)	
-							{
-								BlockTypeSetting.checkMovePang(_cellArray[i+1][j], null, _cellArray, DOWN_MOVE);
-							}	
 						}
 					}
 				}
@@ -270,26 +289,13 @@ package gameview
 		private function onBlockClicked(event : TouchEvent) : void
 		{
 			var touch : Touch = event.getTouch(_gameWindow);
+			
 			if(touch)
 			{
 				switch(touch.phase)
 				{
 					case TouchPhase.BEGAN:
 					{
-						if((event.currentTarget as Cell).cellType == Block.BLOCK_RANDOM)
-						{
-							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
-							clickedRandomBlock();
-							return;
-						}
-						
-						if((event.currentTarget as Cell).cellType == Block.BLOCK_FIRE)
-						{
-							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
-							clickedFireBlock(event.currentTarget as Cell);
-							return;
-						}
-						
 						//전에 클릭 된 블록이 있을 경우 전에 클릭 된 블록은 일반 상태로 변경
 						if(_clickedCell.length != 0)
 						{
@@ -306,6 +312,22 @@ package gameview
 					
 					case TouchPhase.ENDED:
 					{
+						if((event.currentTarget as Cell).cellType == Block.BLOCK_RANDOM)
+						{
+							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
+							(event.currentTarget as Cell).block.showIdleState();
+							clickedRandomBlock();
+							return;
+						}
+						
+						if((event.currentTarget as Cell).cellType == Block.BLOCK_FIRE)
+						{
+							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
+							(event.currentTarget as Cell).block.showIdleState();
+							clickedFireBlock(event.currentTarget as Cell);
+							return;
+						}
+						
 						var intervalX : Number = touch.globalX - _globalX;
 						var intervalY : Number = touch.globalY - _globalY;
 						//BEGAM, ENDED의 차이를 구해서 어느 정도 차이가 날 경우 Move로 인식
@@ -313,23 +335,32 @@ package gameview
 						{
 							if(intervalX <= 0)
 							{
+								if(_clickedCell[0].cellX-1 <= 0) return;
 								_clickedCell[0].block.moveState = Block.LEFT_MOVE;
-								swapCell(_clickedCell[0], _cellArray[_clickedCell[0].cellY][_clickedCell[0].cellX-1], LEFT_MOVE);
+								_cellArray[_clickedCell[0].cellY][_clickedCell[0].cellX-1].block.moveState =  Block.RIGHT_MOVE;
 							}
+							
 							else
 							{
-								swapCell(_clickedCell[0], _cellArray[_clickedCell[0].cellY][_clickedCell[0].cellX+1], RIGHT_MOVE);
+								if(_clickedCell[0].cellX+1 >= Cell.MAX_ROW-1) return;
+								_clickedCell[0].block.moveState = Block.RIGHT_MOVE;
+								_cellArray[_clickedCell[0].cellY][_clickedCell[0].cellX+1].block.moveState =  Block.LEFT_MOVE;
 							}
 						}
 						else if(Math.abs(intervalX) < Math.abs(intervalY) && (Math.abs(intervalX) > 10 || Math.abs(intervalY) > 10))
 						{
 							if(intervalY <= 0)
 							{
-								swapCell(_clickedCell[0], _cellArray[_clickedCell[0].cellY - 1][_clickedCell[0].cellX],UP_MOVE);
+								if(_clickedCell[0].cellY-1 <= 0) return;
+								_clickedCell[0].block.moveState = Block.UP_MOVE;
+								_cellArray[_clickedCell[0].cellY-1][_clickedCell[0].cellX].block.moveState =  Block.DOWN_MOVE;
 							}
+							
 							else
 							{
-								swapCell(_clickedCell[0], _cellArray[_clickedCell[0].cellY + 1][_clickedCell[0].cellX], DOWN_MOVE);
+								if(_clickedCell[0].cellY+1 >= Cell.MAX_COL-1) return;
+								_clickedCell[0].block.moveState = Block.DOWN_MOVE;
+								_cellArray[_clickedCell[0].cellY+1][_clickedCell[0].cellX].block.moveState =  Block.UP_MOVE;
 							}
 						}
 					}
@@ -473,13 +504,72 @@ package gameview
 					_cellArray[i][j] = new Cell();
 					_cellArray[i][j].initCell(i, j);
 					_cellArray[i][j].addEventListener("hintInit", onHintInit);
+					_cellArray[i][j].addEventListener("move", onMove);
 				}
 			}
 			BlockTypeSetting.startBlockSetting(_cellArray);
 		}
 		
+		private function onMove(event:Event):void
+		{
+			onHintInit();
+			var cell : Cell = (event.currentTarget as Cell);
+			
+			switch(cell.block.moveState)
+			{
+				case Block.LEFT_MOVE:
+				{
+					if( Math.abs(cell.block.x) >= Math.abs(cell.width))
+					{
+						cell.block.x = 0;
+						swapCell(cell, _cellArray[cell.cellY][cell.cellX-1], Block.LEFT_MOVE);
+						cell.block.moveState = Block.STOP_MOVE;
+					}
+					
+					break;
+				}
+					
+				case Block.RIGHT_MOVE:
+				{
+					if(Math.abs(cell.block.x) >= Math.abs(cell.width))
+					{
+						cell.block.x = 0;
+						swapCell(cell, _cellArray[cell.cellY][cell.cellX+1], Block.RIGHT_MOVE);
+						cell.block.moveState = Block.STOP_MOVE;
+					}
+					
+					break;
+				}
+				
+				case Block.UP_MOVE:
+				{
+					if(Math.abs(cell.block.y) >= Math.abs(cell.height))
+					{
+						cell.block.y = 0;
+						swapCell(cell, _cellArray[cell.cellY-1][cell.cellX], Block.UP_MOVE);
+						cell.block.moveState = Block.STOP_MOVE;
+					}
+					
+					break;
+				}
+					
+				case Block.DOWN_MOVE:
+				{
+					if(Math.abs(cell.block.y) >= Math.abs(cell.height))
+					{
+						cell.block.y = 0;
+						swapCell(cell, _cellArray[cell.cellY+1][cell.cellX], Block.DOWN_MOVE);
+						cell.block.moveState = Block.STOP_MOVE;
+					}
+					
+					break;
+				}
+			}
+		}
+		
 		private function onHintInit():void
 		{
+			_findFlag = true;
 			_preHintTimer = getTimer();
 			BlockTypeSetting.hintPang.block.showIdleState();
 		}
@@ -488,7 +578,7 @@ package gameview
 		{
 			_timer.stop();
 			removeEventListeners();
-			//removeChildren(); 
+			removeChildren(); 
 			trace("종료");
 		}
 	}
