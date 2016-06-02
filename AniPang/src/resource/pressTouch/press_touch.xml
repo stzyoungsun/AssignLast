@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="press_touch.png">
+   <SubTexture name="press_touch1.png" x="0" y="0" width="413" height="101" />
+   <SubTexture name="press_touch2.png" x="0" y="102" width="413" height="101" />
+</TextureAtlas>
