@@ -28,7 +28,6 @@ package
 			_resourceLoader = new ResourceLoader(onLoaderComplete, onProgress);
 			_resourceLoader.resourceLoad("PrevLoadResource");
 			
-			
 			addChild(_sceneStage);
 		}		
 		

@@ -153,7 +153,8 @@ package object.Block
 						_pangStartFlag = true;
 						ScoreManager.instance.scoreCnt = 10;
 						ScoreManager.instance.pangCount = 1;
-
+						ScoreManager.instance.destoryBlockCount = 1;
+						
 						this.parent.dispatchEvent(new Event("hintInit"));
 					}
 					

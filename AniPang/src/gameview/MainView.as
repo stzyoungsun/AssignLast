@@ -101,8 +101,8 @@ package gameview
 				switch(event.currentTarget)
 				{
 					case _logoutButton:
-//						KakaoExtension.instance.logout();
-//						KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
+						KakaoExtension.instance.logout();
+						KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
 						break;
 					case _startButton:
 						dispose();
@@ -112,6 +112,7 @@ package gameview
 						break;
 					case _exitButton:
 						dispose();
+						NativeApplication.nativeApplication.exit();
 						break;
 				}
 			}
@@ -129,7 +130,7 @@ package gameview
 		public override function dispose():void
 		{
 			super.dispose();
-			this.removeChildren();
+			this.removeChildren(0, -1, true);
 			this.removeEventListeners();
 		}
 	}

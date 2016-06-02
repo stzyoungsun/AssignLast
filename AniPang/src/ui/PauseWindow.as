@@ -87,7 +87,6 @@ package ui
 						dispose();
 						break;
 					}
-					
 					case _restartImage:
 					{
 						dispose();
@@ -98,7 +97,6 @@ package ui
 						SceneManager.instance.sceneChange();
 						break;
 					}
-						
 					case _menuImage:
 					{
 						dispose();
@@ -113,8 +111,10 @@ package ui
 		
 		public override function dispose():void
 		{
+			_pauseWindowAtlas = null;
+			
 			super.dispose();
-			removeChildren();
+			removeChildren(0, -1, true);
 			removeEventListeners();
 		}
 	}

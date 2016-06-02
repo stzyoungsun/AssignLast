@@ -1,15 +1,18 @@
 package
 {
 
+	import com.lpesign.KakaoExtension;
+	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import gameview.PlayView;
+	import gameview.TitleView;
 	
 	import starling.core.Starling;
-	import starling.events.Event;
+	
+	import user.CurUserDataFile;
 
 	[SWF(width="600", height="999", frameRate="60", backgroundColor="#ffffff")]
 	public class AniPang extends Sprite
@@ -23,7 +26,7 @@ package
 		{
 			super();
 	
-			//KakaoExtension.instance.init();
+			KakaoExtension.instance.init();
 			
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
@@ -41,13 +44,16 @@ package
 		
 		private function deactivateListener(event:flash.events.Event):void
 		{
-			//CurUserDataFile.saveData(KakaoExtension.instance.curUserData());
-			Starling.current.stop(true);
+			if(TitleView.sTitleViewLoadFlag == true)
+			{
+				Starling.current.stop(true);
+			}
 		}
 		
 		private function activateListener(event:flash.events.Event):void
 		{
-			Starling.current.start();
+			if(Starling.current.isStarted == false)
+				Starling.current.start();
 		}
 	}
 }

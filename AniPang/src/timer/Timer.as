@@ -43,7 +43,7 @@ package timer
 					_preTime = getTimer();
 					
 					if(_curTime == 0)
-						dispatchEvent(new Event("exit"));
+						dispatchEvent(new Event("result"));
 				}
 			}
 		}
