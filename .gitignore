@@ -5,5 +5,8 @@ bin-release-temp/
 .actionScriptProperties
 Ane/Extension.as/bin/
 Ane/Extensions.java/res/
-Ane/KakaoExtension.as/bin/
+Ane/Extensions.java/bin/
+Ane/KakaoExtension/bin/
 Ane/KakaoExtension.java/res/
+Ane/KakaoExtension.java/bin/
+Ane/KakaoExtension.java/src/com/kakao
