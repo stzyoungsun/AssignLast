@@ -9,6 +9,7 @@ import com.extensions.kakao.InitFunction;
 import com.extensions.kakao.IsLoginFunction;
 import com.extensions.kakao.LoginFunction;
 import com.extensions.kakao.LogoutFunction;
+import com.extensions.kakao.SaveUserScoreFunction;
 import com.extensions.kakao.UserProfileFunction;
 
 
@@ -33,6 +34,7 @@ public class Context extends FREContext{
 		map.put("logout", new LogoutFunction());
 		map.put("curuserdata", new UserProfileFunction());
 		map.put("loginstate", new IsLoginFunction());
+		map.put("saveuserdata", new SaveUserScoreFunction());
 		
         return map;
     }
