@@ -2,12 +2,9 @@ package util
 {
 	import flash.geom.Point;
 	
-	import gameview.PlayView;
-	
 	import object.Block.Block;
 	import object.Block.Cell;
 	
-	import score.ScoreManager;
 
 	public class BlockTypeSetting
 	{
