@@ -25,6 +25,17 @@ package score
 		private var _scoreCnt : int = 0;
 		private var _pangCount : int = 0;
 		private var _preTimer : int = 0;
+		
+		private var _destoryBlockCount : int = 0;
+		public function resetScore() : void
+		{
+		 	 _comboCnt = 0;
+			 _scoreCnt = 0;
+			 _pangCount = 0;
+			 _preTimer = 0;
+			 _destoryBlockCount = 0;
+		}
+		
 		public function get scoreCnt():int
 		{
 			return _scoreCnt;
@@ -32,7 +43,7 @@ package score
 		
 		public function set scoreCnt(value:int):void
 		{
-			_scoreCnt =_scoreCnt + value*(Math.pow(2,(comboCnt+1)));
+			_scoreCnt =_scoreCnt + value*(Math.pow(1.4,(_comboCnt+1))+300);
 		}
 		
 		public function get comboCnt():int
@@ -43,7 +54,7 @@ package score
 		public function set comboCnt(value:int):void
 		{
 			_comboCnt = value;
-			trace(_comboCnt);
+			//trace(_comboCnt);
 		}
 		
 		public function fireInit() : void
@@ -55,8 +66,15 @@ package score
 		{
 			_pangCount+=value;
 		}
+		public function set destoryBlockCount(value:int):void
+		{
+			_destoryBlockCount += value;
+		}
 		
 		public function get pangCount():int{return _pangCount;}
 		
+		public function get destoryBlockCount():int{return _destoryBlockCount;}
+		
+
 	}
 }
