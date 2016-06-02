@@ -20,8 +20,6 @@ package gameview
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
-	import user.CurUserDataFile;
-
 
 	public class TitleView extends Sprite
 	{
@@ -36,50 +34,54 @@ package gameview
 		private var _titleText:MovieClip;
 		
 		private var _loadingGaugeTexture:TextureAtlas;
+		
+		public static var sTitleViewLoadFlag : Boolean = false;
 		public function TitleView()
 		{
-			addEventListener(Event.ADDED_TO_STAGE, initialize);
-		}
-		
-		private function initialize():void
-		{	
+			sTitleViewLoadFlag = false;
 			
-			removeEventListener(Event.ADDED_TO_STAGE, initialize);
+			KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
+			addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			_titleImage = new Image(TextureManager.getInstance().textureDictionary["titleView.png"]);
 			_titleImage.width = AniPang.stageWidth;
 			_titleImage.height = AniPang.stageHeight;
 			addChild(_titleImage);
-//			
-//			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
-//			{
-//				KakaoExtension.instance.login();
-//				KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
-//			}
-//			
-//			else
-//			{
-				var curUserData : String = CurUserDataFile.loadData();
-				//trace(curUserData);
-				if(curUserData != "")
-				{
-					CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
-					CurUserData.instance.initData(curUserData);
-				}
-			//}	
-		}		
-		
-		private function onLoginOK(event : StatusEvent) : void
-		{
-//			KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
-//			
-//			trace("유저 데이터 : " + KakaoExtension.instance.curUserData());
-//			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
-//			CurUserData.instance.initData(KakaoExtension.instance.curUserData());
 		}
 		
+		private function initialize():void
+		{	
+			removeEventListener(Event.ADDED_TO_STAGE, initialize);
+
+			//로그인 체크
+			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
+			{
+				//로그 아웃 상태 일 경우 로그인
+				KakaoExtension.instance.login();
+			}
+		}	
+		
+		/**
+		 * LOGIN_OK 전달 받으면 다음 단계 진행
+		 */		
+		private function onLoginOK(event : StatusEvent) : void
+		{
+			
+			KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
+			
+			//로그인 된 사용자 정보 입력
+			CurUserData.instance.initData();
+			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
+			
+		}
+		
+		/**
+		 * 프로필 사진의 업로드가 완료 후 다음 진행 
+		 */		
 		private function onLoadOK():void
 		{
+			
+			sTitleViewLoadFlag = true;
 			CurUserData.instance.removeEventListener("PROFILE_LOAD_OK",onLoadOK);
 			
 			_loadingGaugeTexture = TextureManager.getInstance().atlasTextureDictionary["loading_gauge.png"];
@@ -129,7 +131,6 @@ package gameview
 			addEventListener(TouchEvent.TOUCH, onTouch);
 			
 			_resourceLoader = null;
-		
 		}
 		
 		private function onTouch(event : TouchEvent):void
