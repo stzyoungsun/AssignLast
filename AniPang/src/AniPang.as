@@ -1,16 +1,15 @@
 package
 {
 
-	import com.lpesign.KakaoExtension;
-	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import starling.core.Starling;
+	import gameview.PlayView;
 	
-	import user.CurUserDataFile;
+	import starling.core.Starling;
+	import starling.events.Event;
 
 	[SWF(width="600", height="999", frameRate="60", backgroundColor="#ffffff")]
 	public class AniPang extends Sprite
@@ -36,19 +35,19 @@ package
 			_mainStarling.showStats = true;
 			_mainStarling.start();
 			
-			addEventListener(Event.ACTIVATE, activateListener);
-			addEventListener(Event.DEACTIVATE, deactivateListener);
+			addEventListener(flash.events.Event.ACTIVATE, activateListener);
+			addEventListener(flash.events.Event.DEACTIVATE, deactivateListener);
 		}
 		
-		private function deactivateListener(event:Event):void
+		private function deactivateListener(event:flash.events.Event):void
 		{
 			//CurUserDataFile.saveData(KakaoExtension.instance.curUserData());
+			Starling.current.stop(true);
 		}
 		
-		private function activateListener(event:Event):void
+		private function activateListener(event:flash.events.Event):void
 		{
-			
-			
+			Starling.current.start();
 		}
 	}
 }
