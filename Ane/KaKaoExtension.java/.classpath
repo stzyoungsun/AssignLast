@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="C:/Program Files/Adobe/Adobe Flash Builder 4.7 (64 Bit)/sdks/4.6.0/lib/android/FlashRuntimeExtensions.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/AssignLast/Ane/KaKaoExtension.java/libs/google-play-services.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/AssignLast/Ane/KaKaoExtension.java/libs/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
