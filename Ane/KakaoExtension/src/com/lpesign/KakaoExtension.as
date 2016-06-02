@@ -52,6 +52,16 @@ package com.lpesign
 			{
 				dispatchEvent(new StatusEvent("LOGOUT_OK"));
 			}
+			
+			else if((event.level as String) == "GET_USERDATA")
+			{
+				dispatchEvent(new StatusEvent("GET_USERDATA",false, false, event.code, event.level));
+			}
+			
+			else if((event.level as String) == "SAVE_OK")
+			{
+				dispatchEvent(new StatusEvent("SAVE_OK"));
+			}
 		}
 		
 		public function dispose() : void
@@ -81,6 +91,11 @@ package com.lpesign
 		public function curUserData() : String
 		{
 			return _context.call("curuserdata") as String
+		}
+		
+		public function saveUserData(maxScore : String) :void
+		{
+			_context.call("saveuserdata", maxScore);
 		}
 	}
 }
