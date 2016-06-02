@@ -2,6 +2,8 @@ package timer
 {
 	import flash.utils.getTimer;
 	
+	import gameview.PlayView;
+	
 	import object.Progress.Progress;
 	
 	import starling.events.Event;
@@ -23,11 +25,13 @@ package timer
 		public function timeInit(x : int, y : int, witdh : int, height : int) : void
 		{
 			ProgressInit(x, y, witdh, height);
-			_curTime = 60;
+			_curTime = MAX_TIME;
 		}
 		
 		private function onEnterFrame():void
 		{
+			if(PlayView.pauseFlag == true) return;
+			
 			if(_startFlag == true)
 			{
 				var curTimer : Number = getTimer();
