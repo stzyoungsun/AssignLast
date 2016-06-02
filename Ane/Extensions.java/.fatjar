@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Tue May 31 09:47:52 KST 2016
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=Extensions_fat.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|slf4j-api-1.7.5.jar>;<jar|android-support-v4.jar>;<jar|google-play-services.jar>;<jar|FlashRuntimeExtensions.jar>
+includes=
