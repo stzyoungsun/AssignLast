@@ -9,9 +9,12 @@ package gameview
 	import object.GameTextField.ComboTextField;
 	import object.Progress.Progress;
 	
+	import scene.SceneManager;
+	
 	import score.ScoreManager;
 	
 	import starling.core.Starling;
+	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
@@ -23,6 +26,9 @@ package gameview
 	import starling.textures.TextureAtlas;
 	
 	import timer.Timer;
+	
+	import ui.PauseWindow;
+	import ui.ResultWindow;
 	
 	import util.BlockTypeSetting;
 	import util.UtilFunction;
@@ -58,7 +64,7 @@ package gameview
 		private var _fireBlockAnimaiton : MovieClip;
 		private var _fireProgress : Progress;
 		//정지 이미지
-		private var _pauseImage : Image;
+		private var _pauseImage : Button;
 		
 		private var _timer : Timer;
 		//점수 텍스트 필드
@@ -67,8 +73,12 @@ package gameview
 		private var _comboTextField : ComboTextField;
 		
 		private var _findFlag : Boolean  = false;
+		
+		private static var _pauseFlag : Boolean = false;
 		public function PlayView()
 		{
+			_pauseFlag = false;
+			
 			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
 			
 			_backGround = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
@@ -103,7 +113,7 @@ package gameview
 		
 		private function onEnterFrame():void
 		{
-			//점수텍스터 필드에 변화되는 점수를 계속 출력 합니다.
+			//점수텍스터 필드에 변화되는 점수를 계속 출력 합니다.	
 			_scoreTextField.text = UtilFunction.makeCurrency(String(ScoreManager.instance.scoreCnt));
 			drawFirePang();
 			
@@ -173,7 +183,7 @@ package gameview
 				}
 			}
 			
-			_findFlag = true;
+			_findFlag = false;
 		}
 		
 		/**
@@ -194,13 +204,12 @@ package gameview
 		}
 		
 		/**
-		 * 블록을 랜덤하게 생성 후 아래쪽 팡여부 체크
+		 * 블록을 랜덤하게 생성 
 		 */		
 		private function createRandomBlock(rowValue : int):void
 		{
 			var randomType : int = UtilFunction.random(1,7,1);
-			_cellArray[1][rowValue].cellType = randomType;
-			//BlockTypeSetting.checkMovePang(_cellArray[1][rowValue], null, _cellArray, Block.DOWN_MOVE);	
+			_cellArray[1][rowValue].cellType = randomType;	
 		}
 		
 		/**
@@ -244,7 +253,7 @@ package gameview
 			{
 				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
 				{
-				
+					//바로 아래쪽의 블록이 REMOVE 일 경우 시행
 					if(_cellArray[i+1][j].cellType == Block.BLOCK_REMOVE)
 					{
 						_cellArray[i][j].y += AniPang.stageHeight/30;
@@ -283,7 +292,6 @@ package gameview
 		}
 		
 		/**
-		 * @param event
 		 * 블록이 클릭 되었을 경우
 		 */		
 		private function onBlockClicked(event : TouchEvent) : void
@@ -312,6 +320,7 @@ package gameview
 					
 					case TouchPhase.ENDED:
 					{
+						//블록이 랜덤팡일 경우 
 						if((event.currentTarget as Cell).cellType == Block.BLOCK_RANDOM)
 						{
 							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
@@ -319,7 +328,7 @@ package gameview
 							clickedRandomBlock();
 							return;
 						}
-						
+						//블록이 파이어 팡일 경우
 						if((event.currentTarget as Cell).cellType == Block.BLOCK_FIRE)
 						{
 							(event.currentTarget as Cell).cellType = Block.BLOCK_PANG;
@@ -331,6 +340,7 @@ package gameview
 						var intervalX : Number = touch.globalX - _globalX;
 						var intervalY : Number = touch.globalY - _globalY;
 						//BEGAM, ENDED의 차이를 구해서 어느 정도 차이가 날 경우 Move로 인식
+						//각각 블록의 모션에 따라 block의 moveState를 설정
 						if(Math.abs(intervalX) >= Math.abs(intervalY) && (Math.abs(intervalX) > 10 || Math.abs(intervalY) > 10))
 						{
 							if(intervalX <= 0)
@@ -374,6 +384,11 @@ package gameview
 				
 		}
 		
+		/**
+		 * 
+		 * @param cell 클릭 한 파이어팡의 셀입니다
+		 * 파이어 팡 클릭 시 파이어 팡을 기준으로 십자가 방향의 모든 블록을 파괴합니다.
+		 */		
 		private function clickedFireBlock(cell : Cell):void
 		{
 			_preHintTimer = getTimer();
@@ -445,7 +460,7 @@ package gameview
 			_timer.timeInit(0, AniPang.stageHeight*0.92, AniPang.stageWidth, AniPang.stageHeight*0.05);
 			_timer.start();
 			
-			_timer.addEventListener("exit", onExit);
+			_timer.addEventListener("result", onResult);
 			addChild(_timer);
 		}
 		
@@ -469,11 +484,12 @@ package gameview
 			_fireBlockAnimaiton.play();
 			Starling.juggler.add(_fireBlockAnimaiton);
 			
-			_pauseImage = new Image(_gameViewAtlas.getTexture("stopbtn"));
+			_pauseImage = new Button(_gameViewAtlas.getTexture("stopbtn"));
 			_pauseImage.width = _fireBlockAnimaiton.width;
 			_pauseImage.height = _fireBlockAnimaiton.height;
 			_pauseImage.x = _upPannelImage.width - _pauseImage.width*1.5;
 			_pauseImage.y = _fireBlockAnimaiton.y;
+			_pauseImage.addEventListener(TouchEvent.TOUCH, onTounchPause);
 			
 			_scoreTextField = new TextField(_upPannelImage.width, _upPannelImage.height, "0");
 			_scoreTextField.format.color = 0xffffff;
@@ -483,11 +499,36 @@ package gameview
 			_fireProgress.ProgressInit(_fireBlockAnimaiton.x,_fireBlockAnimaiton.y + _fireBlockAnimaiton.height, _fireBlockAnimaiton.width, _fireBlockAnimaiton.height/3);
 			_fireProgress.calcValue(FIRE_DRAW_CONUT,0);
 			
-			_upPannel.addChild(_pauseImage);
 			_upPannel.addChild(_upPannelImage);
 			_upPannel.addChild(_fireBlockAnimaiton);
 			_upPannel.addChild(_scoreTextField);
 			_upPannel.addChild(_fireProgress);
+			_upPannel.addChild(_pauseImage);
+		}
+		
+		/**
+		 * 일시 중지 버튼을 클릭 합니다.
+		 */		
+		private function onTounchPause(event : TouchEvent):void
+		{
+			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
+			
+			if(touch)
+			{
+				switch(event.currentTarget)
+				{
+					case _pauseImage:
+					{
+						_pauseFlag = true;
+					 	var pauseWindow : PauseWindow = new PauseWindow();
+						pauseWindow.init(AniPang.stageWidth/2, AniPang.stageHeight/2, AniPang.stageWidth/1.5, AniPang.stageHeight/2);
+						addChild(pauseWindow);
+						break;
+					}
+						
+				}
+			}
+			
 		}
 		
 		/** 
@@ -510,6 +551,10 @@ package gameview
 			BlockTypeSetting.startBlockSetting(_cellArray);
 		}
 		
+		/**
+		 * @param event 이동 시킨 셀
+		 * 셀의 이동에 따라 발생하는 콜백함수입니다.
+		 */		
 		private function onMove(event:Event):void
 		{
 			onHintInit();
@@ -519,6 +564,8 @@ package gameview
 			{
 				case Block.LEFT_MOVE:
 				{
+					//블록의 움직임이 블록의 크기보다 커지면 이동 완료
+					//이동 완료 후 이동 방향에 따라 블록 제거 체크 후 제거
 					if( Math.abs(cell.block.x) >= Math.abs(cell.width))
 					{
 						cell.block.x = 0;
@@ -567,6 +614,10 @@ package gameview
 			}
 		}
 		
+		/**
+		 * 팡이 됬을 경 후 호출 되는 콜백 함수입니다.
+		 * 힌트 값의 초기화하 탐색 플래그를 true 시킵니다.
+		 */		
 		private function onHintInit():void
 		{
 			_findFlag = true;
@@ -574,12 +625,18 @@ package gameview
 			BlockTypeSetting.hintPang.block.showIdleState();
 		}
 		
-		private function onExit():void
+		/**
+		 * 결과 창입니다
+		 */		
+		private function onResult():void
 		{
-			_timer.stop();
-			removeEventListeners();
-			removeChildren(); 
-			trace("종료");
+			_pauseFlag = true;
+			
+			var resultWindow : ResultWindow = new ResultWindow();
+			addChild(resultWindow);
 		}
+		
+		public static function get pauseFlag():Boolean{return _pauseFlag;}
+		public static function set pauseFlag(value:Boolean):void{_pauseFlag = value;}
 	}
 }
