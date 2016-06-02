@@ -84,6 +84,7 @@ package loader
 			else return false;
 		}
 		
+		public function set created(value:Boolean):void{_created = value;}
 		public function get xmlDictionary():Dictionary{ return _xmlDictionary; }
 		public function get textureDictionary():Dictionary{ return _textureDictionary; }
 		public function get atlasTextureDictionary():Dictionary { return _atlasTextureDictionary; }

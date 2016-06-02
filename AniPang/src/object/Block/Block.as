@@ -1,7 +1,5 @@
 package object.Block
 {
-	import gameview.PlayView;
-	
 	import score.ScoreManager;
 	
 	import starling.display.MovieClip;
@@ -52,9 +50,7 @@ package object.Block
 			this.width = AniPang.stageWidth/7;
 			this.height = AniPang.stageHeight*2/21;
 			this.stop();
-			
-			
-			
+
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
@@ -71,10 +67,10 @@ package object.Block
 		private function onEnterFrame():void
 		{
 			if(this.visible == false){return;}
-			
+			//블록의 frame을 설정 합니다.
 			if(_drawFlag == true)
 				drawBlock();
-			
+			//애니메이션 블록일 경우
 			if(_blockType == BLOCK_PANG || _blockType == BLOCK_RANDOM || _blockType == BLOCK_FIRE)
 				AnimationPang();
 			else
@@ -83,7 +79,7 @@ package object.Block
 				_animationFlag = false;
 				this.stop();
 			}
-			
+			//무브 상태가 스탑이 아닌 경우
 			if(_moveState != STOP_MOVE)
 				moveBlock();
 			
@@ -93,6 +89,9 @@ package object.Block
 				this.texture = this.getFrameTexture(1);
 		}
 		
+		/**
+		 * 무브 상태에 따라 블록을 이동 시킵니다.
+		 */		
 		private function moveBlock():void
 		{
 			switch(_moveState)
@@ -128,6 +127,9 @@ package object.Block
 			
 		}
 		
+		/** 
+		 * 애니매이션이 필요 한 팡일 경우 (터지는 모션, 랜덤팡, 파이어팡)
+		 */		
 		private function AnimationPang():void
 		{
 			switch(_blockType)
@@ -164,6 +166,10 @@ package object.Block
 			}
 		}
 		
+		/**
+		 * frame을 재설정 합니다.
+		 * (중요)frame을 재설정 하고 현재 텍스쳐도 바꿔 줍니다.
+		 */		
 		private function drawBlock() : void
 		{
 			

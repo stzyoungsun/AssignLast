@@ -45,7 +45,7 @@ package scene
 		 */
 		public function sceneChange(removeFlag : Boolean = true) : void
 		{
-			MainClass.current.removeChild(MainClass.sceneStage);
+			MainClass.current.removeChild(MainClass.sceneStage, true);
 
 			if(removeFlag == true)
 				MainClass.sceneStage = _sceneVector.pop();
