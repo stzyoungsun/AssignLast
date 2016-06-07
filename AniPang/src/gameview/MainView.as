@@ -1,11 +1,13 @@
 package gameview
 {
-	
-	
 	import com.lpesign.KakaoExtension;
 	
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
+	
+	import UI.window.ButtonWindow;
+	import UI.window.ItemWindow;
+	import UI.window.MainWindow;
 	
 	import loader.TextureManager;
 	
@@ -19,77 +21,79 @@ package gameview
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
-	
-	import ui.MainWindow;
+	import UI.window.ItemShopWindow;
 
 	public class MainView extends Sprite
 	{
 		private var _mainImage : Image;
-		private var _windowSprite : MainWindow;
-		private var _logoutButton : Button;
-		private var _startButton : Button;
-		private var _exitButton : Button;
+		private var _itemShopWindow : ItemShopWindow;
+		
+		private var _startButton : ButtonWindow;
+		private var _rankButton : Button;
+		
+		private var _heartWindow : ItemWindow;
+		private var _coinWindow : ItemWindow;
+		private var _starWindow : ItemWindow;
+		
 		private var _windowAtals : TextureAtlas;
+		private var _itemwindowAtals : TextureAtlas;
+		
 		private var _undateTextField : TextField;
 		
 		public function MainView()
 		{
-			_mainImage = new Image(TextureManager.getInstance().textureDictionary["mainView.png"]);
+			_mainImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_mainImage.width = AniPang.stageWidth;
 			_mainImage.height = AniPang.stageHeight;
 			addChild(_mainImage);
-			
+		
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
+			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
 			
 			drawWindow();
 		}
 		
 		private function drawWindow():void
 		{
-			_windowSprite = new MainWindow();
-			_windowSprite.init(0, _mainImage.height*0.2, _mainImage.width, _mainImage.height/1.5);
-			addChild(_windowSprite);
+			_itemShopWindow = new ItemShopWindow("Red", "아이템샵");
+			_itemShopWindow.init(0, _mainImage.height*0.15, _mainImage.width, _mainImage.height/1.8);
+			addChild(_itemShopWindow);
 			
-			_logoutButton = new Button(TextureManager.getInstance().textureDictionary["kakaoButton.png"],"로그 아웃");
-			_logoutButton.width = _mainImage.width/7;
-			_logoutButton.height = _mainImage.width/7;
-			_logoutButton.x = _mainImage.width -_logoutButton.width; 
-			_logoutButton.y = _mainImage.y + _mainImage.height/4;
-			_logoutButton.textFormat.color = 0xffffff;
-			_logoutButton.textFormat.size = _logoutButton.height/5;
-			_logoutButton.textFormat.bold = true;
-			_logoutButton.addEventListener(TouchEvent.TOUCH, onClicked);
-			addChild(_logoutButton);
+			_heartWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["heart.png"], AniPang.stageWidth*0.05, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			addChild(_heartWindow);
 			
-			_startButton = new Button(_windowAtals.getTexture("redButton"),"게임 시작");
-			_startButton.width = _mainImage.width/3;
-			_startButton.height = _mainImage.height/5;
-			_startButton.x = AniPang.stageWidth * 0.06; 
-			_startButton.y = AniPang.stageHeight * 0.64; 
-			_startButton.textFormat.color = 0xffffff;
-			_startButton.textFormat.size = _logoutButton.height/4;
-			_startButton.textFormat.bold = true;	
+			_coinWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["coin.png"], AniPang.stageWidth*0.4, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			addChild(_coinWindow);
+			
+			_starWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["star.png"], AniPang.stageWidth*0.75, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			addChild(_starWindow);
+			
+
+			
+			//_logoutButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			//addChild(_logoutButton);
+			
+			_startButton = new ButtonWindow(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.73, _mainImage.width/2.5, _mainImage.height/12, 
+				_itemwindowAtals.getTexture("startButton"), null,"게임 시작");
+			_startButton.settingTextField(0xffffff,  _startButton.width/8);
 			_startButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_startButton);
 			
-			_exitButton = new Button(_windowAtals.getTexture("blueButton.png"),"종료");
-			_exitButton.width = _mainImage.width/3;
-			_exitButton.height =  _mainImage.height/5; 
-			_exitButton.x = AniPang.stageWidth * 0.06 + _startButton.width*1.64;
-			_exitButton.y = AniPang.stageHeight * 0.64; 
-			_exitButton.textFormat.color = 0xffffff;
-			_exitButton.textFormat.size = _logoutButton.height/4;
-			_exitButton.textFormat.bold = true;	
-			_exitButton.addEventListener(TouchEvent.TOUCH, onClicked);
-			addChild(_exitButton);
+
+//			
+//			_rankButton = new Button(_windowAtals.getTexture("orangeButton.png"),"랭킹 보기");
+//			_rankButton.width = _logoutButton.width;
+//			_rankButton.height = _logoutButton.height;
+//			_rankButton.x = _logoutButton.x - _logoutButton.width;
+//			_rankButton.y = _logoutButton.y; 
+//			_rankButton.textFormat.color = 0xffffff;
+//			_rankButton.textFormat.size = _logoutButton.height/4;
+//			_rankButton.textFormat.bold = true;	
+//			_rankButton.addEventListener(TouchEvent.TOUCH, onClicked);
+		
 			
-			_undateTextField = new TextField(_mainImage.width, _mainImage.height/4);
-			_undateTextField.x = _mainImage.width*0.03;
-			_undateTextField.y = _mainImage.height*0.4;
-			_undateTextField.format.size = _mainImage.height*0.05;
-			_undateTextField.text = "추후 상점 만들 공간";
-			
-			addChild(_undateTextField);
+			//addChild(_undateTextField);
+			//addChild(_rankButton);
 		}
 		
 		private function onClicked(event : TouchEvent):void
@@ -100,20 +104,26 @@ package gameview
 			{
 				switch(event.currentTarget)
 				{
-					case _logoutButton:
-						KakaoExtension.instance.logout();
-						KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
-						break;
+//					case _logoutButton:
+//						//KakaoExtension.instance.logout();
+//						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
+//						break;
 					case _startButton:
 						dispose();
 						var playView : PlayView = new PlayView();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();
 						break;
-					case _exitButton:
-						dispose();
-						NativeApplication.nativeApplication.exit();
-						break;
+//					case _exitButton:
+//						dispose();
+//						NativeApplication.nativeApplication.exit();
+//						break;
+//					case _rankButton:
+//						dispose();
+//						var rankView : RankView = new RankView();
+//						SceneManager.instance.addScene(rankView);
+//						SceneManager.instance.sceneChange();
+//						break;
 				}
 			}
 
