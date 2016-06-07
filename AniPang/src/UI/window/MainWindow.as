@@ -1,10 +1,16 @@
 package UI.window
 {
+	import flash.geom.Rectangle;
+	
 	import loader.TextureManager;
 	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
@@ -29,11 +35,13 @@ package UI.window
 		private var _windowAtals : TextureAtlas;
 		private var _itemwindowAtals : TextureAtlas;
 		private var _buttonAtals : TextureAtlas;
+		
+		private var _mainWindowRect : Rectangle;
 		public function MainWindow(nameWindowColor : String, nameWindowText : String)
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
 			
 			_mainImage = new Image(_windowAtals.getTexture("mainWindow"));
 			_userImage = new Image(CurUserData.instance.userData.profileTexture);
@@ -64,6 +72,8 @@ package UI.window
 		
 		public function init(x : int, y : int, width: int, height : int) : void
 		{
+			_mainWindowRect = new Rectangle(x, y, width, height);
+				
 			_mainImage.x = x;
 			_mainImage.y = y;
 			_mainImage.width = width;
@@ -89,8 +99,9 @@ package UI.window
 			
 			_exitButton.width = _upPanel.width/10;
 			_exitButton.height = _exitButton.width;
-			_exitButton.x = _upPanel.width - _exitButton.width;
+			_exitButton.x = _upPanel.x + _upPanel.width - _exitButton.width;
 			_exitButton.y = _upPanel.y*1.05;
+			_exitButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_exitButton);
 			
 			_userPanel.width = _mainImage.width;
@@ -99,37 +110,48 @@ package UI.window
 			_userPanel.y = _mainImage.y + _upPanel.height;
 			addChild(_userPanel);
 			
-			_userImage.width = _mainImage.width/7;
+			_userImage.width = _userPanel.width/7;
 			_userImage.height = _userImage.width;
-			_userImage.x = _mainImage.x + _userImage.width*0.1;
-			_userImage.y = _mainImage.y + _upPanel.height*1.1;
+			_userImage.x = _userPanel.x  + _userImage.width*0.1;
+			_userImage.y = _userPanel.y * 1.024;
 			addChild(_userImage);
 			
-			_userNameTextField = new TextField(_mainImage.width/4, _userImage.height);
+			_userNameTextField = new TextField(_userPanel.width - _userImage.width, _userPanel.height);
 			_userNameTextField.text = CurUserData.instance.userData.name;
+			_userNameTextField.format.horizontalAlign = Align.CENTER;
+			_userNameTextField.format.verticalAlign = Align.CENTER;
 			_userNameTextField.format.color = 0xffffff;
 			_userNameTextField.format.size = _userImage.height/2.5;
 			_userNameTextField.format.bold = true;
-			_userNameTextField.x = _userImage.width*1.4;
+			_userNameTextField.x = _userPanel.x + _userImage.width;
 			_userNameTextField.y = _userImage.y;
 			addChild(_userNameTextField);
+		}
+		
+		private function onClicked(event : TouchEvent):void
+		{
+			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
+			var totalPrice : Number;
+			if(touch)
+			{
+				switch(event.currentTarget)
+				{
+					case _exitButton:
+						dispatchEvent(new Event("EXIT"));
+						break;
+				}
+			}
 		}
 		
 		public override function dispose():void
 		{
 			super.dispose();
-			_windowAtals.dispose();
-			_windowAtals = null;
-			
-			_itemwindowAtals.dispose();
-			_itemwindowAtals = null;
-			
-			_buttonAtals.dispose();
-			 _buttonAtals = null;
-			 
+	
 			removeChildren(0, -1, true);
 			removeEventListeners();
 			
 		}
+		
+		public function get mainWindowRect():Rectangle {return _mainWindowRect;}
 	}
 }

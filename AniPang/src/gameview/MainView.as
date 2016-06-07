@@ -6,6 +6,7 @@ package gameview
 	import flash.events.Event;
 	
 	import UI.window.ButtonWindow;
+	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
 	import UI.window.MainWindow;
 	
@@ -21,7 +22,6 @@ package gameview
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
-	import UI.window.ItemShopWindow;
 
 	public class MainView extends Sprite
 	{
@@ -29,7 +29,8 @@ package gameview
 		private var _itemShopWindow : ItemShopWindow;
 		
 		private var _startButton : ButtonWindow;
-		private var _rankButton : Button;
+		private var _rankButton : ButtonWindow;
+		private var _configButton : ButtonWindow;
 		
 		private var _heartWindow : ItemWindow;
 		private var _coinWindow : ItemWindow;
@@ -37,8 +38,8 @@ package gameview
 		
 		private var _windowAtals : TextureAtlas;
 		private var _itemwindowAtals : TextureAtlas;
-		
-		private var _undateTextField : TextField;
+		private var _buttonAtals : TextureAtlas;
+		private var _iconAtals : TextureAtlas;
 		
 		public function MainView()
 		{
@@ -49,6 +50,8 @@ package gameview
 		
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_iconAtals = TextureManager.getInstance().atlasTextureDictionary["Icon.png"];
 			
 			drawWindow();
 		}
@@ -59,19 +62,14 @@ package gameview
 			_itemShopWindow.init(0, _mainImage.height*0.15, _mainImage.width, _mainImage.height/1.8);
 			addChild(_itemShopWindow);
 			
-			_heartWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["heart.png"], AniPang.stageWidth*0.05, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			_heartWindow = new ItemWindow(_itemwindowAtals.getTexture("heart1"), AniPang.stageWidth*0.05, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
 			addChild(_heartWindow);
 			
-			_coinWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["coin.png"], AniPang.stageWidth*0.4, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			_coinWindow = new ItemWindow(_itemwindowAtals.getTexture("coinIcon"), AniPang.stageWidth*0.4, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
 			addChild(_coinWindow);
 			
-			_starWindow = new ItemWindow(TextureManager.getInstance().textureDictionary["star.png"], AniPang.stageWidth*0.75, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/25);
+			_starWindow = new ItemWindow(_itemwindowAtals.getTexture("starIcon"), AniPang.stageWidth*0.75, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
 			addChild(_starWindow);
-			
-
-			
-			//_logoutButton.addEventListener(TouchEvent.TOUCH, onClicked);
-			//addChild(_logoutButton);
 			
 			_startButton = new ButtonWindow(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.73, _mainImage.width/2.5, _mainImage.height/12, 
 				_itemwindowAtals.getTexture("startButton"), null,"게임 시작");
@@ -79,21 +77,17 @@ package gameview
 			_startButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_startButton);
 			
-
-//			
-//			_rankButton = new Button(_windowAtals.getTexture("orangeButton.png"),"랭킹 보기");
-//			_rankButton.width = _logoutButton.width;
-//			_rankButton.height = _logoutButton.height;
-//			_rankButton.x = _logoutButton.x - _logoutButton.width;
-//			_rankButton.y = _logoutButton.y; 
-//			_rankButton.textFormat.color = 0xffffff;
-//			_rankButton.textFormat.size = _logoutButton.height/4;
-//			_rankButton.textFormat.bold = true;	
-//			_rankButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			_rankButton = new ButtonWindow(AniPang.stageWidth * 0.2, AniPang.stageHeight * 0.9, _mainImage.width/2.5, _mainImage.height/12, 
+				_buttonAtals.getTexture("redButton"), _iconAtals.getTexture("rankIcon"),"랭킹 보기");
+			_rankButton.settingTextField(0xffffff,  _startButton.width/8);
+			_rankButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_rankButton);
 		
-			
-			//addChild(_undateTextField);
-			//addChild(_rankButton);
+			_configButton = new ButtonWindow(AniPang.stageWidth * 0.6, AniPang.stageHeight * 0.9, _mainImage.width/2.5, _mainImage.height/12, 
+				_buttonAtals.getTexture("orangeButton"), _iconAtals.getTexture("configIcon"),"환경 설정");
+			_configButton.settingTextField(0xffffff,  _startButton.width/8);
+			_configButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_configButton);
 		}
 		
 		private function onClicked(event : TouchEvent):void
@@ -104,10 +98,14 @@ package gameview
 			{
 				switch(event.currentTarget)
 				{
-//					case _logoutButton:
-//						//KakaoExtension.instance.logout();
-//						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
-//						break;
+					case _configButton:
+						//KakaoExtension.instance.logout();
+						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
+						dispose();
+						var configView : ConfigVeiw = new ConfigVeiw("Green", "환경 설정");
+						SceneManager.instance.addScene(configView);
+						SceneManager.instance.sceneChange();
+						break;
 					case _startButton:
 						dispose();
 						var playView : PlayView = new PlayView();
@@ -118,12 +116,12 @@ package gameview
 //						dispose();
 //						NativeApplication.nativeApplication.exit();
 //						break;
-//					case _rankButton:
-//						dispose();
-//						var rankView : RankView = new RankView();
-//						SceneManager.instance.addScene(rankView);
-//						SceneManager.instance.sceneChange();
-//						break;
+					case _rankButton:
+						dispose();
+						var rankView : RankView = new RankView();
+						SceneManager.instance.addScene(rankView);
+						SceneManager.instance.sceneChange();
+						break;
 				}
 			}
 
