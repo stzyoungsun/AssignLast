@@ -24,7 +24,7 @@ package UI.window
 				_sideImge = new Image(sideTexture);
 				_sideImge.width = this.height/2;
 				_sideImge.height = this.height/2;
-				_sideImge.x = _sideImge.width*0.1;
+				_sideImge.x = _sideImge.width*0.3;
 				_sideImge.y = _sideImge.height/2;
 				
 				this.textBounds = new Rectangle(_sideImge.width, 0, this.width - _sideImge.width*1.1, this.height);
