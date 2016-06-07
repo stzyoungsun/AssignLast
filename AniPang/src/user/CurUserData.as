@@ -9,9 +9,14 @@ package user
 	import flash.events.StatusEvent;
 	import flash.net.URLRequest;
 	
+	import loader.TextureManager;
+	
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
 
+	/**
+	 * 현재 접속 한 유저의 서버 데이터 입니다
+	 */
 	public class CurUserData extends EventDispatcher
 	{
 		private static var _instance : CurUserData;
@@ -33,45 +38,50 @@ package user
 			return _instance;
 		}
 		
-		private var _id : int = 0;
-		private var _name : String = "";
-		private var _profilePath : String = "";
-		private var _curMaxScore : int = 0;
-		private var _profileTexture : Texture;
+//		private var _id : int = 0;
+//		private var _name : String = "";
+//		private var _profilePath : String = "";
+//		private var _curMaxScore : int = 0;
+//		private var _profileTexture : Texture;
+		private var _userData : UserDataFormat = new UserDataFormat();
 		
 		private var _scoreFlag : Boolean;
 		public function initData(scoreFlag : Boolean = false) : void
 		{
 			_scoreFlag = scoreFlag;
-			KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
-			KakaoExtension.instance.curUserData();
+			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
+		//	KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
+			//KakaoExtension.instance.curUserData();
 		}
 		
+		/**
+		 * GET_USERDATA 이벤트 발생 하면 서버에서 받은 데이터 저장
+		 */		
 		protected function onGetUserData(event:StatusEvent):void
 		{
-			// TODO Auto-generated method stub
-			
 			var extension:Array = event.code.split('$');
-			
-			_id = extension[0];
-			_name = extension[1];
-			_profilePath = extension[2];
-			_curMaxScore = extension[3];
+		
+			_userData.id = extension[0];
+			_userData.name = extension[1];
+			_userData.profilePath = extension[2];
+			_userData.curMaxScore = extension[3];
 			
 			if(_scoreFlag == true) return;
 			
-			if(_name == "null" || _name == null || _name == "")
-				_name = "익명";
+			//이름이 없을 경우 익명처리
+			if(_userData.name == "null" || _userData.name == null || _userData.name == "")
+				_userData.name = "익명";
 			
-			if(_profilePath == "null" || _profilePath == null || _profilePath == "")
+			//프로필 사진이 없을 경우 대체 사진으로 대체
+			if(_userData.profilePath == "null" || _userData.profilePath == null || _userData.profilePath == "")
 			{
-				_profileTexture = null
+				_userData.profileTexture = TextureManager.getInstance().textureDictionary["notProfile.png"];
 				dispatchEvent((new starling.events.Event("PROFILE_LOAD_OK")));
 			}
 			else
 			{
 				var imageLoader:Loader = new Loader();
-				imageLoader.load(new URLRequest(_profilePath));
+				imageLoader.load(new URLRequest(_userData.profilePath));
 				imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadImageComplete);	
 			}
 		}
@@ -82,7 +92,7 @@ package user
 			loaderInfo.removeEventListener(Event.COMPLETE, onLoadImageComplete);
 			
 			var bitmap:Bitmap = event.target.content as Bitmap;
-			_profileTexture = Texture.fromBitmapData(bitmap.bitmapData);
+			_userData.profileTexture = Texture.fromBitmapData(bitmap.bitmapData);
 			
 			bitmap = null;
 			loaderInfo = null;
@@ -90,12 +100,6 @@ package user
 			dispatchEvent((new starling.events.Event("PROFILE_LOAD_OK")));
 		}		
 		
-		public function get profileTexture():Texture{return _profileTexture;}
-		
-		public function get name():String{return _name;}
-		
-		public function get id():int{return _id;}
-		
-		public function get curMaxScore():int{return _curMaxScore;}
+		public function get userData():UserDataFormat{return _userData;}
 	}
 }
