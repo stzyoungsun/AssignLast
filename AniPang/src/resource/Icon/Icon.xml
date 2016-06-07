@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="Icon.png">
+   <SubTexture name="char" x="428" y="356" width="132" height="118" />
+   <SubTexture name="configIcon" x="141" y="384" width="55" height="55" />
+   <SubTexture name="go" x="0" y="384" width="140" height="75" />
+   <SubTexture name="hatAni1" x="646" y="0" width="173" height="197" />
+   <SubTexture name="hatAni2" x="820" y="0" width="173" height="197" />
+   <SubTexture name="loadingAni1" x="239" y="0" width="213" height="226" />
+   <SubTexture name="loadingAni2" x="0" y="157" width="213" height="226" />
+   <SubTexture name="loadingAni3" x="214" y="227" width="213" height="226" />
+   <SubTexture name="rankIcon" x="0" y="697" width="55" height="55" />
+   <SubTexture name="readAni1" x="646" y="198" width="131" height="197" />
+   <SubTexture name="readAni2" x="778" y="198" width="131" height="197" />
+   <SubTexture name="readAni3" x="0" y="499" width="131" height="197" />
+   <SubTexture name="ready" x="0" y="460" width="138" height="38" />
+   <SubTexture name="startAni" x="139" y="460" width="131" height="197" />
+   <SubTexture name="timeoverAni1" x="453" y="0" width="192" height="177" />
+   <SubTexture name="timeoverAni2" x="453" y="178" width="192" height="177" />
+   <SubTexture name="timeoverText" x="0" y="0" width="238" height="156" />
+</TextureAtlas>

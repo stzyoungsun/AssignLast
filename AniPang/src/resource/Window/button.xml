@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="button.png">
+   <SubTexture name="buy" x="0" y="66" width="98" height="61" />
+   <SubTexture name="exit" x="177" y="66" width="48" height="49" />
+   <SubTexture name="go" x="78" y="128" width="64" height="52" />
+   <SubTexture name="logout" x="0" y="0" width="382" height="65" />
+   <SubTexture name="muilt" x="226" y="66" width="21" height="21" />
+   <SubTexture name="music" x="143" y="128" width="25" height="25" />
+   <SubTexture name="o" x="0" y="128" width="77" height="61" />
+   <SubTexture name="off" x="0" y="190" width="43" height="28" />
+   <SubTexture name="on" x="44" y="190" width="43" height="28" />
+   <SubTexture name="sound" x="88" y="181" width="25" height="25" />
+   <SubTexture name="x" x="99" y="66" width="77" height="61" />
+</TextureAtlas>

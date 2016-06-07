@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="itemAndreslutWindow.png">
+   <SubTexture name="coinIcon" x="458" y="338" width="29" height="30" />
+   <SubTexture name="heart1" x="760" y="0" width="44" height="36" />
+   <SubTexture name="heart2" x="689" y="89" width="44" height="36" />
+   <SubTexture name="informWindow" x="0" y="0" width="495" height="42" />
+   <SubTexture name="ItemIcon1" x="400" y="241" width="87" height="96" />
+   <SubTexture name="ItemIcon2" x="347" y="380" width="87" height="96" />
+   <SubTexture name="ItemIcon3" x="488" y="241" width="87" height="96" />
+   <SubTexture name="itemWindow" x="400" y="205" width="173" height="35" />
+   <SubTexture name="maoItem" x="689" y="34" width="57" height="54" />
+   <SubTexture name="plusButton" x="747" y="37" width="29" height="28" />
+   <SubTexture name="resultIcon" x="0" y="380" width="346" height="83" />
+   <SubTexture name="resultWindow" x="0" y="43" width="399" height="336" />
+   <SubTexture name="starIcon" x="574" y="205" width="33" height="30" />
+   <SubTexture name="startButton" x="400" y="43" width="288" height="93" />
+   <SubTexture name="subWindow1" x="496" y="0" width="263" height="33" />
+   <SubTexture name="subWindow2" x="400" y="137" width="263" height="33" />
+   <SubTexture name="subWindow3" x="400" y="171" width="263" height="33" />
+   <SubTexture name="timeItem" x="400" y="338" width="57" height="41" />
+</TextureAtlas>
