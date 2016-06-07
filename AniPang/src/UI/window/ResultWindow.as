@@ -1,4 +1,4 @@
-package ui
+package UI.window
 {
 	import com.lpesign.KakaoExtension;
 	
@@ -34,7 +34,6 @@ package ui
 		private var _backImage : Image;
 		private var _mainWindow : MainWindow;
 		
-		private var _rankTextField : TextField;
 		private var _destoryBlockTextField : TextField;
 		private var _curScroeTextField : TextField;
 		private var _maxScroeTextField : TextField;
@@ -51,7 +50,7 @@ package ui
 			_resultWindowAtlas = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			
 			_backImage = new Image(TextureManager.getInstance().textureDictionary["grey_screen.png"]);
-			_mainWindow = new MainWindow();
+			_mainWindow = new MainWindow(null, null);
 			_returnMainButton = new Button(_resultWindowAtlas.getTexture("redButton"),"메인 으로");
 			_newRecordImage = new Image(TextureManager.getInstance().textureDictionary["kakaoButton.png"]);
 			
@@ -75,9 +74,6 @@ package ui
 			if(curTimer - _prevTime > 3000 )
 				_destoryBlockTextField.visible = true;
 			
-			if(curTimer - _prevTime > 4000 )
-				_rankTextField.visible = true;
-			
 			if(curTimer - _prevTime > 5000 )
 				_returnMainButton.visible = true;
 		}
@@ -89,7 +85,6 @@ package ui
 			
 			_mainWindow.init(0, AniPang.stageHeight*0.1, AniPang.stageWidth, AniPang.stageHeight*0.8);
 			
-			_rankTextField = new TextField(AniPang.stageWidth, AniPang.stageHeight/5);
 			_destoryBlockTextField = new TextField(AniPang.stageWidth, AniPang.stageHeight/5);
 			_curScroeTextField = new TextField(AniPang.stageWidth, AniPang.stageHeight/5);
 			_maxScroeTextField = new TextField(AniPang.stageWidth, AniPang.stageHeight/5);
@@ -105,10 +100,9 @@ package ui
 			addChild(_returnMainButton);
 			_returnMainButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			//밑에 순서로 출력
-			textFieldSetting(_maxScroeTextField, UtilFunction.makeCurrency(String(CurUserData.instance.curMaxScore)) + " 점", AniPang.stageWidth/8, _mainWindow.y + _maxScroeTextField.height/4*6);
+			textFieldSetting(_maxScroeTextField, UtilFunction.makeCurrency(String(CurUserData.instance.userData.curMaxScore)) + " 점", AniPang.stageWidth/8, _mainWindow.y + _maxScroeTextField.height/4*6);
 			textFieldSetting(_curScroeTextField, UtilFunction.makeCurrency(String(ScoreManager.instance.scoreCnt)) + " 점", AniPang.stageWidth/8, _mainWindow.y + _maxScroeTextField.height/4*7.6);
 			textFieldSetting(_destoryBlockTextField,UtilFunction.makeCurrency(String(ScoreManager.instance.destoryBlockCount)) + " 개", AniPang.stageWidth/8, _mainWindow.y + _maxScroeTextField.height/4*9.2);
-			textFieldSetting(_rankTextField,"123"+"위",AniPang.stageWidth/8, _mainWindow.y + _maxScroeTextField.height/4*10.8);
 			
 			_newRecordImage.width = _returnMainButton.width/3;
 			_newRecordImage.height = _curScroeTextField.height;
@@ -116,10 +110,11 @@ package ui
 			_newRecordImage.y = _curScroeTextField.y;
 			_newRecordImage.visible = false;
 			
-			if(CurUserData.instance.curMaxScore < ScoreManager.instance.scoreCnt)
+			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
+			if(CurUserData.instance.userData.curMaxScore < ScoreManager.instance.scoreCnt)
 			{
-				KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
-				KakaoExtension.instance.saveUserData(String(ScoreManager.instance.scoreCnt));
+				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
+				//KakaoExtension.instance.saveUserData(String(ScoreManager.instance.scoreCnt));
 			}	
 			
 			else
@@ -129,11 +124,13 @@ package ui
 			}
 		}
 		
+		/**
+		 * 서버 저장 완료 후 SAVE_OK 발생 하면 다음 진행
+		 */		
 		protected function onSaveOK(event:flash.events.Event):void
 		{
-			// TODO Auto-generated method stub
-			KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
-			
+			//KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
+			CurUserData.instance.initData(true);
 			_newScoreFlag = true;	
 			addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
 			_prevTime = getTimer();

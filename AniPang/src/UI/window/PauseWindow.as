@@ -1,4 +1,4 @@
-package ui
+package UI.window
 {
 	import gameview.MainView;
 	import gameview.PlayView;

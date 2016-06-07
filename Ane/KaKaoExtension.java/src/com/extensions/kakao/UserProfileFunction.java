@@ -39,7 +39,7 @@ public class UserProfileFunction implements FREFunction{
 				ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
 				if (result == ErrorCode.CLIENT_ERROR_CODE) {
 				} else {
-
+					Log.d(TAG, "서버 연결 오류3");
 				}
 			}
 
