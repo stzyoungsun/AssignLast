@@ -2,14 +2,8 @@ package com.extensions.kakao;
 
 import java.security.MessageDigest;
 
-import com.kakao.auth.ErrorCode;
+
 import com.kakao.auth.Session;
-import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.LoginButton;
-import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.MeResponseCallback;
-import com.kakao.usermgmt.response.model.UserProfile;
-import com.kakao.util.helper.log.Logger;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,7 +15,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
+
 
 public class LoginActivity extends Activity{
 

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TextureAtlas imagePath="Window.png">
-   <SubTexture name="blueButton.png" x="451" y="0" width="300" height="95" />
-   <SubTexture name="closeButton" x="151" y="401" width="64" height="64" />
-   <SubTexture name="dialog" x="0" y="0" width="450" height="400" />
-   <SubTexture name="orangeButton.png" x="451" y="96" width="300" height="95" />
-   <SubTexture name="redButton" x="451" y="192" width="300" height="95" />
-   <SubTexture name="subWindow" x="0" y="401" width="150" height="41" />
+   <SubTexture name="List" x="0" y="0" width="497" height="85" />
+   <SubTexture name="mainWindow" x="0" y="86" width="411" height="636" />
+   <SubTexture name="nameWindow1" x="412" y="86" width="410" height="66" />
+   <SubTexture name="nameWindow2" x="498" y="0" width="410" height="66" />
+   <SubTexture name="nameWindow3" x="412" y="153" width="410" height="66" />
+   <SubTexture name="notProfile" x="0" y="723" width="146" height="146" />
+   <SubTexture name="onoff" x="412" y="438" width="85" height="21" />
+   <SubTexture name="smallList" x="412" y="394" width="124" height="43" />
+   <SubTexture name="subWindow" x="412" y="220" width="376" height="173" />
 </TextureAtlas>

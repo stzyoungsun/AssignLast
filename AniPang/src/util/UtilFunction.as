@@ -1,7 +1,5 @@
 package util
 {
-	import gameview.PlayView;
-
 	public class UtilFunction
 	{
 		public function UtilFunction() { throw new Error("Abstract Class"); }

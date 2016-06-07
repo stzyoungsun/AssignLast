@@ -5,6 +5,9 @@ package score
 		private static var _instance : ScoreManager;
 		private static var _constructed : Boolean;
 		
+		/**
+		 * 현재 게임의 점수를 관리 합니다.
+		 */		
 		public function ScoreManager()
 		{
 			if(!_constructed) throw new Error("Singleton, use ScoreManager.instance");

@@ -27,8 +27,8 @@ package gameview
 	
 	import timer.Timer;
 	
-	import ui.PauseWindow;
-	import ui.ResultWindow;
+	import UI.window.PauseWindow;
+	import UI.window.ResultWindow;
 	
 	import util.BlockTypeSetting;
 	import util.UtilFunction;
