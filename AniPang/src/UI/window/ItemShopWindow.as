@@ -19,7 +19,9 @@ package UI.window
 		
 		private var _upPanel : Image;
 		private var _mainPanel : Image;
+		
 		private var _downPanel : Image;
+		private var _informTextField : TextField;
 		
 		private var _priceList : Image;
 		private var _totalTextField : TextField;
@@ -101,6 +103,15 @@ package UI.window
 			_downPanel.y = _mainPanel.y + _mainPanel.height;
 			addChild(_downPanel);
 			
+			_informTextField = new TextField(_downPanel.width, _downPanel.height);
+			_informTextField.text = "[힌트] 아이템을 사용해서 더 높은 점수를 획득해봐!!";
+			_informTextField.format.color = 0xECDC31;
+			_informTextField.format.size = _timeCheckBox.height/7;
+			_informTextField.format.bold = true;
+			_informTextField.x = _downPanel.x;
+			_informTextField.y = _downPanel.y;
+			addChild(_informTextField);
+			
 			_maoCheckBox.width = _mainPanel.width/6;
 			_maoCheckBox.height = _mainPanel.height/2.5;
 			_maoCheckBox.x = _mainPanel.x + _mainPanel.width/38;
@@ -170,7 +181,7 @@ package UI.window
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
-			
+			var totalPrice : Number;
 			if(touch)
 			{
 				switch(event.currentTarget)
@@ -179,9 +190,16 @@ package UI.window
 					case _maoCheckBox:
 					{
 						_maoCheckBox.dispatchEvent(new Event("CHECK"));
-						if(_maoCheckBox.clickedFlag == false)
+						if(_maoCheckBox.clickedFlag == true)
 						{
-							
+							totalPrice = Number(_priceTextField.text) + 1200;
+							_priceTextField.text = String(totalPrice);
+							_informTextField.text = "[트리플 마오] 마오 블록을 매치하면 세줄이 한방에!";
+						}
+						else
+						{
+							totalPrice = Number(_priceTextField.text) - 1200;
+							_priceTextField.text = String(totalPrice);
 						}
 						break;
 					}
@@ -190,6 +208,17 @@ package UI.window
 					case _timeCheckBox:
 					{
 						_timeCheckBox.dispatchEvent(new Event("CHECK"));
+						if(_timeCheckBox.clickedFlag == true)
+						{
+							totalPrice = Number(_priceTextField.text) + 270;
+							_priceTextField.text = String(totalPrice);
+							_informTextField.text = "[시간 보너스] 시작 시간이 10초 증가!!";
+						}
+						else
+						{
+							totalPrice = Number(_priceTextField.text) - 270;
+							_priceTextField.text = String(totalPrice);
+						}
 						break;
 					}
 				}
@@ -202,12 +231,6 @@ package UI.window
 			
 			removeChildren(0 , -1, true);
 			removeEventListeners();
-			
-			_windowAtals.dispose();
-			_windowAtals = null;
-			
-			_itemwindowAtals.dispose();
-			_itemwindowAtals = null;
 			
 			_notUpdateImages = null;
 		}
