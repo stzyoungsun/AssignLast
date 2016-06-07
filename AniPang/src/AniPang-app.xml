@@ -285,7 +285,5 @@
 		<requestedDisplayResolution>high</requestedDisplayResolution>
 	</iPhone>
 	
-<extensions>
-        <extensionID>com.lpesign.KakaoExtension</extensionID>
-    </extensions>
+
 </application>

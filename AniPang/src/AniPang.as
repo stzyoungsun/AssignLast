@@ -12,8 +12,6 @@ package
 	
 	import starling.core.Starling;
 	
-	import user.CurUserDataFile;
-
 	[SWF(width="600", height="999", frameRate="60", backgroundColor="#ffffff")]
 	public class AniPang extends Sprite
 	{
@@ -26,7 +24,7 @@ package
 		{
 			super();
 	
-			KakaoExtension.instance.init();
+			//KakaoExtension.instance.init();
 			
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
@@ -36,6 +34,7 @@ package
 			
 			_mainStarling = new Starling(MainClass, stage);
 			_mainStarling.showStats = true;
+			
 			_mainStarling.start();
 			
 			addEventListener(flash.events.Event.ACTIVATE, activateListener);
