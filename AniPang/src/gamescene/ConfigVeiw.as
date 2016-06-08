@@ -1,5 +1,10 @@
-package gameview
+package gamescene
 {
+	import com.lpesign.KakaoExtension;
+	
+	import flash.desktop.NativeApplication;
+	import flash.events.StatusEvent;
+	
 	import UI.window.MainWindow;
 	
 	import loader.TextureManager;
@@ -9,6 +14,9 @@ package gameview
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
 
@@ -35,9 +43,32 @@ package gameview
 			addChild(_mainWindow);
 			
 			_logoutButton = new Button(_buttonAtals.getTexture("logout"));
+			_logoutButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			
 			drawUpPanel();
 			drawDownPanel();
+		}
+		
+		private function onClicked(event : TouchEvent):void
+		{
+			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
+			
+			if(touch)
+			{
+				switch(event.currentTarget)
+				{
+					case _logoutButton:
+						//KakaoExtension.instance.logout();
+						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
+						break;
+				}
+			}
+		}
+		
+		private function onLogout(event : StatusEvent):void
+		{
+			dispose();
+			NativeApplication.nativeApplication.exit();
 		}
 		
 		private function onExit():void

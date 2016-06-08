@@ -1,4 +1,4 @@
-package gameview
+package gamescene
 {
 	import com.lpesign.KakaoExtension;
 	
@@ -66,13 +66,16 @@ package gameview
 		private function initialize():void
 		{	
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
-
+			
+			//KakaoExtension.instance.init();
+			
 			//로그인 체크
-//			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
-//			{
-//				//로그 아웃 상태 일 경우 로그인
-//				KakaoExtension.instance.login();
-//			}
+		//	if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
+		//	{
+				//로그 아웃 상태 일 경우 로그인
+		//		KakaoExtension.instance.login();
+				//골드 초기 
+		//	}
 			onLoginOK(null); // 테스트용
 		}	
 		
@@ -81,7 +84,6 @@ package gameview
 		 */		
 		private function onLoginOK(event : StatusEvent) : void
 		{
-			
 			//KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
 			
 			_loadingGaugeTexture = TextureManager.getInstance().atlasTextureDictionary["loading_gauge.png"];
@@ -121,7 +123,7 @@ package gameview
 			 
 			//로그인 된 사용자 정보 입력
 			CurUserData.instance.initData();
-			//CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
+			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
 			onLoadOK(); //테스트용 코드
 		}
 		

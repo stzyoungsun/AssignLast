@@ -1,5 +1,7 @@
-package gameview
+package gamescene
 {
+	import Animation.LoadingClip;
+	
 	import UI.window.RankWindow;
 	
 	import loader.TextureManager;
@@ -10,6 +12,7 @@ package gameview
 	
 	import starling.display.Button;
 	import starling.display.Image;
+	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -27,7 +30,7 @@ package gameview
 		private var _userRankData : Vector.<UserDataFormat>;
 		private var _randWindow : Vector.<RankWindow> = new Vector.<RankWindow>;
 		
-		private var _windowAtals : TextureAtlas;
+		private var _buttonAtals : TextureAtlas;
 		
 		private var _nextButton : Button;
 		private var _prevButton : Button;
@@ -36,9 +39,10 @@ package gameview
 		private var _start : int = 0;
 		private var _end : int = 5;
 		
+		private var _loadingClip : LoadingClip;
 		public function RankView()
 		{
-			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
 			
 			_backImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_backImage.width = AniPang.stageWidth;
@@ -52,16 +56,21 @@ package gameview
 			
 			addChild(_grayImage);
 			
+			_loadingClip = new LoadingClip(AniPang.stageWidth/2 - AniPang.stageWidth/10, AniPang.stageHeight/2 - AniPang.stageWidth/10, AniPang.stageWidth/5, AniPang.stageWidth/5);
+			addChild(_loadingClip);
+			
 			AllUserData.instance.initRankData();
 			AllUserData.instance.addEventListener("ALL_DATA_LOAD", onAllDataLoad);
 		}
 		
 		private function onAllDataLoad():void
 		{
+			removeChild(_loadingClip, true);
+			
 			AllUserData.instance.removeEventListener("ALL_DATA_LOAD", onAllDataLoad);
 			AllUserData.instance.upSort();
 			
-			_nextButton = new Button(_windowAtals.getTexture("redButton"),"다음");
+			_nextButton = new Button(_buttonAtals.getTexture("redButton"),"다음");
 			_nextButton.x = AniPang.stageWidth*0.6;
 			_nextButton.y = AniPang.stageHeight*0.8;
 			_nextButton.width = AniPang.stageWidth/7;
@@ -70,7 +79,7 @@ package gameview
 			_nextButton.textFormat.size = AniPang.stageHeight/20;
 			_nextButton.textFormat.bold = true;
 			
-			_prevButton = new Button(_windowAtals.getTexture("blueButton.png"),"이전");
+			_prevButton = new Button(_buttonAtals.getTexture("BlueButton"),"이전");
 			_prevButton.x = AniPang.stageWidth*0.25;
 			_prevButton.y = AniPang.stageHeight*0.8;
 			_prevButton.width = AniPang.stageWidth/7;
@@ -80,7 +89,7 @@ package gameview
 			_prevButton.textFormat.bold = true;
 			_prevButton.visible = false;
 			
-			_returnButton = new Button(_windowAtals.getTexture("orangeButton.png"),"돌아가기");
+			_returnButton = new Button(_buttonAtals.getTexture("orangeButton"),"돌아가기");
 			_returnButton.x = AniPang.stageWidth*0.3;
 			_returnButton.y = AniPang.stageHeight*0.9;
 			_returnButton.width = AniPang.stageWidth/3;
@@ -95,6 +104,7 @@ package gameview
 			
 			_nextButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			_prevButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			
 			_returnButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			
 			_userRankData = AllUserData.instance.userData;

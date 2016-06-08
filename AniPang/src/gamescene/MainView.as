@@ -1,27 +1,29 @@
-package gameview
+package gamescene
 {
 	import com.lpesign.KakaoExtension;
 	
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	
+	import UI.popup.PopupWindow;
 	import UI.window.ButtonWindow;
 	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
-	import UI.window.MainWindow;
 	
 	import loader.TextureManager;
 	
 	import scene.SceneManager;
 	
-	import starling.display.Button;
+	import score.ScoreManager;
+	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
+	
+	import user.CurUserData;
 
 	public class MainView extends Sprite
 	{
@@ -32,6 +34,7 @@ package gameview
 		private var _rankButton : ButtonWindow;
 		private var _configButton : ButtonWindow;
 		
+		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
 		private var _coinWindow : ItemWindow;
 		private var _starWindow : ItemWindow;
@@ -41,8 +44,11 @@ package gameview
 		private var _buttonAtals : TextureAtlas;
 		private var _iconAtals : TextureAtlas;
 		
+		private var _popupWindow : PopupWindow;
 		public function MainView()
 		{
+			ScoreManager.instance.resetScore();
+			
 			_mainImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_mainImage.width = AniPang.stageWidth;
 			_mainImage.height = AniPang.stageHeight;
@@ -56,19 +62,22 @@ package gameview
 			drawWindow();
 		}
 		
+		/** 
+		 * 메인 화면을 출력 합니다.
+		 */		
 		private function drawWindow():void
 		{
 			_itemShopWindow = new ItemShopWindow("Red", "아이템샵");
 			_itemShopWindow.init(0, _mainImage.height*0.15, _mainImage.width, _mainImage.height/1.8);
 			addChild(_itemShopWindow);
 			
-			_heartWindow = new ItemWindow(_itemwindowAtals.getTexture("heart1"), AniPang.stageWidth*0.05, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
+			_heartWindow = new ItemWindow(_itemwindowAtals.getTexture("heart1"), AniPang.stageWidth*0.02, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30,0xf98677, "HEART");
 			addChild(_heartWindow);
 			
-			_coinWindow = new ItemWindow(_itemwindowAtals.getTexture("coinIcon"), AniPang.stageWidth*0.4, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
+			_coinWindow = new ItemWindow(_itemwindowAtals.getTexture("coinIcon"), AniPang.stageWidth*0.37, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30,0xfeC532, "COIN");
 			addChild(_coinWindow);
 			
-			_starWindow = new ItemWindow(_itemwindowAtals.getTexture("starIcon"), AniPang.stageWidth*0.75, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30);
+			_starWindow = new ItemWindow(_itemwindowAtals.getTexture("starIcon"), AniPang.stageWidth*0.72, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30,0x3edcf6, "STAR");
 			addChild(_starWindow);
 			
 			_startButton = new ButtonWindow(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.73, _mainImage.width/2.5, _mainImage.height/12, 
@@ -93,25 +102,40 @@ package gameview
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
-			
+			var itemPrice : int = 0;
 			if(touch)
 			{
 				switch(event.currentTarget)
 				{
 					case _configButton:
-						//KakaoExtension.instance.logout();
-						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onExit);
 						dispose();
 						var configView : ConfigVeiw = new ConfigVeiw("Green", "환경 설정");
 						SceneManager.instance.addScene(configView);
 						SceneManager.instance.sceneChange();
 						break;
+					
 					case _startButton:
+						//if(CurUserData.instance.userData.heart <= 0) return;   //팝업창 만들 예젇
+						if(ScoreManager.instance.maoItemUse == true)
+							itemPrice += 1200;
+						if(ScoreManager.instance.timeupItemUse == true)
+							itemPrice += 270;
+						
+						if(CurUserData.instance.userData.gold < itemPrice)
+						{
+							_popupWindow = new PopupWindow("골드가 부족 합니다.", 1, new Array("x"));
+							addChild(_popupWindow);
+							return;
+						}
+						
 						dispose();
 						var playView : PlayView = new PlayView();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();
+						
+						CurUserData.instance.userData.gold -= itemPrice;
 						break;
+					
 //					case _exitButton:
 //						dispose();
 //						NativeApplication.nativeApplication.exit();

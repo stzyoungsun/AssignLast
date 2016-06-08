@@ -1,6 +1,11 @@
-package gameview
+package gamescene
 {
 	import flash.utils.getTimer;
+	
+	import Animation.EndClip;
+	import Animation.StartClip;
+	
+	import UI.window.PauseWindow;
 	
 	import loader.TextureManager;
 	
@@ -27,9 +32,6 @@ package gameview
 	
 	import timer.Timer;
 	
-	import UI.window.PauseWindow;
-	import UI.window.ResultWindow;
-	
 	import util.BlockTypeSetting;
 	import util.UtilFunction;
 
@@ -37,6 +39,9 @@ package gameview
 	{
 		//파이어팡이 등장하는 블록 제거 개수
 		private static const FIRE_DRAW_CONUT : Number = 50;
+		
+		private var _startClip : StartClip;
+		private var _endClip : EndClip;
 		//게임 텍스쳐 아틀라스
 		private var _gameViewAtlas : TextureAtlas;
 		//블록을 담고 있는 셀의 배열
@@ -71,13 +76,13 @@ package gameview
 		private var _scoreTextField : TextField;
 		//콤보 텍스트 필드
 		private var _comboTextField : ComboTextField;
-		
+		//블록이 살아 졌을 경우 true
 		private var _findFlag : Boolean  = false;
 		
 		private static var _pauseFlag : Boolean = false;
 		public function PlayView()
 		{
-			_pauseFlag = false;
+			_pauseFlag = true;
 			
 			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
 			
@@ -108,6 +113,17 @@ package gameview
 			initMainPannel();
 			
 			addChild(_upPannel);
+			
+			_startClip = new StartClip(AniPang.stageWidth/2 - AniPang.stageWidth/6, AniPang.stageHeight/2 - AniPang.stageWidth/6, AniPang.stageWidth/3, AniPang.stageWidth/2);
+			_startClip.addEventListener("START", onStart);
+
+			addChild(_startClip);
+		}
+		
+		private function onStart():void
+		{
+			_startClip.removeEventListener("START", onStart);
+			pauseFlag = false;
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
@@ -204,11 +220,17 @@ package gameview
 		}
 		
 		/**
-		 * 블록을 랜덤하게 생성 
+		 * 블록을 랜덤하게 생성 (마오 아이템 구매 했을 경우 마오도 생성)
 		 */		
 		private function createRandomBlock(rowValue : int):void
 		{
-			var randomType : int = UtilFunction.random(1,7,1);
+			var randomType : int;
+			
+			if(ScoreManager.instance.maoItemUse == true)
+				randomType = UtilFunction.random(2,8,1);
+			else
+				randomType = UtilFunction.random(1,7,1);
+			
 			_cellArray[1][rowValue].cellType = randomType;	
 		}
 		
@@ -422,7 +444,6 @@ package gameview
 		 * @param curCell 		사용자가 클릭 한 블록
 		 * @param targetCell	사용자가 움직인 곳에 놓여있는 블록
 		 * @param moveDirect    사용자가 움직인 방향
-		 * 
 		 */		
 		public function swapCell(curCell : Cell, targetCell : Cell, moveDirect : int) : void
 		{
@@ -433,18 +454,19 @@ package gameview
 			var swapTemp : int = curCell.cellType;
 			curCell.cellType = targetCell.cellType;
 			targetCell.cellType = swapTemp;
-		
+			var checkFlag : Boolean;
+			
 			if(BlockTypeSetting.checkMovePang(targetCell, curCell, _cellArray, moveDirect) == false)
 			{
 				swapTemp  = curCell.cellType;
 				curCell.cellType = targetCell.cellType;
 				targetCell.cellType = swapTemp;
 			}
+			
 			else
 			{
 				ScoreManager.instance.comboCnt++;
 				_comboTextField.showCombo("Combo "+String(ScoreManager.instance.comboCnt));
-
 			}
 			
 			curCell.block.showIdleState();
@@ -460,7 +482,7 @@ package gameview
 			_timer.timeInit(0, AniPang.stageHeight*0.92, AniPang.stageWidth, AniPang.stageHeight*0.05);
 			_timer.start();
 			
-			_timer.addEventListener("result", onResult);
+			_timer.addEventListener("TIMEOUT", onTimeout);
 			addChild(_timer);
 		}
 		
@@ -625,15 +647,25 @@ package gameview
 			BlockTypeSetting.hintPang.block.showIdleState();
 		}
 		
+		private function onTimeout() : void
+		{
+			_pauseFlag = true;
+			_endClip = new EndClip(AniPang.stageWidth/2 - AniPang.stageWidth/4, AniPang.stageHeight/2 - AniPang.stageWidth/6, AniPang.stageWidth/2, AniPang.stageWidth/2);
+			_endClip.addEventListener("RESULT", onResult);
+			
+			addChild(_endClip);
+		}
+		
 		/**
 		 * 결과 창입니다
 		 */		
 		private function onResult():void
 		{
-			_pauseFlag = true;
+			dispose();
 			
-			var resultWindow : ResultWindow = new ResultWindow();
-			addChild(resultWindow);
+			var resultView : ResultView = new ResultView();
+			SceneManager.instance.addScene(resultView);
+			SceneManager.instance.sceneChange();
 		}
 		
 		public static function get pauseFlag():Boolean{return _pauseFlag;}
