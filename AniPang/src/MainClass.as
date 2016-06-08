@@ -1,6 +1,6 @@
 package
 {
-	import gameview.TitleView;
+	import gamescene.TitleView;
 	
 	import loader.ResourceLoader;
 	import loader.TextureManager;

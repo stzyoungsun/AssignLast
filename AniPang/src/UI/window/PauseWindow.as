@@ -1,7 +1,7 @@
 package UI.window
 {
-	import gameview.MainView;
-	import gameview.PlayView;
+	import gamescene.MainView;
+	import gamescene.PlayView;
 	
 	import loader.TextureManager;
 	
