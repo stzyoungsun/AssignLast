@@ -51,7 +51,7 @@ package util
 				if(index.y+colValue[i] <= 0 || index.y+colValue[i] >= Cell.MAX_COL 
 					|| index.x+rawValue[i] <= 0 || index.x+rawValue[i] >= Cell.MAX_ROW
 					|| index.y+colValue[i+1] <= 0 || index.y+colValue[i+1] >= Cell.MAX_COL 
-					|| index.x+rawValue[i+1] <= 0 || index.y+rawValue[i+1] >= Cell.MAX_ROW)
+					|| index.x+rawValue[i+1] <= 0 || index.x+rawValue[i+1] >= Cell.MAX_ROW)
 					return false;
 				
 				if(cellArray[index.y+colValue[i]][index.x+rawValue[i]].cellType == curCellType 
@@ -72,7 +72,7 @@ package util
 				if(index.y+colValue[i] <= 0 || index.y+colValue[i] >= Cell.MAX_COL 
 					|| index.x+rawValue[i] <= 0 || index.x+rawValue[i] >= Cell.MAX_ROW
 					|| index.y+colValue[i+1] <= 0 || index.y+colValue[i+1] >= Cell.MAX_COL 
-					|| index.x+rawValue[i+1] <= 0 || index.y+rawValue[i+1] >= Cell.MAX_ROW)
+					|| index.x+rawValue[i+1] <= 0 || index.x+rawValue[i+1] >= Cell.MAX_ROW)
 					return false;
 				
 				if(cellArray[index.y+colValue[i]][index.x+rawValue[i]].cellType == curCellType 
@@ -93,7 +93,7 @@ package util
 				if(index.y+colValue[i] <= 0 || index.y+colValue[i] >= Cell.MAX_COL 
 					|| index.x+rawValue[i] <= 0 || index.x+rawValue[i] >= Cell.MAX_ROW
 					|| index.y+colValue[i+1] <= 0 || index.y+colValue[i+1] >= Cell.MAX_COL 
-					|| index.x+rawValue[i+1] <= 0 || index.y+rawValue[i+1] >= Cell.MAX_ROW)
+					|| index.x+rawValue[i+1] <= 0 || index.x+rawValue[i+1] >= Cell.MAX_ROW)
 					return false;
 				
 				if(cellArray[index.y+colValue[i]][index.x+rawValue[i]].cellType == curCellType 
@@ -114,7 +114,7 @@ package util
 				if(index.y+colValue[i] <= 0 || index.y+colValue[i] >= Cell.MAX_COL 
 					|| index.x+rawValue[i] <= 0 || index.x+rawValue[i] >= Cell.MAX_ROW
 					|| index.y+colValue[i+1] <= 0 || index.y+colValue[i+1] >= Cell.MAX_COL 
-					|| index.x+rawValue[i+1] <= 0 || index.y+rawValue[i+1] >= Cell.MAX_ROW)
+					|| index.x+rawValue[i+1] <= 0 || index.x+rawValue[i+1] >= Cell.MAX_ROW)
 					return false;
 				
 				if(cellArray[index.y+colValue[i]][index.x+rawValue[i]].cellType == curCellType 
