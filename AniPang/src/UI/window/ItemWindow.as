@@ -1,12 +1,22 @@
 package UI.window
 {
+	import flash.utils.getTimer;
+	
 	import loader.TextureManager;
+	
+	import score.ScoreManager;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	
+	import user.CurUserData;
+	
+	import util.LVFunction;
+	import util.UtilFunction;
 
 	public class ItemWindow extends Sprite
 	{
@@ -15,10 +25,18 @@ package UI.window
 		private var _itemTextField : TextField;
 		
 		private var _itemwindowAtals : TextureAtlas;
-		public function ItemWindow(itemTexture : Texture, x : int, y : int, width : int, height : int, plusFlag : Boolean = false)
+		private var _itemName : String;
+		
+		private var _timerTextField : TextField;
+	
+		private var _lvTextField : TextField;
+		private var _remainStarTextField : TextField;
+		
+		public function ItemWindow(itemTexture : Texture, x : int, y : int, width : int, height : int, color : uint, itemName : String, plusFlag : Boolean = false)
 		{
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
 			
+			_itemName = itemName;
 			_mainImage = new Image(_itemwindowAtals.getTexture("itemWindow"));
 			_mainImage.x = x;
 			_mainImage.y = y;
@@ -35,13 +53,75 @@ package UI.window
 			_itemTextField.x = _mainImage.x;
 			_itemTextField.y = _mainImage.y;
 			_itemTextField.text = "0";
-			_itemTextField.format.color = 0x000000;
+			_itemTextField.format.color = color;
 			_itemTextField.format.bold = true;
 			_itemTextField.format.size = _itemImage.width/2;
 			
 			addChild(_mainImage);
 			addChild(_itemImage);
 			addChild(_itemTextField);
+			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			if(_itemName == "HEART")
+				drawTimer();
+			
+			if(_itemName == "STAR")
+				drawStar();
+		}
+		
+		private function onEnterFrame():void
+		{
+			switch(_itemName)
+			{
+				case "HEART":
+				{
+					_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
+					_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+					break;
+				}
+					
+				case "COIN":
+				{
+					_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.gold)));
+					break;
+				}
+					
+				case "STAR":
+				{
+					LVFunction.calcLV(CurUserData.instance.userData.totalStar);
+					_lvTextField.text = String(CurUserData.instance.userData.lv);
+					_itemTextField.text = String(LVFunction.calcRemainPercent(CurUserData.instance.userData.lv, CurUserData.instance.userData.remainStar)) + "%";
+					break;
+				}
+			}
+			
+		}
+		
+		private function drawTimer() : void
+		{
+			_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
+			
+			_timerTextField = new TextField(_itemTextField.width/4, _itemTextField.height);
+			_timerTextField.x = _itemTextField.x + _itemTextField.width*0.7;
+			_timerTextField.y = _itemTextField.y;
+			_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+			_timerTextField.format.size = _itemTextField.height/3;
+			
+			addChild(_timerTextField);
+		}
+		
+		private function drawStar():void
+		{
+			_lvTextField = new TextField(_itemTextField.width/4, _itemTextField.height);
+			_lvTextField.x = _itemTextField.x*0.993;
+			_lvTextField.y = _itemTextField.y*0.98;
+			_lvTextField.text = "1";
+			_lvTextField.format.size = _itemTextField.height/3;
+			_lvTextField.format.bold = true;
+			
+			addChild(_lvTextField);
+			
 		}
 	}
 }
