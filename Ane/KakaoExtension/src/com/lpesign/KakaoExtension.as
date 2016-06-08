@@ -10,7 +10,6 @@ package com.lpesign
 	public class KakaoExtension extends EventDispatcher
 	{
 		private var _context:ExtensionContext;
-		private var _drawSprite : Function;
 
 		private static var _instance : KakaoExtension;
 		private static var _constructed : Boolean;

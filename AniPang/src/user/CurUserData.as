@@ -46,8 +46,8 @@ package user
 		{
 			_scoreFlag = scoreFlag;
 			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
-			//KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
-			//KakaoExtension.instance.curUserData();
+			KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
+			KakaoExtension.instance.curUserData();
 		}
 		
 		/**

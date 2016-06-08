@@ -11,7 +11,6 @@ import com.adobe.fre.FRETypeMismatchException;
 import com.adobe.fre.FREWrongThreadException;
 import com.lpesign.extensions.PushNotifcation;
 
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
