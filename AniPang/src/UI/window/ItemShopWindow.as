@@ -4,6 +4,8 @@ package UI.window
 	
 	import loader.TextureManager;
 	
+	import score.ScoreManager;
+	
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.events.Touch;
@@ -11,6 +13,8 @@ package UI.window
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
+	
+	import user.CurUserData;
 	
 	public class ItemShopWindow extends MainWindow
 	{
@@ -106,7 +110,7 @@ package UI.window
 			_informTextField = new TextField(_downPanel.width, _downPanel.height);
 			_informTextField.text = "[힌트] 아이템을 사용해서 더 높은 점수를 획득해봐!!";
 			_informTextField.format.color = 0xECDC31;
-			_informTextField.format.size = _timeCheckBox.height/7;
+			_informTextField.format.size = _coinImage.height/2;
 			_informTextField.format.bold = true;
 			_informTextField.x = _downPanel.x;
 			_informTextField.y = _downPanel.y;
@@ -192,13 +196,17 @@ package UI.window
 						_maoCheckBox.dispatchEvent(new Event("CHECK"));
 						if(_maoCheckBox.clickedFlag == true)
 						{
+							ScoreManager.instance.maoItemUse = true;
 							totalPrice = Number(_priceTextField.text) + 1200;
+							//CurUserData.instance.userData.gold -= 1200;
 							_priceTextField.text = String(totalPrice);
 							_informTextField.text = "[트리플 마오] 마오 블록을 매치하면 세줄이 한방에!";
 						}
 						else
 						{
+							ScoreManager.instance.maoItemUse = false;
 							totalPrice = Number(_priceTextField.text) - 1200;
+							//CurUserData.instance.userData.gold += 1200;
 							_priceTextField.text = String(totalPrice);
 						}
 						break;
@@ -210,13 +218,17 @@ package UI.window
 						_timeCheckBox.dispatchEvent(new Event("CHECK"));
 						if(_timeCheckBox.clickedFlag == true)
 						{
+							ScoreManager.instance.timeupItemUse = true;
 							totalPrice = Number(_priceTextField.text) + 270;
+							//CurUserData.instance.userData.gold -= 270;
 							_priceTextField.text = String(totalPrice);
 							_informTextField.text = "[시간 보너스] 시작 시간이 10초 증가!!";
 						}
 						else
 						{
+							ScoreManager.instance.timeupItemUse = false;
 							totalPrice = Number(_priceTextField.text) - 270;
+							//CurUserData.instance.userData.gold += 270;
 							_priceTextField.text = String(totalPrice);
 						}
 						break;

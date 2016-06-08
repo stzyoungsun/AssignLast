@@ -28,8 +28,10 @@ package score
 		private var _scoreCnt : int = 0;
 		private var _pangCount : int = 0;
 		private var _preTimer : int = 0;
-		
 		private var _destoryBlockCount : int = 0;
+		
+		private var _maoItemUse : Boolean = false;
+		private var _timeupItemUse : Boolean = false;
 		public function resetScore() : void
 		{
 		 	 _comboCnt = 0;
@@ -37,6 +39,8 @@ package score
 			 _pangCount = 0;
 			 _preTimer = 0;
 			 _destoryBlockCount = 0;
+			 _maoItemUse = false;
+			 _timeupItemUse = false;
 		}
 		
 		public function get scoreCnt():int
@@ -48,7 +52,6 @@ package score
 		{
 			_scoreCnt =_scoreCnt + value*(Math.pow(1.4,(_comboCnt+1))+300);
 		}
-		
 		public function get comboCnt():int
 		{
 			return _comboCnt;
@@ -75,9 +78,12 @@ package score
 		}
 		
 		public function get pangCount():int{return _pangCount;}
-		
 		public function get destoryBlockCount():int{return _destoryBlockCount;}
 		
-
+		public function get timeupItemUse():Boolean{return _timeupItemUse;}
+		public function set timeupItemUse(value:Boolean):void{_timeupItemUse = value;}
+		
+		public function get maoItemUse():Boolean{return _maoItemUse;}
+		public function set maoItemUse(value:Boolean):void{_maoItemUse = value;}
 	}
 }

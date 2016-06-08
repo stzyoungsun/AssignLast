@@ -17,9 +17,10 @@ package object.Block
 		public static const BLOCK_RAT : int = 			5;
 		public static const BLOCK_RABBIT : int = 		6;
 		public static const BLOCK_CAT : int = 			7;
+		public static const BLOCK_MAO : int = 			8;
 		
-		public static const BLOCK_FIRE : int = 		8;
-		public static const BLOCK_RANDOM : int = 	9;
+		public static const BLOCK_FIRE : int = 		20;
+		public static const BLOCK_RANDOM : int = 	21;
 		public static const BLOCK_PANG : int = 100;
 		
 		public static const STOP_MOVE : int = 0;
@@ -83,9 +84,9 @@ package object.Block
 			if(_moveState != STOP_MOVE)
 				moveBlock();
 			
-			if(this.faceFlag == false && _blockType >=1 && _blockType <= 7)
+			if(this.faceFlag == false && _blockType >=1 && _blockType <= 8)
 				this.texture = this.getFrameTexture(0);
-			else if(this.faceFlag == true && _blockType >=1 && _blockType <= 7)
+			else if(this.faceFlag == true && _blockType >=1 && _blockType <= 8)
 				this.texture = this.getFrameTexture(1);
 		}
 		

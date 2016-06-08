@@ -5,11 +5,18 @@ package util
 	import object.Block.Block;
 	import object.Block.Cell;
 	
+	import score.ScoreManager;
+	
 
 	public class BlockTypeSetting
 	{
 		//힌트팡의 위치를 저장
 		private static var _hintPang : Cell;
+		
+		//3개 이상의 블럭이 가로 배열일 경우
+		private static var _rowFlag : Boolean = false;
+		//3개 이상의 블럭이 세로 배열일 경우
+		private static var _colFlag : Boolean = false;
 		
 		public function BlockTypeSetting(){throw new Error("Abstract Class");}
 		
@@ -33,7 +40,10 @@ package util
 							
 					while(true)
 					{
-						cellArray[i][j].cellType = UtilFunction.random(1, 7, 1);
+						if(ScoreManager.instance.maoItemUse == true)
+							cellArray[i][j].cellType = UtilFunction.random(2, 8, 1);
+						else
+							cellArray[i][j].cellType = UtilFunction.random(1, 7, 1);
 							
 						if(i - 2 > 0)
 						{
@@ -126,6 +136,9 @@ package util
 		{
 			if(curCell.cellType == Block.BLOCK_PANG || curCell.cellType == Block.BLOCK_REMOVE) return false;
 			
+			_rowFlag = false;
+			_colFlag = false;
+			
 			if(targetCell != null)
 				if(targetCell.cellType == Block.BLOCK_PANG || targetCell.cellType == Block.BLOCK_REMOVE) return false;
 			
@@ -172,7 +185,7 @@ package util
 			
 			if(removecurCellVector != null || removetargetCellVector != null)
 			{
-				romoveBlock(removecurCellVector, removetargetCellVector);
+				romoveBlock(cellArray, removecurCellVector, removetargetCellVector, moveDirect);
 				return true;
 			}
 			else
@@ -183,38 +196,111 @@ package util
 		 * @param removecurCellVector		사용자가 움직인 블록을 기준으로 팡이 되어서 사라질 블록들
 		 * @param removetargetCellVector   사용자가 움직인 곳에 있던 블록의 팡이 되어서 사라질 블록들
 		 */		
-		private static function romoveBlock(removecurCellVector : Vector.<Cell>, removetargetCellVector : Vector.<Cell>) : void
+		private static function romoveBlock(cellArray : Array, removecurCellVector : Vector.<Cell>, removetargetCellVector : Vector.<Cell>,  moveDirect : int) : void
 		{
+			var i :int = 0;
 			if(removecurCellVector != null)
 			{
 				var curlenght : int = removecurCellVector.length;
-				
-				if(curlenght >= 4)
-				{
-					removecurCellVector.pop().cellType = Block.BLOCK_RANDOM;
-					curlenght--;
-				}
-				
-				for(var i : int = 0; i < curlenght; i ++)
-					removecurCellVector.pop().cellType = Block.BLOCK_PANG;
-			}
 			
+				if(removecurCellVector[0].cellType != Block.BLOCK_MAO)
+				{
+					if(curlenght >= 4)
+					{
+						removecurCellVector.pop().cellType = Block.BLOCK_RANDOM;
+						curlenght--;
+					}
+					
+					for(i = 0; i < curlenght; i ++)
+						removecurCellVector.pop().cellType = Block.BLOCK_PANG;
+				}
+				else
+				{
+					pangMaoBlock(cellArray, removecurCellVector, curlenght);
+				}	
+			}
+				
 			if(removetargetCellVector != null)
 			{
 				var targetlenght : int = removetargetCellVector.length;
 				
-				if(targetlenght >= 4)
+				if(removetargetCellVector[0].cellType != Block.BLOCK_MAO)
 				{
-					removetargetCellVector.pop().cellType = Block.BLOCK_RANDOM;
-					targetlenght--;
+					if(targetlenght >= 4)
+					{
+						removetargetCellVector.pop().cellType = Block.BLOCK_RANDOM;
+						targetlenght--;
+					}
+					
+					for(i  = 0; i < targetlenght; i ++)
+						removetargetCellVector.pop().cellType = Block.BLOCK_PANG;
 				}
 				
-				for(var j : int = 0; j < targetlenght; j ++)
-					removetargetCellVector.pop().cellType = Block.BLOCK_PANG;
+				else
+				{
+					pangMaoBlock(cellArray, removetargetCellVector, targetlenght);
+				}
 			}
 			
 			removecurCellVector = null;
 			removetargetCellVector = null;
+		}
+		
+		/**
+		 * 삭제 배열에 들어온 셀들의 타입이 마오 인경우 배열이 세로배열이면 모든 가로에 있는 블록을 다 없애고 가로배열이면 모든 세로 블럭을 없앱니다.
+		 * @param cellArray		전체의 셀 배열
+		 * @param curCellVector	삭제 벡터에 들어온 셀
+		 * @param curLenght		삭제 벡터의 크기
+		 */		
+		private static function pangMaoBlock(cellArray : Array, curCellVector : Vector.<Cell>, curLenght : int) : void
+		{
+			var i : int = 0;
+			var tempCellPos : int;
+			
+			//가로 배열인경우 블록을 기준으로 모든 세로 블록을 없앰
+			if(_rowFlag == true)
+			{
+				for(i = 0; i < curLenght; i++)
+				{
+					tempCellPos = curCellVector[i].cellX;
+					
+					while(tempCellPos > 0)
+					{
+						cellArray[curCellVector[i].cellY][tempCellPos].cellType = Block.BLOCK_PANG;
+						tempCellPos--;
+					}
+					
+					tempCellPos = curCellVector[i].cellX;
+					
+					while(tempCellPos < Cell.MAX_ROW)
+					{
+						cellArray[curCellVector[i].cellY][tempCellPos].cellType = Block.BLOCK_PANG;
+						tempCellPos++;
+					}		
+				}
+			}
+			
+			//세로 배열인경우 블록을 기준으로 모든 가로 배열을 없앰
+			if(_colFlag == true)
+			{
+				for(i = 0; i < curLenght; i++)
+				{
+					tempCellPos = curCellVector[i].cellY;
+					
+					while(tempCellPos > 0)
+					{
+						cellArray[tempCellPos][curCellVector[i].cellX].cellType = Block.BLOCK_PANG;
+						tempCellPos--;
+					}
+					
+					tempCellPos = curCellVector[i].cellY;
+					while(tempCellPos < Cell.MAX_COL)
+					{
+						cellArray[tempCellPos][curCellVector[i].cellX].cellType = Block.BLOCK_PANG;
+						tempCellPos++;
+					}
+				}
+			}		
 		}
 		
 		/**
@@ -265,6 +351,8 @@ package util
 				removeBlockVector = null;
 				removeBlockVector = new Vector.<Cell>;	
 			}
+			else if(cell.cellType == Block.BLOCK_MAO)
+				_rowFlag = true;
 			
 			if(moveDirect == Block.RIGHT_MOVE)
 			{
@@ -296,7 +384,10 @@ package util
 				}
 			}
 			
-			if(xCnt == 1) removeBlockVector.pop();
+			if(xCnt == 1)
+				removeBlockVector.pop();
+			else if(xCnt != 0 && cell.cellType == Block.BLOCK_MAO)
+				_colFlag = true;
 			
 			if(removeBlockVector.length >= 2)
 			{
@@ -356,6 +447,9 @@ package util
 				removeBlockVector = new Vector.<Cell>;	
 			}
 			
+			else if(cell.cellType == Block.BLOCK_MAO)
+					_colFlag = true;
+			
 			if(moveDirect == Block.UP_MOVE)
 			{
 				while(cellY >= 2)
@@ -386,10 +480,15 @@ package util
 				}
 			}
 			
-			if(yCnt == 1) removeBlockVector.pop();
+			if(yCnt == 1) 
+				removeBlockVector.pop();
+			else if(yCnt != 0 && cell.cellType == Block.BLOCK_MAO)
+				_rowFlag = true;
 			
 			if(removeBlockVector.length >= 2)
 			{
+				
+				
 				removeBlockVector.push(cell);
 				return removeBlockVector;
 			}

@@ -104,6 +104,12 @@ package object.Block
 					break;
 				}
 					
+				case Block.BLOCK_MAO:
+				{
+					_frame = _blockAtlas.getTextures("mao");
+					break;
+				}
+					
 				case Block.BLOCK_RANDOM:
 				{
 					_frame = _blockAtlas.getTextures("random");
@@ -121,6 +127,7 @@ package object.Block
 					_frame = _blockAtlas.getTextures("pang");
 					break;
 				}
+				
 				case Block.BLOCK_REMOVE:
 				{
 					_block.visible = false;

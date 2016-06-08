@@ -2,15 +2,19 @@ package timer
 {
 	import flash.utils.getTimer;
 	
-	import gameview.PlayView;
+	import gamescene.PlayView;
 	
 	import object.Progress.Progress;
+	
+	import score.ScoreManager;
 	
 	import starling.events.Event;
 
 	public class Timer extends Progress
 	{
-		private static const MAX_TIME : Number = 60;
+		private static const MAX_TIME : Number = 10;
+		private static const UP_MAX_TIME : Number = 70;
+		
 		private var _curTime : int = 0;
 		private var _startFlag : Boolean = false;
 		
@@ -25,7 +29,11 @@ package timer
 		public function timeInit(x : int, y : int, witdh : int, height : int) : void
 		{
 			ProgressInit(x, y, witdh, height);
-			_curTime = MAX_TIME;
+			
+			if(ScoreManager.instance.timeupItemUse == true)
+				_curTime = UP_MAX_TIME;
+			else
+				_curTime = MAX_TIME;
 		}
 		
 		private function onEnterFrame():void
@@ -38,12 +46,16 @@ package timer
 				
 				if(curTimer - _preTime > 1000)
 				{
-					calcValue(MAX_TIME,--_curTime);
+					if(ScoreManager.instance.timeupItemUse == true)
+						calcValue(UP_MAX_TIME,--_curTime);
+					else
+						calcValue(MAX_TIME,--_curTime);
+			
 					text = String(_curTime);
 					_preTime = getTimer();
 					
 					if(_curTime == 0)
-						dispatchEvent(new Event("result"));
+						dispatchEvent(new Event("TIMEOUT"));
 				}
 			}
 		}
