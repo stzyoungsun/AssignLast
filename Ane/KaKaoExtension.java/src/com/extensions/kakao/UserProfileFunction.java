@@ -67,6 +67,12 @@ public class UserProfileFunction implements FREFunction{
 				_playerString += userProfile.getProperty("score");
 				_playerString += "$";
 
+				_playerString += userProfile.getProperty("gold");
+				_playerString += "$";
+				
+				_playerString += userProfile.getProperty("star");
+				_playerString += "$";
+				
 				Log.d(TAG,"_playerString" + _playerString);
 				InitFunction._flashActivity.dispatchStatusEventAsync(_playerString, "GET_USERDATA");
 			}
