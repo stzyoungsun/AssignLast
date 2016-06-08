@@ -38,19 +38,15 @@ package user
 			return _instance;
 		}
 		
-//		private var _id : int = 0;
-//		private var _name : String = "";
-//		private var _profilePath : String = "";
-//		private var _curMaxScore : int = 0;
-//		private var _profileTexture : Texture;
 		private var _userData : UserDataFormat = new UserDataFormat();
 		
+		//curMaxScore 데이터의 재 갱신
 		private var _scoreFlag : Boolean;
 		public function initData(scoreFlag : Boolean = false) : void
 		{
 			_scoreFlag = scoreFlag;
 			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
-		//	KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
+			//KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
 			//KakaoExtension.instance.curUserData();
 		}
 		
@@ -66,7 +62,15 @@ package user
 			_userData.profilePath = extension[2];
 			_userData.curMaxScore = extension[3];
 			
+			//curMaxScore 데이터의 재 갱신
 			if(_scoreFlag == true) return;
+			
+			//처음 접속 유저 2000 골드 증정
+			if(extension[4] == "null")
+				_userData.gold = 2000;
+			else
+				_userData.gold = extension[4];
+			_userData.totalStar = extension[5];
 			
 			//이름이 없을 경우 익명처리
 			if(_userData.name == "null" || _userData.name == null || _userData.name == "")
@@ -84,6 +88,7 @@ package user
 				imageLoader.load(new URLRequest(_userData.profilePath));
 				imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadImageComplete);	
 			}
+			
 		}
 		
 		protected function onLoadImageComplete(event:Event):void
