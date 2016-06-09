@@ -1,4 +1,4 @@
-package object.Progress
+package UI.Progress
 {
 
 	import loader.TextureManager;

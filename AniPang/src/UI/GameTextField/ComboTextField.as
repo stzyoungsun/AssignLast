@@ -1,4 +1,4 @@
-package object.GameTextField
+package UI.GameTextField
 {
 	import starling.events.Event;
 	import starling.text.TextField;

@@ -269,6 +269,24 @@
           	  	android:name="com.kakao.sdk.AppKey"
            		android:value="@string/kakao_app_key" />
            		
+           	<receiver 
+			    android:label="alarmrecever"
+			    android:name="com.lpesign.extensions.PushNotifcation" >
+			
+				<intent-filter>
+					<action android:name="com.lpesign.extensions.PushNotifcation" />
+				</intent-filter>
+				</receiver>
+				
+				<service 
+					android:name="com.lpesign.extensions.PushNotifcation">
+				<intent-filter>
+				
+					<action android:name="com.lpesign.extensions.PushNotifcation"/>
+			
+				</intent-filter>
+				
+				</service>	
 			</application>
 			</manifest>
 			

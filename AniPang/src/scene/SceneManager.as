@@ -43,15 +43,12 @@ package scene
 		/**
 		 * _sceneVector에 저장된 Scene을 현재 렌더링할 Scene으로 바꿔줌
 		 */
-		public function sceneChange(removeFlag : Boolean = true) : void
+		public function sceneChange() : void
 		{
 			MainClass.current.removeChild(MainClass.sceneStage, true);
 
-			if(removeFlag == true)
-				MainClass.sceneStage = _sceneVector.pop();
-			else
-				MainClass.sceneStage = _sceneVector[_sceneVector.length-1];
-			
+			MainClass.sceneStage = _sceneVector.pop();
+
 			MainClass.current.addChild(MainClass.sceneStage);
 		}
 	}

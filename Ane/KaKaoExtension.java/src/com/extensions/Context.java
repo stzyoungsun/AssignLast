@@ -41,7 +41,6 @@ public class Context extends FREContext{
 		map.put("useridlist", new UserIDListFunction());
 		map.put("getserveruserdata", new GetServerUserDataFunction());
 		map.put("saveuserdata", new SaveUserDataFunction());
-		
         return map;
     }
 }

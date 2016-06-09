@@ -52,6 +52,7 @@ public class SaveUserScoreFunction implements FREFunction{
 		Log.d(TAG, "1");
 		UserManagement.requestUpdateProfile(new ApiResponseCallback<Long>() {
 			@Override
+			
 			public void onSuccess(Long userId) {
 				InitFunction.userProfile().updateUserProfile(properties);
 				if (InitFunction.userProfile() != null) {

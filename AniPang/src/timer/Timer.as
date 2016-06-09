@@ -4,7 +4,7 @@ package timer
 	
 	import gamescene.PlayView;
 	
-	import object.Progress.Progress;
+	import UI.Progress.Progress;
 	
 	import score.ScoreManager;
 	

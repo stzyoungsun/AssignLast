@@ -11,8 +11,6 @@ import com.lpesign.extensions.Function.InputFunction;
 import com.lpesign.extensions.Function.ListDialogFunction;
 import com.lpesign.extensions.Function.SpriteSheetFunction;
 import com.lpesign.extensions.Function.ToastFunction;
-import com.lpesign.kakao.LoginFunction;
-
 
 public class Context extends FREContext{
 
@@ -34,8 +32,7 @@ public class Context extends FREContext{
 		map.put("spritesheet",new SpriteSheetFunction());
 		map.put("push", new AlarmFunction());
 		map.put("input", new InputFunction());
-		map.put("login", new LoginFunction());
-		 
+
         return map;
     }
 }
