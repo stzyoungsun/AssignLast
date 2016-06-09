@@ -11,8 +11,8 @@ package gamescene
 	
 	import object.Block.Block;
 	import object.Block.Cell;
-	import object.GameTextField.ComboTextField;
-	import object.Progress.Progress;
+	import UI.GameTextField.ComboTextField;
+	import UI.Progress.Progress;
 	
 	import scene.SceneManager;
 	

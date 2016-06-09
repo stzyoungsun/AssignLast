@@ -150,7 +150,7 @@ package gamescene
 			//밑에 순서로 출력
 			textFieldSetting(_curScroeTextField, 0xFFFC50 ,UtilFunction.makeCurrency(String(curScore)), _mainPanel.x, _mainPanel.y + _mainPanel.height*0.03);
 			textFieldSetting(_lvBonusTextField, 0xFFFFFF, UtilFunction.makeCurrency(String(bonus)), _mainPanel.x + _mainPanel.width*0.3, _mainPanel.y + _mainPanel.height*0.32);
-			textFieldSetting(_maxScroeTextField, 0X197276, UtilFunction.makeCurrency(String(0)), _mainPanel.x + _mainPanel.width*0.3, _mainPanel.y + _mainPanel.height*0.51);
+			textFieldSetting(_maxScroeTextField, 0X197276, UtilFunction.makeCurrency(String(CurUserData.instance.userData.curMaxScore)), _mainPanel.x + _mainPanel.width*0.3, _mainPanel.y + _mainPanel.height*0.51);
 			textFieldSetting(_goldTextField, 0XFFFFFF, String(int(ScoreManager.instance.destoryBlockCount*2)), _mainPanel.x + _mainPanel.width*0.13, _mainPanel.y + _mainPanel.height*0.72);
 			textFieldSetting(_starTextField, 0XFFFFFF, String(ScoreManager.instance.destoryBlockCount), _mainPanel.x + _mainPanel.width*0.61, _mainPanel.y + _mainPanel.height*0.72);
 			
@@ -167,15 +167,15 @@ package gamescene
 			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
 			if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
 			{
-				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
-				//KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
+				KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
+				KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
 			}	
 			
-			//else
-			//{
+			else
+			{
 				addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
 				_prevTime = getTimer();
-			//}
+			}
 		}
 		
 		/**
@@ -183,7 +183,7 @@ package gamescene
 		 */		
 		protected function onSaveOK(event:flash.events.Event):void
 		{
-			//KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
+			KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
 			CurUserData.instance.initData(true);
 			_newScoreFlag = true;	
 			addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);

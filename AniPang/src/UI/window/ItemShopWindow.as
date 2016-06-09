@@ -1,5 +1,7 @@
 package UI.window
 {
+	import com.lpesign.Extension;
+	
 	import UI.checkbox.ImageCheckBox;
 	
 	import loader.TextureManager;
@@ -43,6 +45,7 @@ package UI.window
 		public function ItemShopWindow(nameWindowColor : String, nameWindowText : String)
 		{
 			super(nameWindowColor, nameWindowText)
+			addEventListener("EXIT", onExit);
 			
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
@@ -235,6 +238,12 @@ package UI.window
 					}
 				}
 			}
+		}
+		
+		private function onExit():void
+		{
+			parent.dispose();
+			Extension.instance.exitDialog();
 		}
 		
 		public override function dispose():void

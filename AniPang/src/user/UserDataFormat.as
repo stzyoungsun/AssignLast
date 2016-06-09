@@ -16,6 +16,7 @@ package user
 		public var lv : int = 0;
 		public var remainStar : int = 0;
 		public var totalStar : int = 0;
+		public var exitTime : String;
 		
 		public function UserDataFormat(){}
 	}

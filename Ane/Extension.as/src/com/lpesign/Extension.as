@@ -11,11 +11,13 @@ package com.lpesign
 	public class Extension extends EventDispatcher
 	{
 		private var _context:ExtensionContext;
-		private var _drawSprite : Function;
 
-		public function Extension(drawSprite:Function = null)
+		private static var _instance : Extension;
+		private static var _constructed : Boolean;
+		
+		public function Extension()
 		{
-			_drawSprite = drawSprite;
+			if (!_constructed) throw new Error("Singleton, use Scene.instance");
 			
 			try
 			{
@@ -28,15 +30,22 @@ package com.lpesign
 			}
 		}
 		
+		public static function get instance():Extension
+		{
+			if (_instance == null)
+			{
+				_constructed = true;
+				_instance = new Extension();
+				_constructed = false;
+			}
+			return _instance;
+		}
+		
 		public function statusHandle(event:StatusEvent):void
 		{
 			if((event.level as String) == "INPUT_ID")
 			{
 				dispatchEvent(new StatusEvent("INPUT_ID", false, false, event.code, event.level));
-			}
-			else if((event.level as String) == "eventCode")
-			{
-				_drawSprite(event.level as String);
 			}
 		}
 		
@@ -45,9 +54,9 @@ package com.lpesign
 			_context.call("toast",message);
 		}
 		
-		public function exitDialog(clickedFlag:Boolean):void
+		public function exitDialog():void
 		{
-			_context.call("exitdialog",clickedFlag);
+			_context.call("exitdialog");
 		}
 				
 		public function listDialog(arrPngName:Array) : void
@@ -60,9 +69,9 @@ package com.lpesign
 			_context.call("spritesheet",spriteSheet);
 		}
 		
-		public function push(icon : BitmapData, title:String, message : String, time:int, alarmFlag : Boolean):void
+		public function push(title:String, message : String, time:int, alarmFlag : Boolean):void
 		{
-			_context.call("push",icon, title,message,time,alarmFlag);
+			_context.call("push", title, message, time, alarmFlag);
 		}
 		
 		public function inputID():void
