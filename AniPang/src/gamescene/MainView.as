@@ -115,13 +115,20 @@ package gamescene
 						break;
 					
 					case _startButton:
-						//if(CurUserData.instance.userData.heart <= 0) return;   //팝업창 만들 예젇
+						
 						if(ScoreManager.instance.maoItemUse == true)
 							itemPrice += 1200;
 						if(ScoreManager.instance.timeupItemUse == true)
 							itemPrice += 270;
 						
-						if(CurUserData.instance.userData.gold < itemPrice)
+						if(CurUserData.instance.userData.heart <= 0)
+						{
+							_popupWindow = new PopupWindow("하트가 부족 합니다.", 1, new Array("x"));
+							addChild(_popupWindow);
+							return;
+						}
+						
+						else if(CurUserData.instance.userData.gold < itemPrice)
 						{
 							_popupWindow = new PopupWindow("골드가 부족 합니다.", 1, new Array("x"));
 							addChild(_popupWindow);
@@ -134,6 +141,7 @@ package gamescene
 						SceneManager.instance.sceneChange();
 						
 						CurUserData.instance.userData.gold -= itemPrice;
+						CurUserData.instance.userData.heart--;
 						break;
 					
 //					case _exitButton:
