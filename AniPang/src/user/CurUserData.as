@@ -8,7 +8,7 @@ package user
 	import flash.events.Event;
 	import flash.events.StatusEvent;
 	import flash.net.URLRequest;
-	
+
 	import loader.TextureManager;
 	
 	import starling.events.EventDispatcher;
@@ -40,11 +40,15 @@ package user
 		
 		private var _userData : UserDataFormat = new UserDataFormat();
 		
-		//curMaxScore 데이터의 재 갱신
+		//최고 점수만  재 갱신
 		private var _scoreFlag : Boolean;
-		public function initData(scoreFlag : Boolean = false) : void
+		//유저 데이터만 갱신
+		private var _userDataFlag : Boolean;
+		public function initData(scoreFlag : Boolean = false, userDataFlag : Boolean = false) : void
 		{
+			
 			_scoreFlag = scoreFlag;
+			_userDataFlag = userDataFlag;
 			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
 			KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
 			KakaoExtension.instance.curUserData();
@@ -62,15 +66,33 @@ package user
 			_userData.profilePath = extension[2];
 			_userData.curMaxScore = extension[3];
 			
-			//curMaxScore 데이터의 재 갱신
+			//최고 점수만  재 갱신
 			if(_scoreFlag == true) return;
 			
-			//처음 접속 유저 2000 골드 증정
+			//커스텀 필드의 개수의 제한으로 사용자의 Item 관련 데이터는 묶어서 JSON으로 전송
 			if(extension[4] == "null")
+			{
 				_userData.gold = 2000;
+				_userData.totalStar = 0;
+				_userData.heart = AniPang.MAX_HEART;
+				AniPang.heartTimer = AniPang.HEART_TIME;
+			}
+			
 			else
-				_userData.gold = extension[4];
-			_userData.totalStar = extension[5];
+			{
+				var userItemData : Object = json.JSON.decode(extension[4]);
+				_userData.gold = userItemData.gold;
+				_userData.totalStar = userItemData.star;
+				_userData.heart = userItemData.heart;
+				AniPang.heartTimer = userItemData.hearttime
+			}
+			
+			_userData.exitTime = extension[5];
+			
+			calcHeart();
+			
+			trace(_userData.exitTime);
+			if(_userDataFlag == true) return;
 			
 			//이름이 없을 경우 익명처리
 			if(_userData.name == "null" || _userData.name == null || _userData.name == "")
@@ -89,6 +111,36 @@ package user
 				imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadImageComplete);	
 			}
 			
+		}
+		
+		/**
+		 *  종료 후 접속 시 시간 계산을 통해 하트 개수 설정
+		 */		
+		private function calcHeart():void
+		{
+			if(_userData.heart > AniPang.MAX_HEART) return;
+			
+			var curDate : Date = new Date();
+			var prevDate : Date = new Date(_userData.exitTime);
+			
+			//종료 후 재접 속까지 시간 계산
+			var inActiveTerm : int = (curDate.getTime() - prevDate.getTime())/1000;
+			
+			_userData.heart += inActiveTerm/AniPang.HEART_TIME;
+			AniPang.heartTimer -= inActiveTerm%AniPang.HEART_TIME;
+			
+			if(AniPang.heartTimer < 0)
+			{
+				_userData.heart++;
+				AniPang.heartTimer = AniPang.HEART_TIME + AniPang.heartTimer;
+			}
+			
+			if(_userData.heart > AniPang.MAX_HEART)
+			{
+				_userData.heart = AniPang.MAX_HEART;
+				AniPang.heartTimer = AniPang.HEART_TIME;
+			}
+		
 		}
 		
 		protected function onLoadImageComplete(event:Event):void
