@@ -71,6 +71,11 @@ package com.lpesign
 			{
 				dispatchEvent(new StatusEvent("GET_SERVER_USERDATA",false, false, event.code, event.level));
 			}
+			
+			else if((event.level as String) == "SAVE_DATA")
+			{
+				dispatchEvent(new StatusEvent("SAVE_DATA"));
+			}
 		}
 		
 		public function dispose() : void
@@ -107,9 +112,9 @@ package com.lpesign
 			_context.call("saveuserscroe", maxScore);
 		}
 		
-		public function saveUserData(gold : String, star : String) :void
+		public function saveUserData(itemField : String, exitTime : String) :void
 		{
-			_context.call("saveuserdata", gold, star);
+			_context.call("saveuserdata", itemField, exitTime);
 		}
 		
 		public function getIDList():void
@@ -121,6 +126,5 @@ package com.lpesign
 		{
 			_context.call("getserveruserdata", userID);
 		}
-		
 	}
 }
