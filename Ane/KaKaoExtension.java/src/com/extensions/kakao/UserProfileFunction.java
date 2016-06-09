@@ -52,7 +52,6 @@ public class UserProfileFunction implements FREFunction{
 
 			@Override
 			public void onSuccess(UserProfile userProfile) {  //성공 시 userProfile 형태로 반환
-				Log.d(TAG,"UserProfile" + userProfile.getProperty("score"));
 				_playerString = "";
 				
 				_playerString += userProfile.getId();
@@ -66,11 +65,11 @@ public class UserProfileFunction implements FREFunction{
 				
 				_playerString += userProfile.getProperty("score");
 				_playerString += "$";
-
-				_playerString += userProfile.getProperty("gold");
-				_playerString += "$";
 				
-				_playerString += userProfile.getProperty("star");
+				_playerString += userProfile.getProperty("itemfield");
+				_playerString += "$";
+
+				_playerString += userProfile.getProperty("exit_time");
 				_playerString += "$";
 				
 				Log.d(TAG,"_playerString" + _playerString);

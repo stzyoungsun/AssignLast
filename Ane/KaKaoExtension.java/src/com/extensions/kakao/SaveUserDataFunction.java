@@ -21,12 +21,12 @@ public class SaveUserDataFunction implements FREFunction{
 	@Override
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		// TODO Auto-generated method stub
-		 String gold = "";
-		 String star = "";
+		 String itemField = "";
+		 String exitTime = "";
 		 
 		try {
-			gold = arg1[0].getAsString();
-			star = arg1[1].getAsString();
+			itemField = arg1[0].getAsString();
+			exitTime = arg1[1].getAsString();
         } catch (IllegalStateException e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -40,17 +40,17 @@ public class SaveUserDataFunction implements FREFunction{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	
 		Log.d(TAG, "세이브 들어옴1");
-		requestUpdateProfile(gold, star);
+		requestUpdateProfile(itemField, exitTime);
 		Log.d(TAG, "세이브 나감");
 		return null;
 	}
 
-	private void requestUpdateProfile(String gold, String star) {
+	private void requestUpdateProfile(String itemField, String exitTime) {
 		final Map<String, String> properties = new HashMap<String, String>();
-		properties.put("gold", gold);
-		properties.put("star", star);
+		properties.put("itemfield", itemField);
+		properties.put("exit_time", exitTime);
 		Log.d(TAG, "세이브 들어옴");
 		UserManagement.requestUpdateProfile(new ApiResponseCallback<Long>() {
 			@Override
@@ -60,6 +60,7 @@ public class SaveUserDataFunction implements FREFunction{
 					InitFunction.userProfile().saveUserToCache();
 				}
 				Log.d(TAG,"succeeded to update user profile" + InitFunction.userProfile());
+				InitFunction._flashActivity.dispatchStatusEventAsync("NULL", "SAVE_DATA");
 			}
 
 			@Override
