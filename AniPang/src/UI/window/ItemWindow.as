@@ -1,11 +1,7 @@
 package UI.window
 {
-	import flash.utils.getTimer;
-	
 	import loader.TextureManager;
-	
-	import score.ScoreManager;
-	
+
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -70,14 +66,28 @@ package UI.window
 				drawStar();
 		}
 		
+		/** 
+		 * 아이템 윈도우 종류에 따라 데이터의 변경을 관찰하고 변환된 값을 화면에 출력
+		 */		
 		private function onEnterFrame():void
 		{
 			switch(_itemName)
 			{
 				case "HEART":
 				{
-					_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
-					_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+					if(CurUserData.instance.userData.heart >= 5)
+					{
+						_timerTextField.visible = false;
+						_itemTextField.text = "MAX + " + String(CurUserData.instance.userData.heart - 5);
+						AniPang.heartTimer = AniPang.HEART_TIME;
+					}
+					
+					else
+					{
+						_timerTextField.visible = true;
+						_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
+						_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+					}
 					break;
 				}
 					
