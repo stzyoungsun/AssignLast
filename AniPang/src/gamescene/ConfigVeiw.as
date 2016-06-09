@@ -1,10 +1,13 @@
 package gamescene
 {
+	import com.lpesign.Extension;
 	import com.lpesign.KakaoExtension;
 	
 	import flash.desktop.NativeApplication;
+	import flash.events.Event;
 	import flash.events.StatusEvent;
 	
+	import UI.popup.PopupWindow;
 	import UI.window.MainWindow;
 	
 	import loader.TextureManager;
@@ -19,6 +22,9 @@ package gamescene
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
+	
+	import user.CurUserData;
+	import user.DateFormat;
 
 	public class ConfigVeiw extends Sprite
 	{
@@ -26,6 +32,8 @@ package gamescene
 		private var _mainWindow : MainWindow;
 		
 		private var _logoutButton : Button;
+		
+		private var _logoutPopup : PopupWindow;
 		
 		private var _buttonAtals : TextureAtlas;
 		public function ConfigVeiw(nameWindowColor : String, nameWindowText : String)
@@ -58,16 +66,54 @@ package gamescene
 				switch(event.currentTarget)
 				{
 					case _logoutButton:
-						//KakaoExtension.instance.logout();
-						//KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
+						_logoutPopup = new PopupWindow("정말 로그 아웃 하실 껀가요 ㅠㅠ?", 2, new Array("x","o"), null, onOut);
+						
+						addChild(_logoutPopup);
 						break;
 				}
 			}
 		}
 		
+		/** 
+		 * 팝업창 "O" 클릭
+		 */		
+		public function onOut() : void
+		{
+			KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
+			
+			var exitTime : Date = new Date();
+		
+			CurUserData.instance.userData.exitTime = exitTime.toString();
+			
+			String(CurUserData.instance.userData.gold), String(CurUserData.instance.userData.totalStar), String(CurUserData.instance.userData.heart)
+			
+			var itemDataJson : String = "{" + "\"gold\":" + String(CurUserData.instance.userData.gold) + ",\"star\":" +  String(CurUserData.instance.userData.totalStar) +
+				",\"heart\":" + String(CurUserData.instance.userData.heart) + ",\"hearttime\":" + String(AniPang.heartTimer) + "}";
+			
+			trace(itemDataJson);
+			
+			KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
+		}
+		
+		/**
+		 * 유저데이터 성공적으로 저장
+		 */		
+		private function onSaveData(event:Event):void
+		{
+			KakaoExtension.instance.removeEventListener("SAVE_DATA", onSaveData);
+			
+			KakaoExtension.instance.logout();
+			KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
+		}
+		
+		/**
+		 * 로그아웃 성공적으로 완료
+		 */		
 		private function onLogout(event : StatusEvent):void
 		{
+			AniPang.logOutFlag = true;
 			dispose();
+			Extension.instance.exitDialog();
 			NativeApplication.nativeApplication.exit();
 		}
 		

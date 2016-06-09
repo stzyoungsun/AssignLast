@@ -1,5 +1,7 @@
 package UI.window
 {
+	import UI.popup.PopupWindow;
+	
 	import gamescene.MainView;
 	import gamescene.PlayView;
 	
@@ -16,6 +18,8 @@ package UI.window
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.TextureAtlas;
+	
+	import user.CurUserData;
 
 	public class PauseWindow extends Sprite
 	{
@@ -26,6 +30,8 @@ package UI.window
 		private var _menuImage : Button;
 		private var _restartImage : Button;
 		private var _backImage : Image;
+		
+		private var _popupWindow : PopupWindow;
 		public function PauseWindow()
 		{
 			_pauseWindowAtlas = TextureManager.getInstance().atlasTextureDictionary["pauseWindow.png"];
@@ -91,7 +97,15 @@ package UI.window
 					{
 						dispose();
 						ScoreManager.instance.resetScore();
-
+						
+						if(CurUserData.instance.userData.heart <= 0)
+						{
+							_popupWindow = new PopupWindow("하트가 부족 합니다.", 1, new Array("x"));
+							addChild(_popupWindow);
+							return;
+						}
+						
+						CurUserData.instance.userData.heart--;		
 						var playView : PlayView = new PlayView();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();
