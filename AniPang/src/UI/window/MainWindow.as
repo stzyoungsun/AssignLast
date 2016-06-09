@@ -2,6 +2,8 @@ package UI.window
 {
 	import flash.geom.Rectangle;
 	
+	import Animation.hatAniClip;
+	
 	import loader.TextureManager;
 	
 	import starling.display.Button;
@@ -12,7 +14,6 @@ package UI.window
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	import starling.utils.Align;
 	
@@ -20,6 +21,8 @@ package UI.window
 
 	public class MainWindow extends Sprite
 	{
+		private var _hatAni : hatAniClip;
+		
 		private var _mainImage : Image;
 		private var _userImage : Image;
 		private var _userPanel : Image;
@@ -37,6 +40,11 @@ package UI.window
 		private var _buttonAtals : TextureAtlas;
 		
 		private var _mainWindowRect : Rectangle;
+		/** 
+		 * @param nameWindowColor	메인 윈도우 타이틀 색깔
+		 * @param nameWindowText	메인 윈도우의 타이틀 명
+		 * 많은 부분에서 사용하는 메인 윈도우 창
+		 */		
 		public function MainWindow(nameWindowColor : String, nameWindowText : String)
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
@@ -89,7 +97,7 @@ package UI.window
 			_nameTextField = new TextField(_upPanel.width, _upPanel.height);
 			_nameTextField.text = _nameText;
 			_nameTextField.format.color = 0xffffff;
-			_nameTextField.format.size = _userImage.height/3;
+			_nameTextField.format.size = _upPanel.height/2;
 			_nameTextField.format.horizontalAlign = Align.CENTER;
 			_nameTextField.format.verticalAlign = Align.CENTER;
 			_nameTextField.format.bold = true;
@@ -126,6 +134,9 @@ package UI.window
 			_userNameTextField.x = _userPanel.x + _userImage.width;
 			_userNameTextField.y = _userImage.y;
 			addChild(_userNameTextField);
+			
+			_hatAni = new hatAniClip(_userPanel.x + _userPanel.width - _userImage.width , _userPanel.y, _userImage.width, _userImage.width);
+			addChild(_hatAni);
 		}
 		
 		private function onClicked(event : TouchEvent):void

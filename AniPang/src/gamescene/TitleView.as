@@ -43,7 +43,7 @@ package gamescene
 		{
 			sTitleViewLoadFlag = false;
 			
-			//KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
+			KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
 			addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			//타이틀 이미지 저장
@@ -66,17 +66,19 @@ package gamescene
 		private function initialize():void
 		{	
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
-			
-			//KakaoExtension.instance.init();
-			
+
 			//로그인 체크
-		//	if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
-		//	{
+			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
+			{
 				//로그 아웃 상태 일 경우 로그인
-		//		KakaoExtension.instance.login();
-				//골드 초기 
-		//	}
-			onLoginOK(null); // 테스트용
+				KakaoExtension.instance.login();
+			}
+			
+			else
+			{
+				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
+			}
+			//onLoginOK(null); // 테스트용
 		}	
 		
 		/**
@@ -84,7 +86,7 @@ package gamescene
 		 */		
 		private function onLoginOK(event : StatusEvent) : void
 		{
-			//KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
+			KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
 			
 			_loadingGaugeTexture = TextureManager.getInstance().atlasTextureDictionary["loading_gauge.png"];
 			_loadingImage = new Image(_loadingGaugeTexture.getTexture("30"));
@@ -124,7 +126,7 @@ package gamescene
 			//로그인 된 사용자 정보 입력
 			CurUserData.instance.initData();
 			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
-			onLoadOK(); //테스트용 코드
+			//onLoadOK(); //테스트용 코드
 		}
 		
 		/**
