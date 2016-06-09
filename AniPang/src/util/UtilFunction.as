@@ -95,5 +95,25 @@ package util
 			str = arr.join("");
 			return str;
 		}
+		
+		public static function makeTime(sec : int) : String
+		{
+			var time : String;
+			
+			var min : int;
+			var hour : int;
+			
+			min=sec/60; // 입력받은 sec를 60으로 나누면 분(min)
+			hour=min/60; // min의 값을 60으로 나누면 시(hour)
+			sec=sec%60; // 시분초로 바꿔주는 것이므로, sec를 60으로 나눠 그 나머지가 남은 초
+			min=min%60; // 12줄과 마찬가지로, min을 60으로 나눠 그 나머지가 남은 분
+			
+			if(hour != 0)
+				time = hour + ":" + min + ":" + sec;
+			else
+				time = min + ":" + sec;
+			
+			return time;
+		}
 	}
 }
