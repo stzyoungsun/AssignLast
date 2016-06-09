@@ -35,7 +35,7 @@ package gamescene
 	import util.BlockTypeSetting;
 	import util.UtilFunction;
 
-	public class PlayView extends Sprite
+	public class PlayScene extends Sprite
 	{
 		//파이어팡이 등장하는 블록 제거 개수
 		private static const FIRE_DRAW_CONUT : Number = 50;
@@ -80,7 +80,7 @@ package gamescene
 		private var _findFlag : Boolean  = false;
 		
 		private static var _pauseFlag : Boolean = false;
-		public function PlayView()
+		public function PlayScene()
 		{
 			_pauseFlag = true;
 			
@@ -663,7 +663,7 @@ package gamescene
 		{
 			dispose();
 			
-			var resultView : ResultView = new ResultView();
+			var resultView : ResultScene = new ResultScene();
 			SceneManager.instance.addScene(resultView);
 			SceneManager.instance.sceneChange();
 		}

@@ -22,7 +22,7 @@ package gamescene
 	import user.AllUserData;
 	import user.UserDataFormat;
 
-	public class RankView extends Sprite
+	public class RankScene extends Sprite
 	{
 		
 		private var _backImage : Image;
@@ -40,7 +40,7 @@ package gamescene
 		private var _end : int = 5;
 		
 		private var _loadingClip : LoadingClip;
-		public function RankView()
+		public function RankScene()
 		{
 			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
 			
@@ -178,7 +178,7 @@ package gamescene
 					{
 						AllUserData.instance.dispose();
 						dispose();
-						var mainView : MainView = new MainView();
+						var mainView : MainScene = new MainScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
 						break;

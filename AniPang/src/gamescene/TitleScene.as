@@ -22,7 +22,7 @@ package gamescene
 	
 	import user.CurUserData;
 
-	public class TitleView extends Sprite
+	public class TitleScene extends Sprite
 	{
 		//Note @유영선 리소스를 로드하는 LoaderControl 생성
 		private var _resourceLoader : ResourceLoader;
@@ -39,11 +39,11 @@ package gamescene
 		private var _titleFrame : Vector.<Texture> = new Vector.<Texture>;
 		
 		public static var sTitleViewLoadFlag : Boolean = false;
-		public function TitleView()
+		public function TitleScene()
 		{
 			sTitleViewLoadFlag = false;
 			
-			KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
+			//KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
 			addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			//타이틀 이미지 저장
@@ -68,17 +68,17 @@ package gamescene
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 
 			//로그인 체크
-			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
-			{
-				//로그 아웃 상태 일 경우 로그인
-				KakaoExtension.instance.login();
-			}
-			
-			else
-			{
-				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
-			}
-			//onLoginOK(null); // 테스트용
+//			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
+//			{
+//				//로그 아웃 상태 일 경우 로그인
+//				KakaoExtension.instance.login();
+//			}
+//			
+//			else
+//			{
+//				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
+//			}
+			onLoginOK(null); // 테스트용
 		}	
 		
 		/**
@@ -86,7 +86,7 @@ package gamescene
 		 */		
 		private function onLoginOK(event : StatusEvent) : void
 		{
-			KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
+			//KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
 			
 			_loadingGaugeTexture = TextureManager.getInstance().atlasTextureDictionary["loading_gauge.png"];
 			_loadingImage = new Image(_loadingGaugeTexture.getTexture("30"));
@@ -124,9 +124,9 @@ package gamescene
 			TextureManager.getInstance().createAtlasTexture();			
 			 
 			//로그인 된 사용자 정보 입력
-			CurUserData.instance.initData();
-			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
-			//onLoadOK(); //테스트용 코드
+			//CurUserData.instance.initData();
+			//CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
+			onLoadOK(); //테스트용 코드
 		}
 		
 		/**
@@ -160,7 +160,7 @@ package gamescene
 				{
 					case TouchPhase.ENDED:
 					{
-						var mainView : MainView = new MainView();
+						var mainView : MainScene = new MainScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
 						break;

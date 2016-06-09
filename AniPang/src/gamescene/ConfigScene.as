@@ -26,7 +26,7 @@ package gamescene
 	import user.CurUserData;
 	import user.DateFormat;
 
-	public class ConfigVeiw extends Sprite
+	public class ConfigScene extends Sprite
 	{
 		private var _backImage : Image;
 		private var _mainWindow : MainWindow;
@@ -36,9 +36,9 @@ package gamescene
 		private var _logoutPopup : PopupWindow;
 		
 		private var _buttonAtals : TextureAtlas;
-		public function ConfigVeiw(nameWindowColor : String, nameWindowText : String)
+		public function ConfigScene(nameWindowColor : String, nameWindowText : String)
 		{
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			
 			_backImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_backImage.width = AniPang.stageWidth;
@@ -79,7 +79,7 @@ package gamescene
 		 */		
 		public function onOut() : void
 		{
-			KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
+			//KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
 			
 			var exitTime : Date = new Date();
 		
@@ -92,7 +92,7 @@ package gamescene
 			
 			trace(itemDataJson);
 			
-			KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
+			//KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
 		}
 		
 		/**
@@ -100,10 +100,10 @@ package gamescene
 		 */		
 		private function onSaveData(event:Event):void
 		{
-			KakaoExtension.instance.removeEventListener("SAVE_DATA", onSaveData);
+			//KakaoExtension.instance.removeEventListener("SAVE_DATA", onSaveData);
 			
-			KakaoExtension.instance.logout();
-			KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
+			//KakaoExtension.instance.logout();
+			//KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
 		}
 		
 		/**
@@ -113,14 +113,14 @@ package gamescene
 		{
 			AniPang.logOutFlag = true;
 			dispose();
-			Extension.instance.exitDialog();
+			//Extension.instance.exitDialog();
 			NativeApplication.nativeApplication.exit();
 		}
 		
 		private function onExit():void
 		{
 			dispose();
-			var mainView : MainView = new MainView();
+			var mainView : MainScene = new MainScene();
 			SceneManager.instance.addScene(mainView);
 			SceneManager.instance.sceneChange();
 		}

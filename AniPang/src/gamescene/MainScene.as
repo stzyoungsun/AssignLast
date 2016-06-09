@@ -25,7 +25,7 @@ package gamescene
 	
 	import user.CurUserData;
 
-	public class MainView extends Sprite
+	public class MainScene extends Sprite
 	{
 		private var _mainImage : Image;
 		private var _itemShopWindow : ItemShopWindow;
@@ -33,11 +33,13 @@ package gamescene
 		private var _startButton : ButtonWindow;
 		private var _rankButton : ButtonWindow;
 		private var _configButton : ButtonWindow;
+		private var _questButton : ButtonWindow;
 		
 		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
 		private var _coinWindow : ItemWindow;
 		private var _starWindow : ItemWindow;
+		
 		
 		private var _windowAtals : TextureAtlas;
 		private var _itemwindowAtals : TextureAtlas;
@@ -45,7 +47,7 @@ package gamescene
 		private var _iconAtals : TextureAtlas;
 		
 		private var _popupWindow : PopupWindow;
-		public function MainView()
+		public function MainScene()
 		{
 			ScoreManager.instance.resetScore();
 			
@@ -56,7 +58,7 @@ package gamescene
 		
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			_iconAtals = TextureManager.getInstance().atlasTextureDictionary["Icon.png"];
 			
 			drawWindow();
@@ -86,13 +88,19 @@ package gamescene
 			_startButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_startButton);
 			
-			_rankButton = new ButtonWindow(AniPang.stageWidth * 0.2, AniPang.stageHeight * 0.9, _mainImage.width/2.5, _mainImage.height/12, 
+			_questButton = new ButtonWindow(AniPang.stageWidth * 0.006, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
+				_buttonAtals.getTexture("BlueButton"), _iconAtals.getTexture("rankIcon"),"업적 보기");
+			_questButton.settingTextField(0xffffff,  _startButton.width/8);
+			_questButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_questButton);
+			
+			_rankButton = new ButtonWindow(AniPang.stageWidth * 0.333, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("redButton"), _iconAtals.getTexture("rankIcon"),"랭킹 보기");
 			_rankButton.settingTextField(0xffffff,  _startButton.width/8);
 			_rankButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_rankButton);
 		
-			_configButton = new ButtonWindow(AniPang.stageWidth * 0.6, AniPang.stageHeight * 0.9, _mainImage.width/2.5, _mainImage.height/12, 
+			_configButton = new ButtonWindow(AniPang.stageWidth * 0.66, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("orangeButton"), _iconAtals.getTexture("configIcon"),"환경 설정");
 			_configButton.settingTextField(0xffffff,  _startButton.width/8);
 			_configButton.addEventListener(TouchEvent.TOUCH, onClicked);
@@ -109,9 +117,13 @@ package gamescene
 				{
 					case _configButton:
 						dispose();
-						var configView : ConfigVeiw = new ConfigVeiw("Green", "환경 설정");
+						var configView : ConfigScene = new ConfigScene("Green", "환경 설정");
 						SceneManager.instance.addScene(configView);
 						SceneManager.instance.sceneChange();
+						break;
+					
+					case _questButton:
+						
 						break;
 					
 					case _startButton:
@@ -136,7 +148,7 @@ package gamescene
 						}
 						
 						dispose();
-						var playView : PlayView = new PlayView();
+						var playView : PlayScene = new PlayScene();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();
 						
@@ -144,13 +156,9 @@ package gamescene
 						CurUserData.instance.userData.heart--;
 						break;
 					
-//					case _exitButton:
-//						dispose();
-//						NativeApplication.nativeApplication.exit();
-//						break;
 					case _rankButton:
 						dispose();
-						var rankView : RankView = new RankView();
+						var rankView : RankScene = new RankScene();
 						SceneManager.instance.addScene(rankView);
 						SceneManager.instance.sceneChange();
 						break;

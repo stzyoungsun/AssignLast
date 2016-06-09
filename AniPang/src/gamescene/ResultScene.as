@@ -29,7 +29,7 @@ package gamescene
 	
 	import util.UtilFunction;
 
-	public class ResultView extends Sprite
+	public class ResultScene extends Sprite
 	{
 		private var _buttonAtals : TextureAtlas;
 		private var _itemwindowAtals : TextureAtlas;
@@ -56,7 +56,7 @@ package gamescene
 		
 		private var _newScoreFlag : Boolean = false;
 		private var _passFlag : Boolean = false;
-		public function ResultView()
+		public function ResultScene()
 		{
 			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
@@ -167,8 +167,8 @@ package gamescene
 			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
 			if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
 			{
-				KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
-				KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
+				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
+				//KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
 			}	
 			
 			else
@@ -183,7 +183,7 @@ package gamescene
 		 */		
 		protected function onSaveOK(event:flash.events.Event):void
 		{
-			KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
+			//KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
 			CurUserData.instance.initData(true);
 			_newScoreFlag = true;	
 			addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
@@ -201,7 +201,7 @@ package gamescene
 					case _returnButton:
 					{
 						dispose();
-						var playVeiw : PlayView = new PlayView();
+						var playVeiw : PlayScene = new PlayScene();
 						SceneManager.instance.addScene(playVeiw);
 						SceneManager.instance.sceneChange();
 						break;
@@ -210,7 +210,7 @@ package gamescene
 					case _exitButton:
 					{
 						dispose();
-						var mainView : MainView = new MainView();
+						var mainView : MainScene = new MainScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
 						break;
