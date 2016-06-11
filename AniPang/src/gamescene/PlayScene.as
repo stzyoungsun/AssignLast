@@ -428,12 +428,18 @@ package gamescene
 		private function clickedRandomBlock():void
 		{
 			_preHintTimer = getTimer();
-			var randomValue : int = UtilFunction.random(1,7,1);
+			var randomType : int;
+			
+			if(ScoreManager.instance.maoItemUse == true)
+				randomType = UtilFunction.random(2,7,1);
+			else
+				randomType = UtilFunction.random(1,7,1);
+			
 			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
 			{
 				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
 				{
-					if(_cellArray[i][j].cellType == randomValue)
+					if(_cellArray[i][j].cellType == randomType)
 						_cellArray[i][j].cellType = Block.BLOCK_PANG;
 				}
 			}

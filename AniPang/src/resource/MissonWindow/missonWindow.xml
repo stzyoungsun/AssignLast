@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="missonWindow.png">
+   <SubTexture name="back" x="0" y="0" width="498" height="581" />
+   <SubTexture name="coin1000" x="0" y="718" width="75" height="75" />
+   <SubTexture name="coin500" x="499" y="226" width="75" height="75" />
+   <SubTexture name="coin5000" x="0" y="794" width="75" height="75" />
+   <SubTexture name="coint300" x="76" y="718" width="75" height="75" />
+   <SubTexture name="complete" x="499" y="0" width="498" height="84" />
+   <SubTexture name="heart1" x="499" y="302" width="75" height="75" />
+   <SubTexture name="heart5" x="575" y="226" width="75" height="75" />
+   <SubTexture name="list" x="0" y="582" width="498" height="84" />
+   <SubTexture name="progress" x="0" y="692" width="258" height="25" />
+   <SubTexture name="progressback" x="499" y="200" width="258" height="25" />
+   <SubTexture name="text" x="0" y="667" width="353" height="24" />
+   <SubTexture name="uppanel" x="499" y="85" width="459" height="114" />
+</TextureAtlas>

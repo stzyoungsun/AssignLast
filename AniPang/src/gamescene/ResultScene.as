@@ -58,7 +58,7 @@ package gamescene
 		private var _passFlag : Boolean = false;
 		public function ResultScene()
 		{
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
 			
 			_backImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
@@ -164,18 +164,22 @@ package gamescene
 			_exitButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_exitButton);
 			
-			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
-			if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
+			if(CurUserData.instance.userData.today_MaxScore < bonus + curScore)
 			{
+				CurUserData.instance.userData.today_MaxScore = bonus + curScore;
+			}
+			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
+			//if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
+			//{
 				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
 				//KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
-			}	
+		//	}	
 			
-			else
-			{
+			//else
+			//{
 				addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
 				_prevTime = getTimer();
-			}
+			//}
 		}
 		
 		/**

@@ -2,7 +2,7 @@ package timer
 {
 	import flash.utils.getTimer;
 	
-	import gamescene.PlayView;
+	import gamescene.PlayScene;
 	
 	import UI.Progress.Progress;
 	
@@ -12,7 +12,7 @@ package timer
 
 	public class Timer extends Progress
 	{
-		private static const MAX_TIME : Number = 10;
+		private static const MAX_TIME : Number = 60;
 		private static const UP_MAX_TIME : Number = 70;
 		
 		private var _curTime : int = 0;
@@ -38,7 +38,7 @@ package timer
 		
 		private function onEnterFrame():void
 		{
-			if(PlayView.pauseFlag == true) return;
+			if(PlayScene.pauseFlag == true) return;
 			
 			if(_startFlag == true)
 			{

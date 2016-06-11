@@ -9,7 +9,7 @@ package
 	import flash.events.Event;
 	import flash.utils.getTimer;
 	
-	import gamescene.TitleView;
+	import gamescene.TitleScene;
 	
 	import scene.SceneManager;
 	
@@ -20,7 +20,7 @@ package
 	[SWF(width="600", height="999", frameRate="60", backgroundColor="#ffffff")]
 	public class AniPang extends Sprite
 	{
-		public static const HEART_TIME : int = 30;
+		public static const HEART_TIME : int = 300;
 		public static const MAX_HEART : int = 5;
 		private var _mainStarling:Starling;
 
@@ -35,7 +35,7 @@ package
 		{
 			super();
 			
-			KakaoExtension.instance.init();	
+			//KakaoExtension.instance.init();	
 			
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
@@ -48,9 +48,9 @@ package
 			
 			_mainStarling.start();
 			
-			addEventListener(flash.events.Event.ACTIVATE, activateListener);
-			addEventListener(flash.events.Event.DEACTIVATE, deactivateListener);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//addEventListener(flash.events.Event.ACTIVATE, activateListener);
+			//addEventListener(flash.events.Event.DEACTIVATE, deactivateListener);
+			//addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			_prevTimer = getTimer();
 		}
@@ -76,11 +76,11 @@ package
 		
 		private function deactivateListener(event:flash.events.Event):void
 		{
-			if(TitleView.sTitleViewLoadFlag == true)
+			if(TitleScene.sTitleViewLoadFlag == true)
 			{
 				if(logOutFlag == true)
 				{
-					Extension.instance.toast("로그 아웃이 성공적으로 되었습니다");
+					//Extension.instance.toast("로그 아웃이 성공적으로 되었습니다");
 					logOutFlag = false;
 				}
 				//로그아웃이 아닐 경우  하트가 다차면 푸시메세지 전달
@@ -97,9 +97,9 @@ package
 					
 					trace(itemDataJson);
 					
-					KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
-					if(pushTimer > 0)
-						Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
+					//KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
+//					if(pushTimer > 0)
+//						Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
 				}
 					
 				Starling.current.stop(true);
@@ -111,21 +111,21 @@ package
 			if(Starling.current.isStarted == false)
 				Starling.current.start();
 			
-			Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", 0, false);
+			//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", 0, false);
 			
 			//유저 데이터 만 갱신
 			CurUserData.instance.initData(false, true);
-			trace(TitleView.sTitleViewLoadFlag);
+			trace(TitleScene.sTitleViewLoadFlag);
 			
 			//로그아웃, 게임종료 되었을 경우
-			if((KakaoExtension.instance.loginState() == "LOGIN_OFF" || exitFlag == true) && TitleView.sTitleViewLoadFlag == true)
-			{
-				//게임이 종료 되었거나 로그 아웃 됫을 경우 다시 키면 재실행
-				var titleView : TitleView = new TitleView();
-				SceneManager.instance.addScene(titleView);
-				SceneManager.instance.sceneChange();
-				exitFlag = false;
-			}
+//			if((KakaoExtension.instance.loginState() == "LOGIN_OFF" || exitFlag == true) && TitleScene.sTitleViewLoadFlag == true)
+//			{
+//				//게임이 종료 되었거나 로그 아웃 됫을 경우 다시 키면 재실행
+//				var titleView : TitleScene = new TitleScene();
+//				SceneManager.instance.addScene(titleView);
+//				SceneManager.instance.sceneChange();
+//				exitFlag = false;
+//			}
 			
 		}
 		

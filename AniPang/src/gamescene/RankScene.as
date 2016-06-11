@@ -42,7 +42,7 @@ package gamescene
 		private var _loadingClip : LoadingClip;
 		public function RankScene()
 		{
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			
 			_backImage = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_backImage.width = AniPang.stageWidth;
