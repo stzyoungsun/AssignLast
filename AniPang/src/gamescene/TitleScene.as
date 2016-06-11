@@ -124,8 +124,8 @@ package gamescene
 			TextureManager.getInstance().createAtlasTexture();			
 			 
 			//로그인 된 사용자 정보 입력
-			//CurUserData.instance.initData();
-			//CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
+			CurUserData.instance.initData();
+			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
 			onLoadOK(); //테스트용 코드
 		}
 		
@@ -160,6 +160,7 @@ package gamescene
 				{
 					case TouchPhase.ENDED:
 					{
+						dispose();
 						var mainView : MainScene = new MainScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
@@ -167,6 +168,17 @@ package gamescene
 					}
 				}
 			}
+		}
+		
+		public override function dispose():void
+		{
+			super.dispose();
+			
+			removeChildren(0, -1, true);
+			removeEventListeners();
+			
+			Starling.juggler.remove(_titleText);
+			Starling.juggler.remove(_titleClip);
 		}
 		
 	}
