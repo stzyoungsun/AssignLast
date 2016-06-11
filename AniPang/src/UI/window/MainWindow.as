@@ -14,6 +14,7 @@ package UI.window
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
+	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	import starling.utils.Align;
 	
@@ -45,13 +46,17 @@ package UI.window
 		 * @param nameWindowText	메인 윈도우의 타이틀 명
 		 * 많은 부분에서 사용하는 메인 윈도우 창
 		 */		
-		public function MainWindow(nameWindowColor : String, nameWindowText : String)
+		public function MainWindow(nameWindowColor : String, nameWindowText : String, mainImage : Texture = null, userPanelImage : Texture = null)
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			
-			_mainImage = new Image(_windowAtals.getTexture("mainWindow"));
+			if(mainImage == null)
+				_mainImage = new Image(_windowAtals.getTexture("mainWindow"));
+			else
+				_mainImage = new Image(mainImage);
+			
 			_userImage = new Image(CurUserData.instance.userData.profileTexture);
 			
 			_nameText = nameWindowText;
@@ -74,7 +79,11 @@ package UI.window
 				}
 			}
 			
-			_userPanel = new Image(_windowAtals.getTexture("List"));
+			if(userPanelImage == null)
+				_userPanel = new Image(_windowAtals.getTexture("List"));
+			else
+				_userPanel = new Image(userPanelImage);
+			
 			_exitButton = new Button(_buttonAtals.getTexture("exit"));
 		}
 		
