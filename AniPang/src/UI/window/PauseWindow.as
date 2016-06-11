@@ -2,8 +2,8 @@ package UI.window
 {
 	import UI.popup.PopupWindow;
 	
-	import gamescene.MainView;
-	import gamescene.PlayView;
+	import gamescene.MainScene;
+	import gamescene.PlayScene;
 	
 	import loader.TextureManager;
 	
@@ -89,7 +89,7 @@ package UI.window
 				{
 					case _continueImage:
 					{
-						PlayView.pauseFlag = false;
+						PlayScene.pauseFlag = false;
 						dispose();
 						break;
 					}
@@ -100,13 +100,13 @@ package UI.window
 						
 						if(CurUserData.instance.userData.heart <= 0)
 						{
-							_popupWindow = new PopupWindow("하트가 부족 합니다.", 1, new Array("x"));
+							_popupWindow = new PopupWindow("하트가 부족 합니다.", 2, new Array("x","buy"), null, onDrawBuyHeart);
 							addChild(_popupWindow);
 							return;
 						}
 						
 						CurUserData.instance.userData.heart--;		
-						var playView : PlayView = new PlayView();
+						var playView : PlayScene = new PlayScene();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();
 						break;
@@ -114,13 +114,20 @@ package UI.window
 					case _menuImage:
 					{
 						dispose();
-						var mainView : MainView = new MainView();
+						var mainView : MainScene = new MainScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
 						break;
 					}
 				}
 			}
+		}
+		
+		private function onDrawBuyHeart():void
+		{
+			var butHeartWindow : BuyHeartWindow = new BuyHeartWindow();
+			butHeartWindow.initWindow(AniPang.stageWidth*0.1, AniPang.stageHeight*0.2, AniPang.stageWidth*0.8, AniPang.stageHeight*0.6);
+			addChild(butHeartWindow);
 		}
 		
 		public override function dispose():void
