@@ -2,13 +2,15 @@ package user
 {
 	import com.lpesign.KakaoExtension;
 	
+	import json.JSON;
+	
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.StatusEvent;
 	import flash.net.URLRequest;
-
+	
 	import loader.TextureManager;
 	
 	import starling.events.EventDispatcher;
@@ -50,8 +52,8 @@ package user
 			_scoreFlag = scoreFlag;
 			_userDataFlag = userDataFlag;
 			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
-			KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
-			KakaoExtension.instance.curUserData();
+			//KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
+			//KakaoExtension.instance.curUserData();
 		}
 		
 		/**
@@ -87,11 +89,35 @@ package user
 				AniPang.heartTimer = userItemData.hearttime
 			}
 			
-			_userData.exitTime = extension[5];
+			if(extension[5] == "null")
+			{
+				_userData.today_GameCount = 0;
+				_userData.today_MaxScore = 0;
+				_userData.today_UseItemCount = 0;
+				_userData.today_CompleteString = "XXXXXXXXXX";
+				_userData.today_CompleteCount = 0;
+			}
+				
+			else
+			{
+				var todayMisson : Object = json.JSON.decode(extension[5]);
+				
+				_userData.today_GameCount = todayMisson.gameCount;
+				_userData.today_MaxScore = todayMisson.maxScore;
+				_userData.today_UseItemCount = todayMisson.useItemCount;
+				_userData.today_CompleteString = todayMisson.completeString;
+					
+				for(var i : int =0; i < _userData.today_CompleteString.length; i++);
+				{
+					if(_userData.today_CompleteString.charAt(i) == "0")
+						_userData.today_CompleteCount++;
+				}
+			}
+			
+			_userData.exitTime = extension[6];
 			
 			calcHeart();
 			
-			trace(_userData.exitTime);
 			if(_userDataFlag == true) return;
 			
 			//이름이 없을 경우 익명처리
@@ -111,6 +137,17 @@ package user
 				imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadImageComplete);	
 			}
 			
+		}
+		
+		/**
+		 *  데일리 미션을 초기화 합니다
+		 */		
+		public function initMission() : void
+		{
+			_userData.today_GameCount = 0;
+			_userData.today_MaxScore = 0;
+			_userData.today_UseItemCount = 0;
+			_userData.today_CompleteString = "XXXXXXXXXX";
 		}
 		
 		/**
