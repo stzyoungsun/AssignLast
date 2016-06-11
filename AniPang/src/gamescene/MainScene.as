@@ -1,14 +1,15 @@
 package gamescene
 {
-	import com.lpesign.KakaoExtension;
-	
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	
+	import UI.ListView.ListView;
 	import UI.popup.PopupWindow;
 	import UI.window.ButtonWindow;
+	import UI.window.BuyHeartWindow;
 	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
+	import UI.window.MissonWindow;
 	
 	import loader.TextureManager;
 	
@@ -33,13 +34,12 @@ package gamescene
 		private var _startButton : ButtonWindow;
 		private var _rankButton : ButtonWindow;
 		private var _configButton : ButtonWindow;
-		private var _questButton : ButtonWindow;
+		private var _missonButton : ButtonWindow;
 		
 		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
 		private var _coinWindow : ItemWindow;
 		private var _starWindow : ItemWindow;
-		
 		
 		private var _windowAtals : TextureAtlas;
 		private var _itemwindowAtals : TextureAtlas;
@@ -88,11 +88,11 @@ package gamescene
 			_startButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_startButton);
 			
-			_questButton = new ButtonWindow(AniPang.stageWidth * 0.006, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
-				_buttonAtals.getTexture("BlueButton"), _iconAtals.getTexture("rankIcon"),"업적 보기");
-			_questButton.settingTextField(0xffffff,  _startButton.width/8);
-			_questButton.addEventListener(TouchEvent.TOUCH, onClicked);
-			addChild(_questButton);
+			_missonButton = new ButtonWindow(AniPang.stageWidth * 0.006, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
+				_buttonAtals.getTexture("BlueButton"), _iconAtals.getTexture("rankIcon"),"오늘의 미션");
+			_missonButton.settingTextField(0xffffff,  _startButton.width/10);
+			_missonButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_missonButton);
 			
 			_rankButton = new ButtonWindow(AniPang.stageWidth * 0.333, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("redButton"), _iconAtals.getTexture("rankIcon"),"랭킹 보기");
@@ -122,20 +122,28 @@ package gamescene
 						SceneManager.instance.sceneChange();
 						break;
 					
-					case _questButton:
-						
+					case _missonButton:
+						var missonWindow : MissonWindow = new MissonWindow();
+						addChild(missonWindow);
 						break;
 					
 					case _startButton:
 						
 						if(ScoreManager.instance.maoItemUse == true)
+						{
+							CurUserData.instance.userData.today_UseItemCount++;
 							itemPrice += 1200;
+						}
+							
 						if(ScoreManager.instance.timeupItemUse == true)
+						{
+							CurUserData.instance.userData.today_UseItemCount++;
 							itemPrice += 270;
-						
+						}
+							
 						if(CurUserData.instance.userData.heart <= 0)
 						{
-							_popupWindow = new PopupWindow("하트가 부족 합니다.", 1, new Array("x"));
+							_popupWindow = new PopupWindow("하트가 부족 합니다.", 2, new Array("x","buy"), null, onDrawBuyHeart);
 							addChild(_popupWindow);
 							return;
 						}
@@ -154,6 +162,7 @@ package gamescene
 						
 						CurUserData.instance.userData.gold -= itemPrice;
 						CurUserData.instance.userData.heart--;
+						CurUserData.instance.userData.today_GameCount++;
 						break;
 					
 					case _rankButton:
@@ -167,11 +176,16 @@ package gamescene
 
 		}
 		
+		private function onDrawBuyHeart():void
+		{
+			var butHeartWindow : BuyHeartWindow = new BuyHeartWindow();
+			butHeartWindow.initWindow(AniPang.stageWidth*0.1, AniPang.stageHeight*0.2, AniPang.stageWidth*0.8, AniPang.stageHeight*0.6);
+			addChild(butHeartWindow);
+		}
+		
 		protected function onExit(event:Event):void
 		{
-			// TODO Auto-generated method stub
 			dispose();
-
 			NativeApplication.nativeApplication.exit(); 
 		}
 		
