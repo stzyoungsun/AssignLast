@@ -42,6 +42,9 @@ package UI.window
 		private var _timeprice : TextField;
 		
 		private var _notUpdateImages : Vector.<Image> = new Vector.<Image>;
+		
+		private var _buyHeartButton : ButtonWindow;
+		private var _butHeartWindow : BuyHeartWindow;
 		public function ItemShopWindow(nameWindowColor : String, nameWindowText : String)
 		{
 			super(nameWindowColor, nameWindowText)
@@ -165,6 +168,12 @@ package UI.window
 			_timeprice.y = _timeCheckBox.y*1.26;
 			addChild(_timeprice);
 			
+			_buyHeartButton = new ButtonWindow(_mainPanel.x + _mainPanel.width*0.78, _mainPanel.y + _mainPanel.height*0.82, _mainPanel.width/5, _mainPanel.width/11, 
+				_itemwindowAtals.getTexture("startButton"), _itemwindowAtals.getTexture("heart2"),"구매");
+			_buyHeartButton.settingTextField(0xffffff,  _buyHeartButton.width/8);
+			_buyHeartButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_buyHeartButton);
+			
 			var i : int;
 			for(i = 0; i < 3; i ++)
 			{
@@ -236,6 +245,15 @@ package UI.window
 						}
 						break;
 					}
+						
+					case _buyHeartButton:
+					{
+						_butHeartWindow = new BuyHeartWindow();
+						_butHeartWindow.initWindow(AniPang.stageWidth*0.1, AniPang.stageHeight*0.2, AniPang.stageWidth*0.8, AniPang.stageHeight*0.6);
+						MainClass.sceneStage.addChild(_butHeartWindow);
+						break;
+					}
+				
 				}
 			}
 		}
@@ -243,7 +261,7 @@ package UI.window
 		private function onExit():void
 		{
 			parent.dispose();
-			Extension.instance.exitDialog();
+			//Extension.instance.exitDialog();
 		}
 		
 		public override function dispose():void
