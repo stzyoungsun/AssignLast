@@ -69,6 +69,9 @@ public class UserProfileFunction implements FREFunction{
 				_playerString += userProfile.getProperty("itemfield");
 				_playerString += "$";
 
+				_playerString += userProfile.getProperty("misson");
+				_playerString += "$";
+				
 				_playerString += userProfile.getProperty("exit_time");
 				_playerString += "$";
 				

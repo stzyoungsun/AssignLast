@@ -22,11 +22,13 @@ public class SaveUserDataFunction implements FREFunction{
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		// TODO Auto-generated method stub
 		 String itemField = "";
+		 String misson = "";
 		 String exitTime = "";
 		 
 		try {
 			itemField = arg1[0].getAsString();
-			exitTime = arg1[1].getAsString();
+			misson = arg1[1].getAsString();
+			exitTime = arg1[2].getAsString();
         } catch (IllegalStateException e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -42,14 +44,15 @@ public class SaveUserDataFunction implements FREFunction{
 		}
 	
 		Log.d(TAG, "세이브 들어옴1");
-		requestUpdateProfile(itemField, exitTime);
+		requestUpdateProfile(itemField, misson, exitTime);
 		Log.d(TAG, "세이브 나감");
 		return null;
 	}
 
-	private void requestUpdateProfile(String itemField, String exitTime) {
+	private void requestUpdateProfile(String itemField, String misson, String exitTime) {
 		final Map<String, String> properties = new HashMap<String, String>();
 		properties.put("itemfield", itemField);
+		properties.put("misson", misson);
 		properties.put("exit_time", exitTime);
 		Log.d(TAG, "세이브 들어옴");
 		UserManagement.requestUpdateProfile(new ApiResponseCallback<Long>() {
