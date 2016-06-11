@@ -33,7 +33,7 @@ package UI.popup
 		 */
 		public function PopupWindow(popupContent : String, buttonCnt : int, buttonNames : Array, oneFunc : Function = null, twoFunc : Function = null)
 		{
-			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["Button.png"];
+			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
 			
 			_oneFunction = oneFunc;
 			_twoFunction = twoFunc;

@@ -27,7 +27,7 @@ package UI.Progress
 			if(backTexture == null)
 				_backGoundImage = new Image(_gameViewAtlas.getTexture("background"));
 			else 
-				_backGoundImage = new new Image(backTexture);
+				_backGoundImage = new Image(backTexture);
 			
 			if(ProgressTexture == null)
 				_progressTexture = new Image(_gameViewAtlas.getTexture("bar"));
@@ -53,7 +53,7 @@ package UI.Progress
 			{
 				_textField = new TextField(_backGoundImage.width,_backGoundImage.height);
 				_textField.format.color = 0xffffff;
-				_textField.format.size = _backGoundImage.height*0.9;
+				_textField.format.size = _backGoundImage.height*0.7;
 				this.addChild(_textField);
 			}
 		}

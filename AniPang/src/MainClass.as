@@ -8,7 +8,7 @@ package
 	
 	import UI.popup.PopupWindow;
 	
-	import gamescene.TitleView;
+	import gamescene.TitleScene;
 	
 	import loader.ResourceLoader;
 	import loader.TextureManager;
@@ -62,7 +62,7 @@ package
 		{
 			AniPang.exitFlag = true;
 			dispose();
-			Extension.instance.exitDialog();
+			//Extension.instance.exitDialog();
 			NativeApplication.nativeApplication.exit();
 		}
 		
@@ -72,7 +72,7 @@ package
 		{
 			TextureManager.getInstance().createAtlasTexture();
 			
-			var titleView : TitleView = new TitleView();
+			var titleView : TitleScene = new TitleScene();
 			SceneManager.instance.addScene(titleView);
 			SceneManager.instance.sceneChange();
 			
