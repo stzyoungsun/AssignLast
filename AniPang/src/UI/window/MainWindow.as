@@ -6,6 +6,8 @@ package UI.window
 	
 	import loader.TextureManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -46,7 +48,7 @@ package UI.window
 		 * @param nameWindowText	메인 윈도우의 타이틀 명
 		 * 많은 부분에서 사용하는 메인 윈도우 창
 		 */		
-		public function MainWindow(nameWindowColor : String, nameWindowText : String, mainImage : Texture = null, userPanelImage : Texture = null)
+		public function MainWindow(nameWindowColor : String, nameWindowText : String, mainImage : Texture = null, userPanelImage : Texture = null, exitButtonFlag : Boolean = true)
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
@@ -85,6 +87,9 @@ package UI.window
 				_userPanel = new Image(userPanelImage);
 			
 			_exitButton = new Button(_buttonAtals.getTexture("exit"));
+			
+			if(exitButtonFlag == false) _exitButton.visible = false;
+			else _exitButton.visible = true;
 		}
 		
 		public function init(x : int, y : int, width: int, height : int) : void
@@ -154,6 +159,7 @@ package UI.window
 			var totalPrice : Number;
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _exitButton:

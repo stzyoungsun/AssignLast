@@ -4,6 +4,8 @@ package Animation
 	
 	import loader.TextureManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -50,8 +52,11 @@ package Animation
 		{
 			var curTimer : int = getTimer();
 			
-			if(curTimer - _prevTimer > 1000 && curTimer - _prevTimer < 3000)
+			if(curTimer - _prevTimer > 1000 && curTimer - _prevTimer < 3000 && _textImage.visible == false)
 			{
+				SoundManager.getInstance().stopLoopedPlaying();
+				SoundManager.getInstance().play("timeover.mp3", false);
+				
 				_AniImage.texture = _iconAtals.getTexture("timeoverAni2")
 				_textImage.visible = true;
 			}

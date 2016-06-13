@@ -17,6 +17,8 @@ package gamescene
 	
 	import score.ScoreManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Touch;
@@ -62,6 +64,9 @@ package gamescene
 			_iconAtals = TextureManager.getInstance().atlasTextureDictionary["Icon.png"];
 			
 			drawWindow();
+			
+			SoundManager.getInstance().stopLoopedPlaying();
+			SoundManager.getInstance().play("anipang_ui.mp3", true);
 		}
 		
 		/** 
@@ -111,8 +116,10 @@ package gamescene
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
 			var itemPrice : int = 0;
+			var itemCount : int = 0;
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _configButton:
@@ -131,13 +138,13 @@ package gamescene
 						
 						if(ScoreManager.instance.maoItemUse == true)
 						{
-							CurUserData.instance.userData.today_UseItemCount++;
+							itemCount++;
 							itemPrice += 1200;
 						}
 							
 						if(ScoreManager.instance.timeupItemUse == true)
 						{
-							CurUserData.instance.userData.today_UseItemCount++;
+							itemCount++;
 							itemPrice += 270;
 						}
 							
@@ -162,6 +169,7 @@ package gamescene
 						
 						CurUserData.instance.userData.gold -= itemPrice;
 						CurUserData.instance.userData.heart--;
+						CurUserData.instance.userData.today_UseItemCount += itemCount;
 						CurUserData.instance.userData.today_GameCount++;
 						break;
 					

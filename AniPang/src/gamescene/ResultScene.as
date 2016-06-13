@@ -14,6 +14,8 @@ package gamescene
 	
 	import score.ScoreManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -89,21 +91,23 @@ package gamescene
 			_exitButton = new Button(_buttonAtals.getTexture("exit"));
 			
 			drawMainPanel();	
+			
+			SoundManager.getInstance().play("result.mp3", false);
 		}
 		
 		private function onEnterFrame():void
 		{
 			var curTimer : int = getTimer();
 			
-			if(curTimer - _prevTime > 800)
+			if(curTimer - _prevTime > 500)
 				_curScroeTextField.visible = true;
 			
-			if(curTimer - _prevTime > 1600 )
+			if(curTimer - _prevTime > 1000 )
 			{
 				_lvBonusTextField.visible = true;
 			}
 				
-			if(curTimer - _prevTime > 2400 && _passFlag == false)
+			if(curTimer - _prevTime > 1500 && _passFlag == false)
 			{
 				var bonus : int = int(ScoreManager.instance.scoreCnt * (0.01 * CurUserData.instance.userData.lv));
 				var curScore : int  = ScoreManager.instance.scoreCnt;
@@ -112,18 +116,17 @@ package gamescene
 				_passFlag = true;
 			}
 				
-			if(curTimer - _prevTime > 3200 )
+			if(curTimer - _prevTime > 2000 )
 				_maxScroeTextField.visible = true;
 			
-			if(curTimer - _prevTime > 4000 )
+			if(curTimer - _prevTime > 2500 )
 				_goldTextField.visible = true;
 			
-			if(curTimer - _prevTime > 4800 )
+			if(curTimer - _prevTime > 3000 )
 			{
 				_starTextField.visible = true;
 				_returnButton.visible = true;
 			}
-				
 		}
 		
 		private function drawMainPanel():void
@@ -173,7 +176,7 @@ package gamescene
 			//{
 				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
 				//KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
-		//	}	
+			//}	
 			
 			//else
 			//{
@@ -200,6 +203,7 @@ package gamescene
 			
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _returnButton:

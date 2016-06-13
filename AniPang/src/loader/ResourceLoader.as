@@ -12,6 +12,7 @@ package loader
 	import avmplus.getQualifiedClassName;
 	
 	import starling.textures.Texture;
+	import sound.SoundManager;
 	
 	
 	/**
@@ -154,9 +155,9 @@ package loader
 			
 			for(var i:int = 0; i < _urlSoundArray.length; ++i)
 			{
-				var sound:Sound = new Sound();
-				sound.load(new URLRequest(_urlSoundArray[i]));
-				sound.addEventListener(Event.COMPLETE, onLoadSoundComplete);
+				var gameSound:Sound = new Sound();
+				gameSound.load(new URLRequest(_urlSoundArray[i]));
+				gameSound.addEventListener(Event.COMPLETE, onLoadSoundComplete);
 			}
 		}
 		
@@ -208,15 +209,15 @@ package loader
 		 */
 		private function onLoadSoundComplete(event:Event):void
 		{
-//			var sound:Sound = event.currentTarget as Sound;
-//			sound.removeEventListener(Event.COMPLETE, onLoadSoundComplete);
-//			
-//			var extension:Array = decodeURIComponent(sound.url).split('/');
+			var gameSound:Sound = event.currentTarget as Sound;
+			gameSound.removeEventListener(Event.COMPLETE, onLoadSoundComplete);
+			
+			var extension:Array = decodeURIComponent(gameSound.url).split('/');
 			
 			// 사운드 매니저에 입력
-			//var soundManager:SoundManager = SoundManager.getInstance();
-			//soundManager.addSound(extension[extension.length - 1], sound);
-			//sound.close();
+			var soundManager:SoundManager = SoundManager.getInstance();
+			soundManager.addSound(extension[extension.length - 1], gameSound);
+			gameSound.close();
 		}
 		
 		/**

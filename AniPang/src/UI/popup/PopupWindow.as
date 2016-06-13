@@ -2,6 +2,8 @@ package UI.popup
 {
 	import loader.TextureManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -116,6 +118,7 @@ package UI.popup
 			
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _oneButton:

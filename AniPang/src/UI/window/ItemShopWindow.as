@@ -8,6 +8,8 @@ package UI.window
 	
 	import score.ScoreManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.events.Touch;
@@ -47,7 +49,7 @@ package UI.window
 		private var _butHeartWindow : BuyHeartWindow;
 		public function ItemShopWindow(nameWindowColor : String, nameWindowText : String)
 		{
-			super(nameWindowColor, nameWindowText)
+			super(nameWindowColor, nameWindowText, null, null, false)
 			addEventListener("EXIT", onExit);
 			
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
@@ -200,6 +202,7 @@ package UI.window
 			var totalPrice : Number;
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _maoImage:
@@ -210,7 +213,6 @@ package UI.window
 						{
 							ScoreManager.instance.maoItemUse = true;
 							totalPrice = Number(_priceTextField.text) + 1200;
-							//CurUserData.instance.userData.gold -= 1200;
 							_priceTextField.text = String(totalPrice);
 							_informTextField.text = "[트리플 마오] 마오 블록을 매치하면 세줄이 한방에!";
 						}
@@ -218,7 +220,6 @@ package UI.window
 						{
 							ScoreManager.instance.maoItemUse = false;
 							totalPrice = Number(_priceTextField.text) - 1200;
-							//CurUserData.instance.userData.gold += 1200;
 							_priceTextField.text = String(totalPrice);
 						}
 						break;
@@ -232,7 +233,6 @@ package UI.window
 						{
 							ScoreManager.instance.timeupItemUse = true;
 							totalPrice = Number(_priceTextField.text) + 270;
-							//CurUserData.instance.userData.gold -= 270;
 							_priceTextField.text = String(totalPrice);
 							_informTextField.text = "[시간 보너스] 시작 시간이 10초 증가!!";
 						}
@@ -240,7 +240,6 @@ package UI.window
 						{
 							ScoreManager.instance.timeupItemUse = false;
 							totalPrice = Number(_priceTextField.text) - 270;
-							//CurUserData.instance.userData.gold += 270;
 							_priceTextField.text = String(totalPrice);
 						}
 						break;

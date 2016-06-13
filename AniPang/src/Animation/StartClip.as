@@ -4,6 +4,8 @@ package Animation
 	
 	import loader.TextureManager;
 	
+	import sound.SoundManager;
+	
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -57,17 +59,18 @@ package Animation
 			
 			_prevTimer = getTimer();
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			SoundManager.getInstance().play("readygo.mp3", false);
 		}
 		
 		private function onEnterFrame():void
 		{
 			var curTimer : int = getTimer();
 			
-			if(curTimer - _prevTimer > 1600 && curTimer - _prevTimer < 2400)
+			if(curTimer - _prevTimer > 1300 && curTimer - _prevTimer < 2400 && _readyClip.visible == true)
 			{
 				_readyClip.visible = false;
 				_startImage.visible = true;
-				_textImage.texture = _iconAtals.getTexture("go")
+				_textImage.texture = _iconAtals.getTexture("go")		
 			}
 			
 			else if(curTimer - _prevTimer > 2400)

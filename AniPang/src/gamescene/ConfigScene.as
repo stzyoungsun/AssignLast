@@ -14,6 +14,8 @@ package gamescene
 	
 	import scene.SceneManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -24,7 +26,6 @@ package gamescene
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
-	import user.DateFormat;
 
 	public class ConfigScene extends Sprite
 	{
@@ -63,6 +64,7 @@ package gamescene
 			
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _logoutButton:
@@ -92,7 +94,13 @@ package gamescene
 			
 			trace(itemDataJson);
 			
-			//KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
+			var missonDataJson : String = "{" + "\"today_GameCount\":" + String(CurUserData.instance.userData.today_GameCount) + 
+				",\"today_MaxScore\":" +  String(CurUserData.instance.userData.today_MaxScore) +",\"today_UseItemCount\":" + String(CurUserData.instance.userData.today_UseItemCount) + 
+				",\"today_CompleteString\":" +  "\"" + CurUserData.instance.userData.today_CompleteString + "\"" + "}";
+			
+			trace(missonDataJson);
+			
+			//KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
 		}
 		
 		/**

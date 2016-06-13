@@ -4,6 +4,8 @@ package UI.window
 	
 	import loader.TextureManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.events.Touch;
@@ -122,6 +124,7 @@ package UI.window
 
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch((event.currentTarget as Button).name)
 				{
 					case "1":

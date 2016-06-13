@@ -2,6 +2,8 @@ package object.Block
 {
 	import score.ScoreManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.MovieClip;
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -157,6 +159,7 @@ package object.Block
 						ScoreManager.instance.destoryBlockCount = 1;
 						
 						this.parent.dispatchEvent(new Event("hintInit"));
+						SoundManager.getInstance().play("pang.mp3", false);
 					}
 					
 					if(this.currentFrame >= 2)

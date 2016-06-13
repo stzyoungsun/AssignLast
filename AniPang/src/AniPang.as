@@ -13,6 +13,8 @@ package
 	
 	import scene.SceneManager;
 	
+	import sound.SoundManager;
+	
 	import starling.core.Starling;
 	
 	import user.CurUserData;
@@ -78,6 +80,7 @@ package
 		{
 			if(TitleScene.sTitleViewLoadFlag == true)
 			{
+				SoundManager.getInstance().stopLoopedPlaying();
 				if(logOutFlag == true)
 				{
 					//Extension.instance.toast("로그 아웃이 성공적으로 되었습니다");
@@ -97,9 +100,15 @@ package
 					
 					trace(itemDataJson);
 					
-					//KakaoExtension.instance.saveUserData(itemDataJson, CurUserData.instance.userData.exitTime);
-//					if(pushTimer > 0)
-//						Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
+					var missonDataJson : String = "{" + "\"today_GameCount\":" + String(CurUserData.instance.userData.today_GameCount) + 
+						",\"today_MaxScore\":" +  String(CurUserData.instance.userData.today_MaxScore) +",\"today_UseItemCount\":" + String(CurUserData.instance.userData.today_UseItemCount) + 
+						",\"today_CompleteString\":" + "\"" + CurUserData.instance.userData.today_CompleteString + "\"" + "}";
+					
+					trace(missonDataJson);
+					
+					//KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
+					//if(pushTimer > 0)
+						//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
 				}
 					
 				Starling.current.stop(true);
@@ -110,6 +119,11 @@ package
 		{
 			if(Starling.current.isStarted == false)
 				Starling.current.start();
+			
+			if(TitleScene.sTitleViewLoadFlag == true)
+			{
+				SoundManager.getInstance().playLoopedPlaying();
+			}
 			
 			//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", 0, false);
 			

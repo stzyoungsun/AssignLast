@@ -10,6 +10,8 @@ package gamescene
 	
 	import score.ScoreManager;
 	
+	import sound.SoundManager;
+	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -139,6 +141,7 @@ package gamescene
 			
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _nextButton:

@@ -3,11 +3,14 @@ package gamescene
 	import com.lpesign.KakaoExtension;
 	
 	import flash.events.StatusEvent;
+	import flash.media.Sound;
 	
 	import loader.ResourceLoader;
 	import loader.TextureManager;
 	
 	import scene.SceneManager;
+	
+	import sound.SoundManager;
 	
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -70,10 +73,10 @@ package gamescene
 			//로그인 체크
 //			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
 //			{
-//				//로그 아웃 상태 일 경우 로그인
+////				//로그 아웃 상태 일 경우 로그인
 //				KakaoExtension.instance.login();
 //			}
-//			
+////			
 //			else
 //			{
 //				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
@@ -121,8 +124,11 @@ package gamescene
 			_loadingImage = null;
 			
 			TextureManager.getInstance().created = false;
-			TextureManager.getInstance().createAtlasTexture();			
-			 
+			TextureManager.getInstance().createAtlasTexture();	
+			
+			SoundManager.getInstance().stopLoopedPlaying();
+			SoundManager.getInstance().play("anipang_ui.mp3", true);
+				
 			//로그인 된 사용자 정보 입력
 			CurUserData.instance.initData();
 			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);

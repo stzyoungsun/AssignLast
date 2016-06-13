@@ -5,18 +5,20 @@ package gamescene
 	import Animation.EndClip;
 	import Animation.StartClip;
 	
+	import UI.GameTextField.ComboTextField;
+	import UI.Progress.Progress;
 	import UI.window.PauseWindow;
 	
 	import loader.TextureManager;
 	
 	import object.Block.Block;
 	import object.Block.Cell;
-	import UI.GameTextField.ComboTextField;
-	import UI.Progress.Progress;
 	
 	import scene.SceneManager;
 	
 	import score.ScoreManager;
+	
+	import sound.SoundManager;
 	
 	import starling.core.Starling;
 	import starling.display.Button;
@@ -118,6 +120,9 @@ package gamescene
 			_startClip.addEventListener("START", onStart);
 
 			addChild(_startClip);
+			
+			SoundManager.getInstance().stopLoopedPlaying();
+			SoundManager.getInstance().play("anipang_ingame.mp3", true);
 		}
 		
 		private function onStart():void
@@ -453,6 +458,8 @@ package gamescene
 		 */		
 		public function swapCell(curCell : Cell, targetCell : Cell, moveDirect : int) : void
 		{
+			SoundManager.getInstance().play("moving.mp3", false);
+			
 			if(targetCell.cellType == Block.WALL) return;
 			if(targetCell.cellType == Block.BLOCK_PANG) return;
 			if(targetCell.cellType == Block.BLOCK_REMOVE) return;
@@ -543,6 +550,7 @@ package gamescene
 			
 			if(touch)
 			{
+				SoundManager.getInstance().play("button.mp3", false);
 				switch(event.currentTarget)
 				{
 					case _pauseImage:
