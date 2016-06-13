@@ -33,7 +33,7 @@ package UI.window
 		
 		private var _upPanelImage : Image;
 		private var _completeProgress : Progress;
-		
+		private var _allCompleteImage : Image
 		private static var _temp : int = 50;
 		
 		private var _listVector : Vector.<Sprite> = new Vector.<Sprite>;
@@ -78,17 +78,48 @@ package UI.window
 			allClearReward.x = _upPanelImage.x + _upPanelImage.width - allClearReward.width*1.18;
 			allClearReward.y = _upPanelImage.y + _upPanelImage.height - allClearReward.height*1.1;
 			
+			_allCompleteImage = new Image(_missonAtals.getTexture("complete"));
+			_allCompleteImage.x = _upPanelImage.x;
+			_allCompleteImage.y = _upPanelImage.y;
+			_allCompleteImage.width = _upPanelImage.width;
+			_allCompleteImage.height = _upPanelImage.height;
+			_allCompleteImage.visible = false;
+			_allCompleteImage.addEventListener(TouchEvent.TOUCH, onTounchUpPanel);
+			
 			addChild(informTextField);
 			addChild(_upPanelImage);
 			addChild(_completeProgress);
 			addChild(allClearReward);
+			addChild(_allCompleteImage);
 		}
 		
 		private function onEnterFrame():void
 		{
+			calcRemainTime();
+			
 			_completeProgress.calcValue(MAX_MISSON_COUNT, CurUserData.instance.userData.today_CompleteCount);
 			_completeProgress.text = CurUserData.instance.userData.today_CompleteCount + "/" + String(MAX_MISSON_COUNT);
-			calcRemainTime();
+			
+			if(CurUserData.instance.userData.today_CompleteString == "Complete") return;
+			
+			if(CurUserData.instance.userData.today_CompleteCount == 10)
+			{
+				_allCompleteImage.visible = true;
+			}
+		}
+		
+		private function onTounchUpPanel(event : TouchEvent):void
+		{
+			var touch : Touch = event.getTouch((event.currentTarget as Image), TouchPhase.ENDED);
+
+			if(touch)
+			{
+				_popupWindow = new PopupWindow("모든 미션 완료 하여 코인 5000개를 받았습니다.", 1, new Array("o"));
+				parent.addChild(_popupWindow);
+				CurUserData.instance.userData.gold += 5000;
+				CurUserData.instance.userData.today_CompleteString = "Complete";
+				(event.currentTarget as Image).removeEventListener(TouchEvent.TOUCH, onTounchUpPanel);
+			}
 		}
 		
 		private function calcRemainTime():void
@@ -128,6 +159,8 @@ package UI.window
 		
 		private function drawListView():void
 		{
+			if(CurUserData.instance.userData.today_CompleteString == "Complete") return;
+			
 			var vectorCnt : int = 0;
 			var i : int = 0;
 			
@@ -289,8 +322,7 @@ package UI.window
 							completeImage.visible = true;
 						}
 						break;
-					}
-						
+					}		
 				}
 			}
 		
@@ -317,6 +349,7 @@ package UI.window
 						(event.currentTarget as Sprite).dispatchEvent(new Event("GAIN_ITEM", false, "하트 1개"));
 						CurUserData.instance.userData.today_CompleteString = "O" + CurUserData.instance.userData.today_CompleteString.substr(1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", true, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					
@@ -326,6 +359,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "2": 
@@ -334,6 +368,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "3": 
@@ -342,6 +377,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "4": 
@@ -350,6 +386,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "5": 
@@ -358,6 +395,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "6": 
@@ -366,6 +404,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case"7":
@@ -374,6 +413,7 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 							+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}
 					case "8":
@@ -382,13 +422,14 @@ package UI.window
 						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, tempName) + "O" 
 																			+ CurUserData.instance.userData.today_CompleteString.substr(tempName+1, 9);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
+						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
 					}	
 					
 					case "9":
 					{
 						(event.currentTarget as Sprite).dispatchEvent(new Event("GAIN_ITEM", false, "코인 1000개"));
-						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, 8) + "O";
+						CurUserData.instance.userData.today_CompleteString = CurUserData.instance.userData.today_CompleteString.substr(0, 9) + "O";
 						trace(CurUserData.instance.userData.today_CompleteString);
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", false, posInvector));
 					}
