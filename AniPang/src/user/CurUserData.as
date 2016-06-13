@@ -2,14 +2,14 @@ package user
 {
 	import com.lpesign.KakaoExtension;
 	
-	import json.JSON;
-	
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.StatusEvent;
 	import flash.net.URLRequest;
+	
+	import json.JSON;
 	
 	import loader.TextureManager;
 	
@@ -89,6 +89,10 @@ package user
 				AniPang.heartTimer = userItemData.hearttime
 			}
 			
+			_userData.exitTime = extension[6];
+			
+			if(initMisson() == true) extension[5] = "null"
+			
 			if(extension[5] == "null")
 			{
 				_userData.today_GameCount = 0;
@@ -102,19 +106,27 @@ package user
 			{
 				var todayMisson : Object = json.JSON.decode(extension[5]);
 				
-				_userData.today_GameCount = todayMisson.gameCount;
-				_userData.today_MaxScore = todayMisson.maxScore;
-				_userData.today_UseItemCount = todayMisson.useItemCount;
-				_userData.today_CompleteString = todayMisson.completeString;
-					
-				for(var i : int =0; i < _userData.today_CompleteString.length; i++);
+				_userData.today_GameCount = todayMisson.today_GameCount;
+				_userData.today_MaxScore = todayMisson.today_MaxScore;
+				_userData.today_UseItemCount = todayMisson.today_UseItemCount;
+				_userData.today_CompleteString = todayMisson.today_CompleteString;
+				_userData.today_CompleteCount = 0;
+				
+				if(CurUserData.instance.userData.today_CompleteString == "Complete") 
 				{
-					if(_userData.today_CompleteString.charAt(i) == "0")
-						_userData.today_CompleteCount++;
+					_userData.today_CompleteCount = 10;
 				}
+				
+				else
+				{
+					for(var i : int =0; i < _userData.today_CompleteString.length; i++)
+					{
+						if(_userData.today_CompleteString.charAt(i) == "O")
+							_userData.today_CompleteCount++;
+					}
+				}
+				
 			}
-			
-			_userData.exitTime = extension[6];
 			
 			calcHeart();
 			
@@ -130,6 +142,7 @@ package user
 				_userData.profileTexture = TextureManager.getInstance().textureDictionary["notProfile.png"];
 				dispatchEvent((new starling.events.Event("PROFILE_LOAD_OK")));
 			}
+			
 			else
 			{
 				var imageLoader:Loader = new Loader();
@@ -139,11 +152,32 @@ package user
 			
 		}
 		
+		private function initMisson():Boolean
+		{
+			var curDate : Date = new Date();
+			var prevDate : Date = new Date(_userData.exitTime);
+			
+			if(curDate.date != prevDate.date) 
+			{
+				curDate = null;
+				prevDate = null;
+				return true;
+			}
+			
+			else
+			{
+				curDate = null;
+				prevDate = null;
+				return false;
+			}
+		}
+		
 		/**
 		 *  데일리 미션을 초기화 합니다
 		 */		
 		public function initMission() : void
 		{
+			_userData.today_CompleteCount = 0;
 			_userData.today_GameCount = 0;
 			_userData.today_MaxScore = 0;
 			_userData.today_UseItemCount = 0;
@@ -177,7 +211,9 @@ package user
 				_userData.heart = AniPang.MAX_HEART;
 				AniPang.heartTimer = AniPang.HEART_TIME;
 			}
-		
+			
+			curDate = null;
+			prevDate = null;
 		}
 		
 		protected function onLoadImageComplete(event:Event):void

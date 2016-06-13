@@ -112,9 +112,9 @@ package com.lpesign
 			_context.call("saveuserscroe", maxScore);
 		}
 		
-		public function saveUserData(itemField : String, exitTime : String) :void
+		public function saveUserData(itemField : String, missonData : String, exitTime : String) :void
 		{
-			_context.call("saveuserdata", itemField, exitTime);
+			_context.call("saveuserdata", itemField, missonData, exitTime);
 		}
 		
 		public function getIDList():void
