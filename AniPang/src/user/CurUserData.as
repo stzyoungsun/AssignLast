@@ -78,15 +78,22 @@ package user
 				_userData.totalStar = 0;
 				_userData.heart = AniPang.MAX_HEART;
 				AniPang.heartTimer = AniPang.HEART_TIME;
+				_userData.backGoundSound = "ON";
+				_userData.effectSound = "ON";
+				_userData.permitPush = "ON";
 			}
 			
 			else
 			{
 				var userItemData : Object = json.JSON.decode(extension[4]);
+				
 				_userData.gold = userItemData.gold;
 				_userData.totalStar = userItemData.star;
 				_userData.heart = userItemData.heart;
 				AniPang.heartTimer = userItemData.hearttime
+				_userData.backGoundSound = userItemData.backGoundSound;
+				_userData.effectSound = userItemData.effectSound;
+				_userData.permitPush = userItemData.permitPush;
 			}
 			
 			_userData.exitTime = extension[6];

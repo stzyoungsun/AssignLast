@@ -19,6 +19,7 @@ package UI.window
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
+	import UI.Button.SideImageButton;
 	
 	public class ItemShopWindow extends MainWindow
 	{
@@ -45,7 +46,7 @@ package UI.window
 		
 		private var _notUpdateImages : Vector.<Image> = new Vector.<Image>;
 		
-		private var _buyHeartButton : ButtonWindow;
+		private var _buyHeartButton : SideImageButton;
 		private var _butHeartWindow : BuyHeartWindow;
 		public function ItemShopWindow(nameWindowColor : String, nameWindowText : String)
 		{
@@ -170,7 +171,7 @@ package UI.window
 			_timeprice.y = _timeCheckBox.y*1.26;
 			addChild(_timeprice);
 			
-			_buyHeartButton = new ButtonWindow(_mainPanel.x + _mainPanel.width*0.78, _mainPanel.y + _mainPanel.height*0.82, _mainPanel.width/5, _mainPanel.width/11, 
+			_buyHeartButton = new SideImageButton(_mainPanel.x + _mainPanel.width*0.78, _mainPanel.y + _mainPanel.height*0.82, _mainPanel.width/5, _mainPanel.width/11, 
 				_itemwindowAtals.getTexture("startButton"), _itemwindowAtals.getTexture("heart2"),"구매");
 			_buyHeartButton.settingTextField(0xffffff,  _buyHeartButton.width/8);
 			_buyHeartButton.addEventListener(TouchEvent.TOUCH, onClicked);

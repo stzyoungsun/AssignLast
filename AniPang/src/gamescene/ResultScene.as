@@ -5,7 +5,7 @@ package gamescene
 	import flash.events.Event;
 	import flash.utils.getTimer;
 	
-	import UI.window.ButtonWindow;
+	import UI.Button.SideImageButton;
 	import UI.window.MainWindow;
 	
 	import loader.TextureManager;
@@ -48,7 +48,7 @@ package gamescene
 		private var _goldTextField : TextField;
 		private var _starTextField : TextField;
 		
-		private var _returnButton : ButtonWindow;
+		private var _returnButton : SideImageButton;
 		private var _newRecordImage : Image;		//추후
 		private var _newRankingImage : Image;		//추후
 		
@@ -68,7 +68,7 @@ package gamescene
 			_backImage.height = AniPang.stageHeight;
 			addChild(_backImage);
 			
-			_returnButton = new ButtonWindow(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.78, AniPang.stageWidth/2.5, AniPang.stageHeight/12, 
+			_returnButton = new SideImageButton(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.78, AniPang.stageWidth/2.5, AniPang.stageHeight/12, 
 				_itemwindowAtals.getTexture("startButton"), null,"다시하기");
 			_returnButton.settingTextField(0xffffff,  _returnButton.width/8);
 			_returnButton.addEventListener(TouchEvent.TOUCH, onClicked);

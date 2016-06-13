@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="attend.png">
+   <SubTexture name="attendBox" x="498" y="0" width="156" height="122" />
+   <SubTexture name="attendPanel" x="0" y="0" width="497" height="504" />
+   <SubTexture name="attendStamp" x="498" y="123" width="76" height="76" />
+</TextureAtlas>

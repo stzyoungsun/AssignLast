@@ -3,7 +3,6 @@ package
 	import com.lpesign.Extension;
 	
 	import flash.desktop.NativeApplication;
-	import flash.net.drm.AddToDeviceGroupSetting;
 	import flash.ui.Keyboard;
 	
 	import UI.popup.PopupWindow;

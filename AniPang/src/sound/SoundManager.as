@@ -5,6 +5,11 @@ package sound
 	import flash.media.SoundChannel;
 	import flash.utils.Dictionary;
 	
+	import starling.core.starling_internal;
+	
+	import user.CurUserData;
+	import user.UserDataFormat;
+	
 	/**
 	 * 사운드 리소스를 관리하는 클래스. 싱글턴 패턴을 적용해서 전체 어플리케이션에서 단 하나의 객체만 생성된다.
 	 */
@@ -98,10 +103,11 @@ package sound
 					throw new Error("Invalid sound resource name. Check your sound resource name");
 				}
 				
-				effectSound.play();
+				if(CurUserData.instance.userData.effectSound == "ON")
+					effectSound.play();
 			}
 				// loop가 true이고, _loopedPlayingState가 STOP이면 반복 재생 설정
-			else if(loop && _loopedPlayingState == STOP)
+			else if(loop && _loopedPlayingState == STOP && CurUserData.instance.userData.backGoundSound == "ON")
 			{
 				_gameSound = _soundResource[resourceName];
 				

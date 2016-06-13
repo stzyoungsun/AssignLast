@@ -5,6 +5,8 @@ package gamescene
 	import flash.events.StatusEvent;
 	import flash.media.Sound;
 	
+	import gamescene.attend.AttendScene;
+	
 	import loader.ResourceLoader;
 	import loader.TextureManager;
 	
@@ -167,7 +169,7 @@ package gamescene
 					case TouchPhase.ENDED:
 					{
 						dispose();
-						var mainView : MainScene = new MainScene();
+						var mainView : AttendScene = new AttendScene();
 						SceneManager.instance.addScene(mainView);
 						SceneManager.instance.sceneChange();
 						break;

@@ -1,4 +1,4 @@
-package UI.window
+package UI.Button
 {
 	import flash.geom.Rectangle;
 	
@@ -6,11 +6,11 @@ package UI.window
 	import starling.display.Image;
 	import starling.textures.Texture;
 
-	public class ButtonWindow extends Button
+	public class SideImageButton extends Button
 	{
 		private var _sideImge : Image;
 		
-		public function ButtonWindow(x : int, y: int, width : int, height : int, buttonTexture : Texture, sideTexture : Texture = null, text : String = "")
+		public function SideImageButton(x : int, y: int, width : int, height : int, buttonTexture : Texture, sideTexture : Texture = null, text : String = "")
 		{
 			super(buttonTexture,text);
 			

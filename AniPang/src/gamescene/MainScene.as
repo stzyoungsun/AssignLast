@@ -5,7 +5,7 @@ package gamescene
 	
 	import UI.ListView.ListView;
 	import UI.popup.PopupWindow;
-	import UI.window.ButtonWindow;
+	import UI.Button.SideImageButton;
 	import UI.window.BuyHeartWindow;
 	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
@@ -33,10 +33,10 @@ package gamescene
 		private var _mainImage : Image;
 		private var _itemShopWindow : ItemShopWindow;
 		
-		private var _startButton : ButtonWindow;
-		private var _rankButton : ButtonWindow;
-		private var _configButton : ButtonWindow;
-		private var _missonButton : ButtonWindow;
+		private var _startButton : SideImageButton;
+		private var _rankButton : SideImageButton;
+		private var _configButton : SideImageButton;
+		private var _missonButton : SideImageButton;
 		
 		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
@@ -87,25 +87,25 @@ package gamescene
 			_starWindow = new ItemWindow(_itemwindowAtals.getTexture("starIcon"), AniPang.stageWidth*0.72, AniPang.stageHeight*0.03, AniPang.stageWidth/4, AniPang.stageHeight/30,0x3edcf6, "STAR");
 			addChild(_starWindow);
 			
-			_startButton = new ButtonWindow(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.73, _mainImage.width/2.5, _mainImage.height/12, 
+			_startButton = new SideImageButton(AniPang.stageWidth * 0.3, AniPang.stageHeight * 0.73, _mainImage.width/2.5, _mainImage.height/12, 
 				_itemwindowAtals.getTexture("startButton"), null,"게임 시작");
 			_startButton.settingTextField(0xffffff,  _startButton.width/8);
 			_startButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_startButton);
 			
-			_missonButton = new ButtonWindow(AniPang.stageWidth * 0.006, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
+			_missonButton = new SideImageButton(AniPang.stageWidth * 0.006, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("BlueButton"), _iconAtals.getTexture("rankIcon"),"오늘의 미션");
 			_missonButton.settingTextField(0xffffff,  _startButton.width/10);
 			_missonButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_missonButton);
 			
-			_rankButton = new ButtonWindow(AniPang.stageWidth * 0.333, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
+			_rankButton = new SideImageButton(AniPang.stageWidth * 0.333, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("redButton"), _iconAtals.getTexture("rankIcon"),"랭킹 보기");
 			_rankButton.settingTextField(0xffffff,  _startButton.width/8);
 			_rankButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_rankButton);
 		
-			_configButton = new ButtonWindow(AniPang.stageWidth * 0.66, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
+			_configButton = new SideImageButton(AniPang.stageWidth * 0.66, AniPang.stageHeight * 0.9, _mainImage.width/3, _mainImage.height/12, 
 				_buttonAtals.getTexture("orangeButton"), _iconAtals.getTexture("configIcon"),"환경 설정");
 			_configButton.settingTextField(0xffffff,  _startButton.width/8);
 			_configButton.addEventListener(TouchEvent.TOUCH, onClicked);

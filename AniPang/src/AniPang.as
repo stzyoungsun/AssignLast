@@ -96,7 +96,10 @@ package
 					trace(pushTimer);
 				
 					var itemDataJson : String = "{" + "\"gold\":" + String(CurUserData.instance.userData.gold) + ",\"star\":" +  String(CurUserData.instance.userData.totalStar) +
-												",\"heart\":" + String(CurUserData.instance.userData.heart) + ",\"hearttime\":" + String(AniPang.heartTimer) + "}";
+												",\"heart\":" + String(CurUserData.instance.userData.heart) + ",\"hearttime\":" + String(AniPang.heartTimer) + 
+												",\"backGoundSound\":" + "\"" + CurUserData.instance.userData.backGoundSound + "\"" +
+												",\"effectSound\":" + "\"" + CurUserData.instance.userData.effectSound + "\"" + 
+												",\permitPush\":" + "\"" + CurUserData.instance.userData.permitPush + "\"" + "}";
 					
 					trace(itemDataJson);
 					
@@ -107,7 +110,7 @@ package
 					trace(missonDataJson);
 					
 					//KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
-					//if(pushTimer > 0)
+					//if(pushTimer > 0 && CurUserData.instance.userData.permitPush == true)
 						//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
 				}
 					
@@ -125,7 +128,8 @@ package
 				SoundManager.getInstance().playLoopedPlaying();
 			}
 			
-			//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", 0, false);
+			//if(CurUserData.instance.userData.permitPush == true)
+				//Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", 0, false);
 			
 			//유저 데이터 만 갱신
 			CurUserData.instance.initData(false, true);

@@ -36,6 +36,8 @@ package UI.window
 		private var _allCompleteImage : Image
 		private static var _temp : int = 50;
 		
+		private var _backImage : Image;
+		
 		private var _listVector : Vector.<Sprite> = new Vector.<Sprite>;
 		public function MissonWindow()
 		{
@@ -43,6 +45,12 @@ package UI.window
 			_missonAtals = TextureManager.getInstance().atlasTextureDictionary["missonWindow.png"];
 			
 			super("Green", "오늘의 미션", _missonAtals.getTexture("back"));
+			
+			_backImage = new Image(TextureManager.getInstance().textureDictionary["grey_screen.png"]);
+			_backImage.width = AniPang.stageWidth;
+			_backImage.height = AniPang.stageHeight;
+			addChild(_backImage);
+			
 			addEventListener("EXIT", onExit);
 			this.init(AniPang.stageWidth*0.1, AniPang.stageHeight*0.2, AniPang.stageWidth*0.8, AniPang.stageHeight*0.6);
 			

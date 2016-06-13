@@ -27,6 +27,11 @@ package user
 		public var today_CompleteString : String ="XXXXXXXXXX";
 		public var today_CompleteCount : int = 0;
 		
+		//게임 세팅 데이터
+		public var backGoundSound : String = "ON";
+		public var effectSound : String = "ON";
+		public var permitPush : String = "ON";
+		
 		//유저 접속 시간
 		public var exitTime : String;
 		
