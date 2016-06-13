@@ -2,12 +2,12 @@ package timer
 {
 	import flash.utils.getTimer;
 	
-	import gamescene.PlayScene;
-	
 	import UI.Progress.Progress;
 	
-	import score.ScoreManager;
+	import gamescene.PlayScene;
 	
+	import score.ScoreManager;
+
 	import starling.events.Event;
 
 	public class Timer extends Progress
@@ -55,7 +55,10 @@ package timer
 					_preTime = getTimer();
 					
 					if(_curTime == 0)
+					{
 						dispatchEvent(new Event("TIMEOUT"));
+					}
+						
 				}
 			}
 		}
