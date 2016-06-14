@@ -96,6 +96,10 @@ package util
 			return str;
 		}
 		
+		/**
+		 * @param sec		초
+		 * @return 			초를 이용하여 시간 스트링 출력
+		 */		
 		public static function makeTime(sec : int) : String
 		{
 			var time : String;
@@ -114,6 +118,17 @@ package util
 				time = min + ":" + sec;
 			
 			return time;
+		}
+		
+		/**
+		 * @return 현재 시간을 기준으로 자정 Date 
+		 */		
+		public static function getMidnight() : Date
+		{
+			var midnight : Date = new Date();
+			midnight.setHours(24, 0, 0, 0);	
+			
+			return midnight;
 		}
 	}
 }
