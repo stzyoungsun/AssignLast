@@ -172,17 +172,17 @@ package gamescene
 				CurUserData.instance.userData.today_MaxScore = bonus + curScore;
 			}
 			//현재 획득 한 점수가 맥스 점수보다 높은 경우 서버에 저장
-			//if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
-			//{
-				//KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
-				//KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
-			//}	
+			if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
+			{
+				KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
+				KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
+			}	
 			
-			//else
-			//{
+			else
+			{
 				addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
 				_prevTime = getTimer();
-			//}
+			}
 		}
 		
 		/**
@@ -190,7 +190,7 @@ package gamescene
 		 */		
 		protected function onSaveOK(event:flash.events.Event):void
 		{
-			//KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
+			KakaoExtension.instance.removeEventListener("SAVE_OK", onSaveOK);
 			CurUserData.instance.initData(true);
 			_newScoreFlag = true;	
 			addEventListener(starling.events.Event.ENTER_FRAME, onEnterFrame);
