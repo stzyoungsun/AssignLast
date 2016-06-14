@@ -10,6 +10,16 @@ package UI.Button
 	{
 		private var _sideImge : Image;
 		
+		/**
+		 * @param x
+		 * @param y
+		 * @param width
+		 * @param height
+		 * @param buttonTexture		버튼의 back 텍스쳐
+		 * @param sideTexture		버튼의 side 텍스쳐
+		 * @param text
+		 * 버튼 사이드에 이미지를 넣을 수 있는 클래스
+		 */		
 		public function SideImageButton(x : int, y: int, width : int, height : int, buttonTexture : Texture, sideTexture : Texture = null, text : String = "")
 		{
 			super(buttonTexture,text);
