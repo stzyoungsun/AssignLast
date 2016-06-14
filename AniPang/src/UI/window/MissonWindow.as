@@ -39,6 +39,11 @@ package UI.window
 		private var _backImage : Image;
 		
 		private var _listVector : Vector.<Sprite> = new Vector.<Sprite>;
+		
+		/**
+		 * 일일 미션의 윈도우
+		 * 일일 미션을 담고 있는 리스트 뷰, 초기화 시간을 나타내는 텍스트 필드 등으로 구성
+		 */		
 		public function MissonWindow()
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
@@ -61,6 +66,9 @@ package UI.window
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
+		/** 
+		 * 미션의 달성도, 초기화까지 남은 시간 등을 화면에 출력
+		 */		
 		private function drawUpPanel():void
 		{
 			_upPanelImage = new Image(_missonAtals.getTexture("uppanel"));
@@ -103,8 +111,9 @@ package UI.window
 		
 		private function onEnterFrame():void
 		{
+			//남은 시간을 계산
 			calcRemainTime();
-			
+			//미션 달성도를 나타내는 프로그래스 바
 			_completeProgress.calcValue(MAX_MISSON_COUNT, CurUserData.instance.userData.today_CompleteCount);
 			_completeProgress.text = CurUserData.instance.userData.today_CompleteCount + "/" + String(MAX_MISSON_COUNT);
 			
@@ -116,6 +125,9 @@ package UI.window
 			}
 		}
 		
+		/**
+		 * 모든 미션을 클리어 할 경우 클릭 하면 모든 미션 달성 보상 코인 5000 획득
+		 */		
 		private function onTounchUpPanel(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch((event.currentTarget as Image), TouchPhase.ENDED);
@@ -130,11 +142,13 @@ package UI.window
 			}
 		}
 		
+		/**
+		 * 현재 시간과 자정까지의 시간을 비교하여 남은 시간을 화면에 출력
+		 */		
 		private function calcRemainTime():void
 		{
 			var curDate : Date = new Date();
-			var midnight : Date = new Date();
-			midnight.setHours(24, 0, 0, 0);	//테스트
+			var midnight : Date = UtilFunction.getMidnight();
 			
 			var remainTime : int = midnight.getTime() - curDate.getTime();
 
@@ -152,6 +166,9 @@ package UI.window
 			midnight = null;
 		}
 		
+		/**
+		 * 타이머 텍스트 필드를 화면에 출력
+		 */		
 		private function drawTodayTimer():void
 		{
 			_todayTimer = new TextField(_upPanelImage.width*0.66, _upPanelImage.height/2);
@@ -165,6 +182,9 @@ package UI.window
 			addChild(_todayTimer);
 		}
 		
+		/**
+		 * 사용자가 완료 한 일일 미션은 리스트에 제외 하고 완료 되었을 경우에는 완료 스템프를 찍어주는 작업을 하는 함수
+		 */		
 		private function drawListView():void
 		{
 			if(CurUserData.instance.userData.today_CompleteString == "Complete") return;
@@ -173,7 +193,7 @@ package UI.window
 			var i : int = 0;
 			
 			_listView = new ListView(AniPang.stageWidth*0.1, AniPang.stageHeight*0.48, AniPang.stageWidth*0.8, AniPang.stageHeight*0.31);
-	
+			//일일 미션이 완료가 아닌 부분안 리스트 벡터에 삽입
 			for(i = 0; i < 10; i++)
 			{
 				if(CurUserData.instance.userData.today_CompleteString.charAt(i) == "O") continue;
@@ -181,7 +201,9 @@ package UI.window
 				_listVector.push(new Sprite());
 				_listVector[vectorCnt++].name = String(i);
 			}
-			
+			//아직 완료가 안된 일일 미션의 리스트를 초기화 
+			//완료 했을 경우 완료 스템프와 클릭 이벤트를 설정
+			//미 완료 일 경우 현재 진행 상태를 출력
 			for( i = 0; i < _listVector.length; i++)
 			{
 				var listImage : Image = new Image(_missonAtals.getTexture("list"));
@@ -337,7 +359,12 @@ package UI.window
 			_listView.drawList(_listVector);
 			addChild(_listView);
 		}
-				
+		
+		/**
+		 * 일일 미션을 완료 했을 경우 생기는 클릭 이벤트
+		 * 클릭 한 일일 미션 리스트에 따라 완료 된 리스트는 화면에서 지우라는 이벤트 발생
+		 * 클릭 한 일일 미션 리스트에 따라 완료 보상을 획득 하라는 이벤트 발생
+		 */				
 		private function onTouch(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(event.currentTarget as Sprite, TouchPhase.ENDED);
@@ -354,8 +381,10 @@ package UI.window
 				{
 					case "0":
 					{
+						//완료 보상을 획득 하라는 이벤트 바생
 						(event.currentTarget as Sprite).dispatchEvent(new Event("GAIN_ITEM", false, "하트 1개"));
 						CurUserData.instance.userData.today_CompleteString = "O" + CurUserData.instance.userData.today_CompleteString.substr(1, 9);
+						//완료 리스트를 화면에서 지우라는 이벤트 발생
 						_listView.dispatchEvent(new Event("LIST_REARRANGE", true, posInvector));
 						trace(CurUserData.instance.userData.today_CompleteString);
 						break;
@@ -447,6 +476,10 @@ package UI.window
 			}
 		}
 		
+		/**
+		 * @param data		완료 보상의 타입
+		 * 완료 보상의 타입에 따라 보상을 획득하여 사용자 데이터에 적용하는 콜백 함수
+		 */		
 		private function onGainItem(event : Event, data : String):void
 		{
 			switch(data)
