@@ -27,6 +27,9 @@ package UI.Button
 		
 		private var _configName : String;
 		
+		/**
+		 * 환경 설정에서 사운드, 효과음, 푸시 알림 등의 ON/OFF를 관리하는 탭입니다.
+		 */		
 		public function ConfigButton(x : int, y :int, width : int, height :int, configIcon : Texture, configName : String, onFlag : String)
 		{
 			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
@@ -84,6 +87,9 @@ package UI.Button
 			addChild(_offButton);
 		}
 		
+		/**
+		 * ON 버튼을 눌렀을 경우 OFF 버튼이 화면에 나오고 OFF를 클릭 햇을 경우 ON이 화면에 나옵니다.
+		 */		
 		private function onTouch(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
