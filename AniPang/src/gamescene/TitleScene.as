@@ -10,6 +10,8 @@ package gamescene
 	import loader.ResourceLoader;
 	import loader.TextureManager;
 	
+	import org.hamcrest.Matcher;
+	
 	import scene.SceneManager;
 	
 	import sound.SoundManager;
@@ -44,11 +46,12 @@ package gamescene
 		private var _titleFrame : Vector.<Texture> = new Vector.<Texture>;
 		
 		public static var sTitleViewLoadFlag : Boolean = false;
+		private  var _attendFlag : Boolean = false;
 		public function TitleScene()
 		{
 			sTitleViewLoadFlag = false;
 			
-			//KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
+			KakaoExtension.instance.addEventListener("LOGIN_OK", onLoginOK);
 			addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			//타이틀 이미지 저장
@@ -73,17 +76,17 @@ package gamescene
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 
 			//로그인 체크
-//			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
-//			{
-////				//로그 아웃 상태 일 경우 로그인
-//				KakaoExtension.instance.login();
-//			}
-////			
-//			else
-//			{
-//				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
-//			}
-			onLoginOK(null); // 테스트용
+			if(KakaoExtension.instance.loginState() == "LOGIN_OFF")
+			{
+			//로그 아웃 상태 일 경우 로그인
+				KakaoExtension.instance.login();
+			}
+			
+			else
+			{
+				KakaoExtension.instance.dispatchEvent(new StatusEvent("LOGIN_OK"));
+			}
+			//onLoginOK(null); // 테스트용
 		}	
 		
 		/**
@@ -91,7 +94,7 @@ package gamescene
 		 */		
 		private function onLoginOK(event : StatusEvent) : void
 		{
-			//KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
+			KakaoExtension.instance.removeEventListener("LOGIN_OK", onLoginOK);
 			
 			_loadingGaugeTexture = TextureManager.getInstance().atlasTextureDictionary["loading_gauge.png"];
 			_loadingImage = new Image(_loadingGaugeTexture.getTexture("30"));
@@ -134,7 +137,7 @@ package gamescene
 			//로그인 된 사용자 정보 입력
 			CurUserData.instance.initData();
 			CurUserData.instance.addEventListener("PROFILE_LOAD_OK",onLoadOK);
-			onLoadOK(); //테스트용 코드
+			//onLoadOK(); //테스트용 코드
 		}
 		
 		/**
@@ -157,7 +160,34 @@ package gamescene
 			addEventListener(TouchEvent.TOUCH, onTouch);
 			
 			_resourceLoader = null;
+			
+			attendCheck();
 		}
+		
+		/**
+		 * 오늘 출석 보상을 받았는지 체크 하고 오늘 첫 접속이면 출석 플래그를 true 설정
+		 */		
+		private function attendCheck():void
+		{
+			var curDate : Date = new Date();
+			trace(CurUserData.instance.userData.exitTime);
+			var prevDate : Date = new Date(CurUserData.instance.userData.exitTime);
+			prevDate.setHours(24, 0, 0, 0);
+			
+			if(curDate.getTime() > prevDate.getTime() || CurUserData.instance.userData.exitTime == "null")
+			{
+				_attendFlag = true;
+				CurUserData.instance.userData.attendCnt++;
+				
+				if(CurUserData.instance.userData.attendCnt == MainClass.MAX_ATTENTBOX_COUNT+1) CurUserData.instance.userData.attendCnt = 1;
+				
+				trace(CurUserData.instance.userData.attendCnt);
+			}
+		}
+		
+		/**
+		 * _attendFlag에 따라 다음 화면이 메인 씬인지 출석 씬인지 설정 합니다.
+		 */		
 		private function onTouch(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this);
@@ -168,11 +198,23 @@ package gamescene
 				{
 					case TouchPhase.ENDED:
 					{
-						dispose();
-						var mainView : AttendScene = new AttendScene();
-						SceneManager.instance.addScene(mainView);
-						SceneManager.instance.sceneChange();
-						break;
+						if(_attendFlag == true)
+						{
+							dispose();
+							var attendView : AttendScene = new AttendScene(true);
+							SceneManager.instance.addScene(attendView);
+							SceneManager.instance.sceneChange();
+							break;
+						}
+						
+						else
+						{
+							dispose();
+							var mainView : MainScene = new MainScene();
+							SceneManager.instance.addScene(mainView);
+							SceneManager.instance.sceneChange();
+							break;
+						}
 					}
 				}
 			}
