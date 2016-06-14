@@ -8,13 +8,10 @@ package gamescene
 	
 	import scene.SceneManager;
 	
-	import score.ScoreManager;
-	
 	import sound.SoundManager;
 	
 	import starling.display.Button;
 	import starling.display.Image;
-	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -42,6 +39,10 @@ package gamescene
 		private var _end : int = 5;
 		
 		private var _loadingClip : LoadingClip;
+		
+		/**
+		 * 카톡 서버에 등록 되어 있는 모든 사용자들의 점수를 내림 차순으로 정렬하여 화면에 출력하는 랭크 씬
+		 */		
 		public function RankScene()
 		{
 			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
@@ -61,10 +62,16 @@ package gamescene
 			_loadingClip = new LoadingClip(AniPang.stageWidth/2 - AniPang.stageWidth/10, AniPang.stageHeight/2 - AniPang.stageWidth/10, AniPang.stageWidth/5, AniPang.stageWidth/5);
 			addChild(_loadingClip);
 			
+			//모든 유저의 데이터를 로드합니다.
 			AllUserData.instance.initRankData();
+			//모든 유저의 데이터 로드가 완료되면 ALL_DATA_LOAD가 발생 됩니다.
 			AllUserData.instance.addEventListener("ALL_DATA_LOAD", onAllDataLoad);
 		}
 		
+		/**
+		 * 모든 유저 데이터의 로드가 완료 되었을 경우 동작하는 콜백 함수
+		 * 랭킹 씬 화면에 버튼, 유저 데이터 등을 출력 합니다.
+		 */		
 		private function onAllDataLoad():void
 		{
 			removeChild(_loadingClip, true);
@@ -124,6 +131,11 @@ package gamescene
 			drawRankWindow(_start, _end);
 		}
 		
+		/**
+		 * @param start		한 화면에 보여줄 유저 랭킹 시작 번호
+		 * @param end		한 화면에 보여중 유저 랭킹 마지막 번호
+		 * 순위, 유저이름, 유저사진, 유저점수를 RankWindow Sprite
+		 */		
 		private function drawRankWindow(start : int, end : int) : void
 		{
 			var i : int = 0;
@@ -135,6 +147,9 @@ package gamescene
 				_randWindow[i].visible = true;
 		}
 		
+		/**
+		 * 한 화면에 5명의 유저가 출력 되면 다음/이전 버튼으로 조절이 가능 합니다.
+		 */		
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
