@@ -82,6 +82,10 @@ package gamescene
 		private var _findFlag : Boolean  = false;
 		
 		private static var _pauseFlag : Boolean = false;
+		
+		/**
+		 * 실제 게임의 화면인 플레이 씬
+		 */		
 		public function PlayScene()
 		{
 			_pauseFlag = true;
@@ -125,6 +129,10 @@ package gamescene
 			SoundManager.getInstance().play("anipang_ingame.mp3", true);
 		}
 		
+		/**
+		 * 준비, 시작 애니매이션 입니다. 
+		 * 이 애니매이션이 끝난 후 게임이 시작 됩니다.
+		 */		
 		private function onStart():void
 		{
 			_startClip.removeEventListener("START", onStart);
@@ -320,6 +328,7 @@ package gamescene
 		
 		/**
 		 * 블록이 클릭 되었을 경우
+		 * 특수 팡인 경우에는 바로 효과가 발동 되고 일반 팡인 경우 움직임에 따라 상태가 변화합니다.
 		 */		
 		private function onBlockClicked(event : TouchEvent) : void
 		{
@@ -487,7 +496,7 @@ package gamescene
 		}
 		
 		/** 
-		 * 아래쪽 화면
+		 * 아래쪽 화면 초기화
 		 */		
 		private function initDownPannel():void
 		{
@@ -661,6 +670,11 @@ package gamescene
 			BlockTypeSetting.hintPang.block.showIdleState();
 		}
 		
+		/**
+		 * 게임 시간이 다 되었을 경우 동작하는 콜백함수
+		 * 타임 아웃 애니매이션이 출력 됩니다.
+		 * 애니매이션이 끝난 후 RESULT 이벤트를 발생 시켜 결과창으로 넘어갑니다.
+		 */		
 		private function onTimeout() : void
 		{
 			_pauseFlag = true;
@@ -671,7 +685,8 @@ package gamescene
 		}
 		
 		/**
-		 * 결과 창입니다
+		 * 게임 종료 후 작동하는 콜백 함수
+		 * 결과 씬으로 넘어 갑니다.
 		 */		
 		private function onResult():void
 		{
