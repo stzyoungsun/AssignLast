@@ -11,6 +11,12 @@ package UI.checkbox
 		private var _onTexture : Texture;
 		private var _offTexture : Texture;
 		
+		/**
+		 * @param clickedON		체크 됫을 경우 이미지
+		 * @param clickedOFF	체크 안 됫을 경우 이미지
+		 * @param name			체크 박스의 이름
+		 * 
+		 */		
 		public function ImageCheckBox(clickedON : Texture, clickedOFF : Texture, name : String)
 		{
 			super(clickedOFF);
