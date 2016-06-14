@@ -42,6 +42,11 @@ package gamescene
 		private var _windowAtals : TextureAtlas;
 		private var _iconAtals : TextureAtlas;
 		
+		/**
+		 * @param nameWindowColor		메인 윈도우 타이틀의 색깔
+		 * @param nameWindowText		메인 윈도우의 타이틀 명
+		 * 배경음, 효과음, 푸시허용, 로그아웃 이 있는 환경 설정 씬입니다.
+		 */		
 		public function ConfigScene(nameWindowColor : String, nameWindowText : String)
 		{
 			_buttonAtals = TextureManager.getInstance().atlasTextureDictionary["button.png"];
@@ -85,11 +90,11 @@ package gamescene
 		}
 		
 		/** 
-		 * 팝업창 "O" 클릭
+		 * 팝업창 "O" 클릭시 현재 유저 데이터를 서버어 저장합니다.
 		 */		
 		public function onOut() : void
 		{
-			//KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
+			KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
 			
 			var exitTime : Date = new Date();
 		
@@ -98,7 +103,11 @@ package gamescene
 			String(CurUserData.instance.userData.gold), String(CurUserData.instance.userData.totalStar), String(CurUserData.instance.userData.heart)
 			
 			var itemDataJson : String = "{" + "\"gold\":" + String(CurUserData.instance.userData.gold) + ",\"star\":" +  String(CurUserData.instance.userData.totalStar) +
-				",\"heart\":" + String(CurUserData.instance.userData.heart) + ",\"hearttime\":" + String(AniPang.heartTimer) + "}";
+				",\"heart\":" + String(CurUserData.instance.userData.heart) + ",\"hearttime\":" + String(AniPang.heartTimer) + 
+				",\"backGoundSound\":" + "\"" + CurUserData.instance.userData.backGoundSound + "\"" +
+				",\"effectSound\":" + "\"" + CurUserData.instance.userData.effectSound + "\"" + 
+				",\"permitPush\":" + "\"" + CurUserData.instance.userData.permitPush + "\"" + 
+				",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + "}";
 			
 			trace(itemDataJson);
 			
@@ -108,28 +117,28 @@ package gamescene
 			
 			trace(missonDataJson);
 			
-			//KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
+			KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
 		}
 		
 		/**
-		 * 유저데이터 성공적으로 저장
+		 * 유저데이터 성공적으로 저장 후 로그아웃을 합니다.
 		 */		
 		private function onSaveData(event:Event):void
 		{
-			//KakaoExtension.instance.removeEventListener("SAVE_DATA", onSaveData);
+			KakaoExtension.instance.removeEventListener("SAVE_DATA", onSaveData);
 			
-			//KakaoExtension.instance.logout();
-			//KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
+			KakaoExtension.instance.logout();
+			KakaoExtension.instance.addEventListener("LOGOUT_OK", onLogout);
 		}
 		
 		/**
-		 * 로그아웃 성공적으로 완료
+		 * 로그아웃 성공적으로 완료 후 프로그램을 종료 합니다.
 		 */		
 		private function onLogout(event : StatusEvent):void
 		{
 			AniPang.logOutFlag = true;
 			dispose();
-			//Extension.instance.exitDialog();
+			Extension.instance.exitDialog();
 			NativeApplication.nativeApplication.exit();
 		}
 		
