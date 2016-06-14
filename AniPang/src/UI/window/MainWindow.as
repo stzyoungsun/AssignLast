@@ -43,6 +43,7 @@ package UI.window
 		private var _buttonAtals : TextureAtlas;
 		
 		private var _mainWindowRect : Rectangle;
+		
 		/** 
 		 * @param nameWindowColor	메인 윈도우 타이틀 색깔
 		 * @param nameWindowText	메인 윈도우의 타이틀 명
@@ -92,6 +93,9 @@ package UI.window
 			else _exitButton.visible = true;
 		}
 		
+		/**
+		 * 많은 부분에서 사용하는 윈도우창의 위치, 크기를 조절 하는 함수
+		 */		
 		public function init(x : int, y : int, width: int, height : int) : void
 		{
 			_mainWindowRect = new Rectangle(x, y, width, height);
