@@ -52,8 +52,8 @@ package user
 			_scoreFlag = scoreFlag;
 			_userDataFlag = userDataFlag;
 			//카톡 서버에서 데이터를 무사히 불러왔을 경우 GET_USERDATA 이벤트 발생
-			//KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
-			//KakaoExtension.instance.curUserData();
+			KakaoExtension.instance.addEventListener("GET_USERDATA", onGetUserData);
+			KakaoExtension.instance.curUserData();
 		}
 		
 		/**
@@ -71,7 +71,7 @@ package user
 			//최고 점수만  재 갱신
 			if(_scoreFlag == true) return;
 			
-			//커스텀 필드의 개수의 제한으로 사용자의 Item 관련 데이터는 묶어서 JSON으로 전송
+			//커스텀 필드의 개수의 제한으로 사용자  관련 데이터는 묶어서 JSON으로 전송
 			if(extension[4] == "null")
 			{
 				_userData.gold = 2000;
@@ -81,6 +81,7 @@ package user
 				_userData.backGoundSound = "ON";
 				_userData.effectSound = "ON";
 				_userData.permitPush = "ON";
+				_userData.attendCnt = 0;
 			}
 			
 			else
@@ -94,12 +95,14 @@ package user
 				_userData.backGoundSound = userItemData.backGoundSound;
 				_userData.effectSound = userItemData.effectSound;
 				_userData.permitPush = userItemData.permitPush;
+				_userData.attendCnt = userItemData.attendCnt;
 			}
-			
+			//유저 종료 시간
 			_userData.exitTime = extension[6];
 			
+			//종료 시간과 현재 접속 시간의 차이를 이용하여 하루가 지났을 경우 일일 미션 데이터 초기화
 			if(initMisson() == true) extension[5] = "null"
-			
+			//서버에 있는 일일 미션 데이터를 현재 유저 데이터에 저장
 			if(extension[5] == "null")
 			{
 				_userData.today_GameCount = 0;
@@ -159,6 +162,9 @@ package user
 			
 		}
 		
+		/**
+		 * 현재 시간과 유저의 최종 종료 시간의 날짜가 다르면 return true
+		 */		
 		private function initMisson():Boolean
 		{
 			var curDate : Date = new Date();
