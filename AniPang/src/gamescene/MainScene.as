@@ -3,13 +3,15 @@ package gamescene
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	
+	import UI.Button.SideImageButton;
 	import UI.ListView.ListView;
 	import UI.popup.PopupWindow;
-	import UI.Button.SideImageButton;
 	import UI.window.BuyHeartWindow;
 	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
 	import UI.window.MissonWindow;
+	
+	import gamescene.attend.AttendScene;
 	
 	import loader.TextureManager;
 	
@@ -32,11 +34,16 @@ package gamescene
 	{
 		private var _mainImage : Image;
 		private var _itemShopWindow : ItemShopWindow;
-		
+		//게임 시작 버튼
 		private var _startButton : SideImageButton;
+		//랭킹 버튼
 		private var _rankButton : SideImageButton;
+		//환경 설정 버튼
 		private var _configButton : SideImageButton;
+		//오늘의 미션 버튼
 		private var _missonButton : SideImageButton;
+		//출석 확인 버튼
+		private var _attendButton : SideImageButton;
 		
 		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
@@ -49,6 +56,10 @@ package gamescene
 		private var _iconAtals : TextureAtlas;
 		
 		private var _popupWindow : PopupWindow;
+		
+		/**
+		 * 게임의 시작 화면인 메인 씬
+		 */		
 		public function MainScene()
 		{
 			ScoreManager.instance.resetScore();
@@ -110,8 +121,17 @@ package gamescene
 			_configButton.settingTextField(0xffffff,  _startButton.width/8);
 			_configButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_configButton);
+			
+			_attendButton = new SideImageButton(AniPang.stageWidth * 0.68, AniPang.stageHeight * 0.09, _mainImage.width/3.5, _mainImage.height/18, 
+				_buttonAtals.getTexture("orangeButton"), null,"출석 확인");
+			_attendButton.settingTextField(0xffffff,  _startButton.width/8);
+			_attendButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_attendButton);
 		}
 		
+		/**
+		 * 메인 씬의 있는 버튼들의 클릭 이벤트 입니다.
+		 */		
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
@@ -179,11 +199,22 @@ package gamescene
 						SceneManager.instance.addScene(rankView);
 						SceneManager.instance.sceneChange();
 						break;
+					
+					case _attendButton:
+						dispose();
+						var attendView : AttendScene = new AttendScene();
+						SceneManager.instance.addScene(attendView);
+						SceneManager.instance.sceneChange();
+						break;
 				}
 			}
 
 		}
 		
+		/**
+		 * 하트가 부족 할 경우 작동 하는 콜백 함수
+		 * 하트 구매 창을 화면에 출력 합니다.
+		 */		
 		private function onDrawBuyHeart():void
 		{
 			var butHeartWindow : BuyHeartWindow = new BuyHeartWindow();
