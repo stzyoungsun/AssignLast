@@ -7,6 +7,9 @@ package UI.GameTextField
 	{
 		private var _showFlag : Boolean = false;
 		
+		/**
+		 * 게임 씬에서 콤보 횟수를 출력 하는 텍스트 필드
+		 */		
 		public function ComboTextField(width : int, height : int)
 		{
 			super(width, height);
@@ -16,6 +19,9 @@ package UI.GameTextField
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
+		/**
+		 * 화면에 출력 후 서서히 사라지는 텍스트 필드 입니다
+		 */		
 		private function onEnterFrame():void
 		{
 		  if(_showFlag == true)
