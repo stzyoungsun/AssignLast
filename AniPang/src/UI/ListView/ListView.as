@@ -13,8 +13,6 @@ package UI.ListView
 	import starling.events.TouchPhase;
 	import starling.textures.TextureAtlas;
 	
-	import user.CurUserData;
-
 	public class ListView extends Sprite
 	{
 		private var _windowAtals : TextureAtlas;
@@ -31,6 +29,12 @@ package UI.ListView
 		private var _onTouchFlag : Boolean = false;
 		private var _minListIndex : int = 0;
 
+		/**
+		 * 일일 미션에서 사용되는 리스트 뷰입니다.
+		 * 손의 움직임에 따라 리스트가 움직이고 손을 빠르게 올렸다가 때면 리스트가 자동으로 위로 움직입니다.
+		 * 리스트가 젤 아래로 갔을 경우 자동으로 위로 팅겨져 올라 갑니다.
+		 * 특정 상태일 경우 리스트를 하나 클릭하면 자동으로 삭제가 됩니다
+		 */		
 		public function ListView(x : int, y : int, width: int, height : int)
 		{
 			_windowAtals = TextureManager.getInstance().atlasTextureDictionary["Window.png"];
@@ -52,6 +56,9 @@ package UI.ListView
 			this.mask = new Quad(width,height);
 		}
 		
+		/**
+		 * 손의 움직임에 따라 리스트가 움직 입니다.
+		 */		
 		private function onEnterFrame():void
 		{
 			if(_list.length ==0) return;
@@ -81,6 +88,10 @@ package UI.ListView
 			}
 		}
 		
+		/**
+		 * @param data 리스트의 번호
+		 * 일일 미션 완료 한 리스트를 클릭하면 그 리스트가 사라집니다.
+		 */		
 		private function onListReArrange(event : Event, data : int):void
 		{
 			_list[data].visible = false;
@@ -93,6 +104,9 @@ package UI.ListView
 	
 		}
 		
+		/**
+		 * 리스트 하나 하나를 뷰에 출력 합니다.
+		 */		
 		public function drawList( list : Vector.<Sprite>):void
 		{
 			_list = list;
