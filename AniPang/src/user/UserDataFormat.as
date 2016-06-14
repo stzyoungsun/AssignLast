@@ -32,6 +32,9 @@ package user
 		public var effectSound : String = "ON";
 		public var permitPush : String = "ON";
 		
+		//출석 데이터
+		public var attendCnt : int = 0;
+		
 		//유저 접속 시간
 		public var exitTime : String;
 		
