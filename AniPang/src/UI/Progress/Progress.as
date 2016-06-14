@@ -18,6 +18,12 @@ package UI.Progress
 		private var _textField : TextField;
 		private var _textFlag : Boolean;
 		
+		/**
+		 * @param textFalg			프로그래스 바 위에 텍스트를 출력 유무
+		 * @param backTexture		프로그래스 바 배경 텍스쳐
+		 * @param ProgressTexture	프로그래스 바 텍스쳐
+		 * 
+		 */		
 		public function Progress(textFalg : Boolean = false, backTexture : Texture = null, ProgressTexture : Texture = null)
 		{		
 			_textFlag = textFalg;
@@ -34,7 +40,10 @@ package UI.Progress
 			else
 				_progressTexture = new Image(ProgressTexture);
 		}
-			
+		
+		/**
+		 * 프로그래스 바의 위치, 크기를 초기화 합니다.
+		 */		
 		public function ProgressInit(x : int, y : int, witdh : int, height : int) : void
 		{
 			this.x = x;
