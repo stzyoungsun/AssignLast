@@ -15,6 +15,12 @@ package UI.window
 		private var _userImage : Image;
 		private var _userDataTextField : TextField;
 		
+		/**
+		 * @param userRankData		유저 데이터
+		 * @param userRank			유저의 랭킹
+		 * AllUserData  클래스에 나오는 서버의 모든 유저 데이터를 이용하여 랭크 Sprite 생성
+		 * 생성도니 랭킹 Sprite는 랭크 씬에서 출력
+		 */		
 		public function RankWindow(userRankData : UserDataFormat, userRank : int, x : int, y : int)
 		{
 			_userRankNum = new TextField(AniPang.stageWidth/7, AniPang.stageHeight/7);
