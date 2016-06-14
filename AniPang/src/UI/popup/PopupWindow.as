@@ -32,6 +32,9 @@ package UI.popup
 		 * @param popupContent	팝업 창에 출력 할 텍스트
 		 * @param buttonCnt		팝업 창에 들록 할 버튼의 개수 (2개 최대)
 		 * @param buttonNames	팝업 창에 등록 할 버튼의 종류 (x, o, buy)
+		 * 많은 곳에서 팝업창을 사용하기 때문에 최대한 간단하게 팝업창을 띄울수 있도록 설계하였습니다.
+		 * 사용자는 팝업 창의 내용, 버튼의 개수, 버튼의 이미지 이름을 설정하면 그에 맞게 팝업창이 생성됩니다.
+		 * 팝업창의 버튼 클릭 시 콜백 함수를 설정하도록 하여 확장성도 고려하였습니다.
 		 */
 		public function PopupWindow(popupContent : String, buttonCnt : int, buttonNames : Array, oneFunc : Function = null, twoFunc : Function = null)
 		{
@@ -71,6 +74,10 @@ package UI.popup
 			createButton(buttonCnt, buttonNames);
 		}
 		
+		/**
+		 * @param buttonCnt		버튼의 개수
+		 * @param buttonNames	버튼의 이미지의 이름
+		 */		
 		private function createButton(buttonCnt : int, buttonNames : Array) : void
 		{
 			switch(buttonCnt)
