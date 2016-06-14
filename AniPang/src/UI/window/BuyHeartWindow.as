@@ -26,6 +26,12 @@ package UI.window
 		private var _buttonAtals : TextureAtlas;
 		
 		private var _popupWindow : PopupWindow;
+		
+		/**
+		 * 게임의 시작이나 재시작 버튼 등에 하트를 사용 했을 경우에 하트가 부족 하면 팝업 창을 통해 구매가 가능
+		 * 아이템 상점에 하트 구매 버튼이 존재
+		 * 하트 구매창 클래스
+		 */		
 		public function BuyHeartWindow()
 		{
 			super("Blue", "하트 구매");
@@ -118,6 +124,10 @@ package UI.window
 			buyButton.addEventListener(TouchEvent.TOUCH, onClicked);
 		}
 		
+		/**
+		 * 하트를 구매 할 경우 그에 맞는 팝업 창을 출력
+		 * 하트의 구매 개수, 구매 가격에 따라 사용자 아이템 재화 조절
+		 */		
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
