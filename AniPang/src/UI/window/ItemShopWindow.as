@@ -48,6 +48,12 @@ package UI.window
 		
 		private var _buyHeartButton : SideImageButton;
 		private var _butHeartWindow : BuyHeartWindow;
+		
+		/**
+		 * 메인 윈도우 클래스를 기반으로 만든 아이템 상점
+		 * 화면에 각각 아이템을 이미지 체크 박스 형태로 출력
+		 * 여러 버튼들이 존재
+		 */		
 		public function ItemShopWindow(nameWindowColor : String, nameWindowText : String)
 		{
 			super(nameWindowColor, nameWindowText, null, null, false)
@@ -261,7 +267,7 @@ package UI.window
 		private function onExit():void
 		{
 			parent.dispose();
-			//Extension.instance.exitDialog();
+			Extension.instance.exitDialog();
 		}
 		
 		public override function dispose():void
