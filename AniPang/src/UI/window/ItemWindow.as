@@ -28,7 +28,14 @@ package UI.window
 		private var _lvTextField : TextField;
 		private var _remainStarTextField : TextField;
 		
-		public function ItemWindow(itemTexture : Texture, x : int, y : int, width : int, height : int, color : uint, itemName : String, plusFlag : Boolean = false)
+		/**
+		 * 
+		 * @param color
+		 * @param itemName
+		 * @param plusFlag
+		 * 
+		 */		
+		public function ItemWindow(itemTexture : Texture, x : int, y : int, width : int, height : int, color : uint, itemName : String)
 		{
 			_itemwindowAtals = TextureManager.getInstance().atlasTextureDictionary["itemAndreslutWindow.png"];
 			
