@@ -34,6 +34,10 @@ package UI.window
 		private var _backImage : Image;
 		
 		private var _popupWindow : PopupWindow;
+		
+		/**
+		 * 게임 씬에서 일시 정지 버튼을 눌렀을 경우 출력 되는 정지 윈도우
+		 */		
 		public function PauseWindow()
 		{
 			_pauseWindowAtlas = TextureManager.getInstance().atlasTextureDictionary["pauseWindow.png"];
@@ -81,6 +85,10 @@ package UI.window
 			_menuImage.addEventListener(TouchEvent.TOUCH, onClicked);
 		}
 		
+		/**
+		 * 게속하기, 다시하기, 메인 화면으로 3버튼이 존재
+		 * 다시 하기 할 경우 하트가 감소 하고 하트 부족시 하트 구매 팝업 출력
+		 */		
 		private function onClicked(event : TouchEvent):void
 		{
 			var touch : Touch = event.getTouch(this, TouchPhase.ENDED);
