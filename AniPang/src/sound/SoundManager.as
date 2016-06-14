@@ -93,7 +93,7 @@ package sound
 		 */
 		public function play(resourceName:String, loop:Boolean = false):void
 		{
-			// loop가 false이면 단순 재생
+			// loop가 false이면 효과음 재생
 			if(!loop)
 			{
 				var effectSound : Sound = _soundResource[resourceName];
@@ -106,7 +106,7 @@ package sound
 				if(CurUserData.instance.userData.effectSound == "ON")
 					effectSound.play();
 			}
-				// loop가 true이고, _loopedPlayingState가 STOP이면 반복 재생 설정
+				// loop가 true이고, _loopedPlayingState가 STOP이면 배경음 재생
 			else if(loop && _loopedPlayingState == STOP && CurUserData.instance.userData.backGoundSound == "ON")
 			{
 				_gameSound = _soundResource[resourceName];
