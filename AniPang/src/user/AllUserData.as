@@ -48,8 +48,8 @@ package user
 		public function initRankData() : void
 		{
 			_userData  = new Vector.<UserDataFormat>;
-			//KakaoExtension.instance.addEventListener("GET_IDLIST", onGetIDList);
-			//KakaoExtension.instance.getIDList();
+			KakaoExtension.instance.addEventListener("GET_IDLIST", onGetIDList);
+			KakaoExtension.instance.getIDList();
 		}
 		
 		/**
@@ -57,13 +57,16 @@ package user
 		 */		
 		private function onGetIDList(event:StatusEvent):void
 		{
-			//KakaoExtension.instance.removeEventListener("GET_IDLIST", onGetIDList);
+			KakaoExtension.instance.removeEventListener("GET_IDLIST", onGetIDList);
 			_userIDList = json.JSON.decode(event.code);
 		
-			//KakaoExtension.instance.addEventListener("GET_SERVER_USERDATA", onSeverUserData);
-			//KakaoExtension.instance.getServerUserData(_userIDList.elements[_userNum]);
+			KakaoExtension.instance.addEventListener("GET_SERVER_USERDATA", onSeverUserData);
+			KakaoExtension.instance.getServerUserData(_userIDList.elements[_userNum]);
 		}
 		
+		/**
+		 * 유저 id를 통해 각각의 유저데이터를 로드
+		 */		
 		private function onSeverUserData(event:StatusEvent):void
 		{
 			var tempObject : Object;
@@ -130,16 +133,19 @@ package user
 			if(_userNum == _userIDList.total_count - 1)
 			{
 				removeEventListener("PROFILE_LOAD_OK", onProfileLoad);
-				//KakaoExtension.instance.removeEventListener("GET_SERVER_USERDATA", onSeverUserData);
+				KakaoExtension.instance.removeEventListener("GET_SERVER_USERDATA", onSeverUserData);
 				
 				dispatchEvent((new starling.events.Event("ALL_DATA_LOAD")));
 				
 				trace("모든 데이터 로드 완료");
 				return;
 			}
-			//KakaoExtension.instance.getServerUserData(_userIDList.elements[++_userNum]);
+			KakaoExtension.instance.getServerUserData(_userIDList.elements[++_userNum]);
 		}
 		
+		/**
+		 * 로드한 유저 데이터를 내림차순으로 정렬
+		 */		
 		public function upSort() : void
 		{
 			_userData.sort(orderAbs);
