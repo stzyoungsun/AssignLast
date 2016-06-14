@@ -30,9 +30,8 @@ package UI.window
 		
 		/**
 		 * 
-		 * @param color
-		 * @param itemName
-		 * @param plusFlag
+		 * @param color		아이템 윈도우의 전반적인 색깔
+		 * @param itemName	아이템의 이름에 따라 사용자 재화 조절
 		 * 
 		 */		
 		public function ItemWindow(itemTexture : Texture, x : int, y : int, width : int, height : int, color : uint, itemName : String)
