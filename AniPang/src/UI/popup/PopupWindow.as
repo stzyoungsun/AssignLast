@@ -20,7 +20,7 @@ package UI.popup
 		private var _backImage : Image;
 		private var _mainWindow : Image;
 		private var _contentTextField : TextField;
-		private var _goButton : Button;
+		//private var _goButton : Button;
 		
 		private var _oneButton : Button;
 		private var _twoButton : Button;
@@ -64,12 +64,12 @@ package UI.popup
 			_contentTextField.format.size = _contentTextField.height/4;
 			addChild(_contentTextField);
 			
-			_goButton = new Button(_buttonAtals.getTexture("go"));
-			_goButton.width = AniPang.stageWidth/12;
-			_goButton.height = AniPang.stageWidth/12;
-			_goButton.x = _mainWindow.x + _mainWindow.width*0.8;
-			_goButton.y = _mainWindow.y + _mainWindow.height*0.25;
-			addChild(_goButton);
+//			_goButton = new Button(_buttonAtals.getTexture("go"));
+//			_goButton.width = AniPang.stageWidth/12;
+//			_goButton.height = AniPang.stageWidth/12;
+//			_goButton.x = _mainWindow.x + _mainWindow.width*0.8;
+//			_goButton.y = _mainWindow.y + _mainWindow.height*0.25;
+//			addChild(_goButton);
 			
 			createButton(buttonCnt, buttonNames);
 		}
@@ -112,8 +112,8 @@ package UI.popup
 					_twoButton.x = _mainWindow.x + _mainWindow.width*0.6;
 					_twoButton.y = _mainWindow.y + _mainWindow.height*0.75;
 					
-					_twoButton.addEventListener(TouchEvent.TOUCH, onClicked);
 					addChild(_twoButton);
+					_twoButton.addEventListener(TouchEvent.TOUCH, onClicked);
 					break;
 				}
 			}
@@ -141,6 +141,8 @@ package UI.popup
 							dispose();
 						else
 							_twoFunction();
+						
+						break;
 					} 
 				}
 			}
