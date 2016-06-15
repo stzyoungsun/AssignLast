@@ -10,6 +10,8 @@ package gamescene
 	
 	import loader.TextureManager;
 	
+	import object.specialItem.ExpPotion;
+	
 	import scene.SceneManager;
 	
 	import score.ScoreManager;
@@ -29,6 +31,7 @@ package gamescene
 	
 	import user.CurUserData;
 	
+	import util.EventManager;
 	import util.UtilFunction;
 
 	public class ResultScene extends Sprite
@@ -131,7 +134,13 @@ package gamescene
 		
 		private function drawMainPanel():void
 		{
-			var bonus : int = int(ScoreManager.instance.scoreCnt * (0.01 * CurUserData.instance.userData.lv));
+			var bonus : int;
+			
+			if(AniPang.evnetValue == EventManager.NIGHT_EVENT)
+				bonus = int((ScoreManager.instance.scoreCnt * (0.01 * CurUserData.instance.userData.lv))*1.3);
+			else
+				bonus = int(ScoreManager.instance.scoreCnt * (0.01 * CurUserData.instance.userData.lv));
+			
 			var curScore : int  = ScoreManager.instance.scoreCnt;
 			
 			_mainPanel = new Image(_itemwindowAtals.getTexture("resultWindow"));
@@ -154,12 +163,33 @@ package gamescene
 			textFieldSetting(_curScroeTextField, 0xFFFC50 ,UtilFunction.makeCurrency(String(curScore)), _mainPanel.x, _mainPanel.y + _mainPanel.height*0.03);
 			textFieldSetting(_lvBonusTextField, 0xFFFFFF, UtilFunction.makeCurrency(String(bonus)), _mainPanel.x + _mainPanel.width*0.3, _mainPanel.y + _mainPanel.height*0.32);
 			textFieldSetting(_maxScroeTextField, 0X197276, UtilFunction.makeCurrency(String(CurUserData.instance.userData.curMaxScore)), _mainPanel.x + _mainPanel.width*0.3, _mainPanel.y + _mainPanel.height*0.51);
-			textFieldSetting(_goldTextField, 0XFFFFFF, String(int(ScoreManager.instance.destoryBlockCount*2)), _mainPanel.x + _mainPanel.width*0.13, _mainPanel.y + _mainPanel.height*0.72);
-			textFieldSetting(_starTextField, 0XFFFFFF, String(ScoreManager.instance.destoryBlockCount), _mainPanel.x + _mainPanel.width*0.61, _mainPanel.y + _mainPanel.height*0.72);
 			
-			CurUserData.instance.userData.gold += ScoreManager.instance.destoryBlockCount*2;
-			CurUserData.instance.userData.totalStar += ScoreManager.instance.destoryBlockCount;
-				
+			//저녁 이벤트면 골드가 2배
+			if(AniPang.evnetValue == EventManager.DINNER_EVENT)
+			{
+				textFieldSetting(_goldTextField, 0XFFFFFF, String(int(ScoreManager.instance.destoryBlockCount*4)), _mainPanel.x + _mainPanel.width*0.13, _mainPanel.y + _mainPanel.height*0.72);
+				CurUserData.instance.userData.gold += ScoreManager.instance.destoryBlockCount*4;
+			}
+			
+			else
+			{
+				textFieldSetting(_goldTextField, 0XFFFFFF, String(int(ScoreManager.instance.destoryBlockCount*2)), _mainPanel.x + _mainPanel.width*0.13, _mainPanel.y + _mainPanel.height*0.72);
+				CurUserData.instance.userData.gold += ScoreManager.instance.destoryBlockCount*2;
+			}
+			
+			//경험치 물약 상태이면 경험치가 2배
+			if(ExpPotion.expPotionFlag == true)
+			{
+				textFieldSetting(_starTextField, 0XFFFFFF, String(ScoreManager.instance.destoryBlockCount*2), _mainPanel.x + _mainPanel.width*0.61, _mainPanel.y + _mainPanel.height*0.72);
+				CurUserData.instance.userData.totalStar += ScoreManager.instance.destoryBlockCount*2;
+			}
+			
+			else
+			{
+				textFieldSetting(_starTextField, 0XFFFFFF, String(ScoreManager.instance.destoryBlockCount), _mainPanel.x + _mainPanel.width*0.61, _mainPanel.y + _mainPanel.height*0.72);
+				CurUserData.instance.userData.totalStar += ScoreManager.instance.destoryBlockCount;
+			}
+			
 			_exitButton.width = _upPanel.width/10;
 			_exitButton.height = _exitButton.width;
 			_exitButton.x = _upPanel.x + _upPanel.width - _exitButton.width/2.5;
@@ -175,7 +205,7 @@ package gamescene
 			if(CurUserData.instance.userData.curMaxScore < bonus + curScore)
 			{
 				KakaoExtension.instance.addEventListener("SAVE_OK", onSaveOK);
-				KakaoExtension.instance.saveUserScore(String(ScoreManager.instance.scoreCnt));
+				KakaoExtension.instance.saveUserScore(String(bonus + curScore));
 			}	
 			
 			else

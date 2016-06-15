@@ -1,7 +1,7 @@
 package UI.window
 {
 	import loader.TextureManager;
-
+	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -11,6 +11,7 @@ package UI.window
 	
 	import user.CurUserData;
 	
+	import util.EventManager;
 	import util.LVFunction;
 	import util.UtilFunction;
 
@@ -81,18 +82,27 @@ package UI.window
 			{
 				case "HEART":
 				{
-					if(CurUserData.instance.userData.heart >= 5)
+					if(AniPang.evnetValue == EventManager.LAUNCH_EVENT)
 					{
 						_timerTextField.visible = false;
-						_itemTextField.text = "MAX + " + String(CurUserData.instance.userData.heart - 5);
-						AniPang.heartTimer = AniPang.HEART_TIME;
+						_itemTextField.text = "하트 무제한";
 					}
 					
 					else
 					{
-						_timerTextField.visible = true;
-						_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
-						_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+						if(CurUserData.instance.userData.heart >= 5)
+						{
+							_timerTextField.visible = false;
+							_itemTextField.text = "MAX + " + String(CurUserData.instance.userData.heart - 5);
+							AniPang.heartTimer = AniPang.HEART_TIME;
+						}
+							
+						else
+						{
+							_timerTextField.visible = true;
+							_itemTextField.text = UtilFunction.makeCurrency((String(CurUserData.instance.userData.heart)));
+							_timerTextField.text = UtilFunction.makeTime(AniPang.heartTimer);
+						}
 					}
 					break;
 				}

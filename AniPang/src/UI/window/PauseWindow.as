@@ -22,6 +22,8 @@ package UI.window
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
+	
+	import util.EventManager;
 
 	public class PauseWindow extends Sprite
 	{
@@ -115,8 +117,8 @@ package UI.window
 							addChild(_popupWindow);
 							return;
 						}
-						
-						CurUserData.instance.userData.heart--;		
+						if(AniPang.evnetValue != EventManager.LAUNCH_EVENT)
+							CurUserData.instance.userData.heart--;		
 						var playView : PlayScene = new PlayScene();
 						SceneManager.instance.addScene(playView);
 						SceneManager.instance.sceneChange();

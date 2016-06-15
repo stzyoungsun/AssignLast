@@ -10,10 +10,13 @@ package gamescene
 	import UI.window.ItemShopWindow;
 	import UI.window.ItemWindow;
 	import UI.window.MissonWindow;
+	import UI.window.EventWindow;
 	
 	import gamescene.attend.AttendScene;
 	
 	import loader.TextureManager;
+	
+	import object.specialItem.ExpPotion;
 	
 	import scene.SceneManager;
 	
@@ -26,9 +29,14 @@ package gamescene
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.TextureAtlas;
+	import starling.utils.Align;
 	
 	import user.CurUserData;
+	
+	import util.EventManager;
+	import util.UtilFunction;
 
 	public class MainScene extends Sprite
 	{
@@ -44,6 +52,8 @@ package gamescene
 		private var _missonButton : SideImageButton;
 		//출석 확인 버튼
 		private var _attendButton : SideImageButton;
+		//이벤트 확인 버튼
+		private var _eventButton : SideImageButton;
 		
 		//메인 화면 상단에 게임 내 재화 상태를 출력 합니다.
 		private var _heartWindow : ItemWindow;
@@ -57,6 +67,7 @@ package gamescene
 		
 		private var _popupWindow : PopupWindow;
 		
+		private var _remainExpPotionTextField : TextField;
 		/**
 		 * 게임의 시작 화면인 메인 씬
 		 */		
@@ -78,6 +89,62 @@ package gamescene
 			
 			SoundManager.getInstance().stopLoopedPlaying();
 			SoundManager.getInstance().play("anipang_ui.mp3", true);
+			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			eventTimeCheck();
+		}
+		
+		private function onEnterFrame():void
+		{
+			if(ExpPotion.expPotionFlag == true)
+			{
+				_remainExpPotionTextField.visible = true;
+				_remainExpPotionTextField.text = "경험치 2배 남은시간 : " + UtilFunction.makeTime(ExpPotion.remainSec);
+			}
+				
+			else
+			{
+				_remainExpPotionTextField.visible = false;
+			}
+		}
+		
+		/** 
+		 * 이벤트의 타입에 따라 이벤트 윈도우를 출력 합니다.
+		 */		
+		private function eventTimeCheck():void
+		{
+			switch(AniPang.evnetValue)
+			{
+				case EventManager.LAUNCH_EVENT:
+				{
+					_eventButton.visible = true;
+					_eventButton.text = "점심 이벤트 중";
+					addChild(new EventWindow(EventManager.LAUNCH_EVENT));
+					break;
+				}
+					
+				case EventManager.DINNER_EVENT:
+				{
+					_eventButton.visible = true;
+					_eventButton.text = "저녁 이벤트 중";
+					addChild(new EventWindow(EventManager.DINNER_EVENT));
+					break;
+				}
+					
+				case EventManager.NIGHT_EVENT:
+				{
+					_eventButton.visible = true;
+					_eventButton.text = "야간 이벤트 중";
+					addChild(new EventWindow(EventManager.NIGHT_EVENT));
+					break;
+				}
+					
+				default:
+					_eventButton.visible = false;
+					break;		
+			}
+			
 		}
 		
 		/** 
@@ -127,6 +194,24 @@ package gamescene
 			_attendButton.settingTextField(0xffffff,  _startButton.width/8);
 			_attendButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_attendButton);
+			
+			_eventButton = new SideImageButton(AniPang.stageWidth * 0.38, AniPang.stageHeight * 0.09, _mainImage.width/3.5, _mainImage.height/18, 
+				_buttonAtals.getTexture("redButton"), null, "");
+			_eventButton.settingTextField(0xffffff,  _startButton.width/12);
+			_eventButton.addEventListener(TouchEvent.TOUCH, onClicked);
+			_eventButton.visible = false;
+			addChild(_eventButton);
+			
+			_remainExpPotionTextField = new TextField(_mainImage.width/2, _mainImage.height/10);
+			_remainExpPotionTextField.x = AniPang.stageWidth * 0.01;
+			_remainExpPotionTextField.y = AniPang.stageHeight * 0.05;
+			_remainExpPotionTextField.format.color = 0x0000FF;
+			_remainExpPotionTextField.format.size = _remainExpPotionTextField.height/8;
+			_remainExpPotionTextField.format.bold = true;
+			_remainExpPotionTextField.format.horizontalAlign = Align.LEFT;
+			_remainExpPotionTextField.visible = false;
+		
+			addChild(_remainExpPotionTextField);
 		}
 		
 		/**
@@ -188,7 +273,8 @@ package gamescene
 						SceneManager.instance.sceneChange();
 						
 						CurUserData.instance.userData.gold -= itemPrice;
-						CurUserData.instance.userData.heart--;
+						if(AniPang.evnetValue != EventManager.LAUNCH_EVENT)
+							CurUserData.instance.userData.heart--;
 						CurUserData.instance.userData.today_UseItemCount += itemCount;
 						CurUserData.instance.userData.today_GameCount++;
 						break;
@@ -205,6 +291,10 @@ package gamescene
 						var attendView : AttendScene = new AttendScene();
 						SceneManager.instance.addScene(attendView);
 						SceneManager.instance.sceneChange();
+						break;
+					
+					case _eventButton:
+						eventTimeCheck();
 						break;
 				}
 			}

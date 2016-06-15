@@ -10,6 +10,8 @@ package gamescene
 	import loader.ResourceLoader;
 	import loader.TextureManager;
 	
+	import object.specialItem.ExpPotion;
+	
 	import org.hamcrest.Matcher;
 	
 	import scene.SceneManager;
@@ -28,6 +30,8 @@ package gamescene
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
+	
+	import util.EventManager;
 
 	public class TitleScene extends Sprite
 	{
@@ -161,28 +165,12 @@ package gamescene
 			
 			_resourceLoader = null;
 			
-			attendCheck();
-		}
-		
-		/**
-		 * 오늘 출석 보상을 받았는지 체크 하고 오늘 첫 접속이면 출석 플래그를 true 설정
-		 */		
-		private function attendCheck():void
-		{
-			var curDate : Date = new Date();
-			trace(CurUserData.instance.userData.exitTime);
-			var prevDate : Date = new Date(CurUserData.instance.userData.exitTime);
-			prevDate.setHours(24, 0, 0, 0);
-			
-			if(curDate.getTime() > prevDate.getTime() || CurUserData.instance.userData.exitTime == "null")
-			{
+			if(EventManager.attendCheck() == true)
 				_attendFlag = true;
-				CurUserData.instance.userData.attendCnt++;
-				
-				if(CurUserData.instance.userData.attendCnt == MainClass.MAX_ATTENTBOX_COUNT+1) CurUserData.instance.userData.attendCnt = 1;
-				
-				trace(CurUserData.instance.userData.attendCnt);
-			}
+			else
+				_attendFlag = false;
+			
+			EventManager.expPotionCheck();
 		}
 		
 		/**
