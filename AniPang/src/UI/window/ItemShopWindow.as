@@ -2,9 +2,13 @@ package UI.window
 {
 	import com.lpesign.Extension;
 	
+	import UI.Button.SideImageButton;
 	import UI.checkbox.ImageCheckBox;
+	import UI.popup.PopupWindow;
 	
 	import loader.TextureManager;
+	
+	import object.specialItem.ExpPotion;
 	
 	import score.ScoreManager;
 	
@@ -19,7 +23,6 @@ package UI.window
 	import starling.textures.TextureAtlas;
 	
 	import user.CurUserData;
-	import UI.Button.SideImageButton;
 	
 	public class ItemShopWindow extends MainWindow
 	{
@@ -49,6 +52,8 @@ package UI.window
 		private var _buyHeartButton : SideImageButton;
 		private var _butHeartWindow : BuyHeartWindow;
 		
+		private var _buyExpPotion : SideImageButton;
+		private var _popUpWindow : PopupWindow;
 		/**
 		 * 메인 윈도우 클래스를 기반으로 만든 아이템 상점
 		 * 화면에 각각 아이템을 이미지 체크 박스 형태로 출력
@@ -183,6 +188,17 @@ package UI.window
 			_buyHeartButton.addEventListener(TouchEvent.TOUCH, onClicked);
 			addChild(_buyHeartButton);
 			
+			_buyExpPotion = new SideImageButton(_mainPanel.x , _mainPanel.y+ _mainPanel.height*0.82, _mainPanel.width/5, _mainPanel.width/11, 
+				_itemwindowAtals.getTexture("startButton"), null, "경험치 물약");
+			_buyExpPotion.settingTextField(0xffffff,  _buyHeartButton.width/8);
+			_buyExpPotion.addEventListener(TouchEvent.TOUCH, onClicked);
+			addChild(_buyExpPotion);
+			
+			if(ExpPotion.expPotionFlag == true)
+				_buyExpPotion.visible = false;
+			else
+				_buyExpPotion.visible = true;
+			
 			var i : int;
 			for(i = 0; i < 3; i ++)
 			{
@@ -201,6 +217,8 @@ package UI.window
 				_notUpdateImages[i].y = _mainPanel.y*1.01 + _maoCheckBox.height;
 				addChild(_notUpdateImages[i]);
 			}
+			
+			MainClass.current.addEventListener("STOP_EXP_POTION", onStopExpPotion);
 		}
 		
 		private function onClicked(event : TouchEvent):void
@@ -260,8 +278,43 @@ package UI.window
 						break;
 					}
 				
+					case _buyExpPotion:
+					{
+						if(CurUserData.instance.userData.gold - 5000 < 0)
+						{
+							_popUpWindow = new PopupWindow("5000 골드가 필요 합니다.", 1, new Array("x"));
+							addChild(_popUpWindow);
+						}
+						else
+						{
+							_popUpWindow = new PopupWindow("24시간 경험치 물약을 5천 골드에 구매?", 2, new Array("x", "o"), null, onBuyExpPotion);
+							addChild(_popUpWindow);
+						}
+						
+						break;
+					}
 				}
 			}
+		}
+		
+		private function onBuyExpPotion():void
+		{
+			CurUserData.instance.userData.gold -= 5000;
+			
+			_buyExpPotion.visible = false;
+			var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+			
+			ExpPotion.expPotionStart(millisecondsPerDay);
+			CurUserData.instance.userData.startTimeExpPotion = (new Date()).toString();
+			removeChild(_popUpWindow, true);
+		}
+		
+		/**
+		 * 
+		 */		
+		private function onStopExpPotion():void
+		{
+			_buyExpPotion.visible = true;
 		}
 		
 		private function onExit():void
