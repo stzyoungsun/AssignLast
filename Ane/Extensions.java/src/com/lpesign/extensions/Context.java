@@ -9,6 +9,7 @@ import com.lpesign.extensions.Function.AlarmFunction;
 import com.lpesign.extensions.Function.ExitDialogFuncion;
 import com.lpesign.extensions.Function.InputFunction;
 import com.lpesign.extensions.Function.ListDialogFunction;
+import com.lpesign.extensions.Function.NoCheatFunction;
 import com.lpesign.extensions.Function.SpriteSheetFunction;
 import com.lpesign.extensions.Function.ToastFunction;
 
@@ -32,7 +33,7 @@ public class Context extends FREContext{
 		map.put("spritesheet",new SpriteSheetFunction());
 		map.put("push", new AlarmFunction());
 		map.put("input", new InputFunction());
-
+		map.put("nocheat", new NoCheatFunction());
         return map;
     }
 }

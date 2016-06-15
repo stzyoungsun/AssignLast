@@ -83,5 +83,10 @@ package com.lpesign
 		{
 			_context.call("login");
 		}
+		
+		public function noCheat() : void
+		{
+			_context.call("nocheat");
+		}
 	}
 }
