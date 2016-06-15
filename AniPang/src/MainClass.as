@@ -4,6 +4,7 @@ package
 	import com.lpesign.KakaoExtension;
 	
 	import flash.desktop.NativeApplication;
+	import flash.events.StatusEvent;
 	import flash.ui.Keyboard;
 	
 	import UI.popup.PopupWindow;
@@ -22,7 +23,6 @@ package
 	import starling.events.KeyboardEvent;
 	
 	import user.CurUserData;
-	import flash.events.StatusEvent;
 	
 	public class MainClass extends Sprite
 	{
@@ -95,11 +95,11 @@ package
 		{
 			//현재 데이터 서버에 저장
 			KakaoExtension.instance.addEventListener("SAVE_DATA", onSaveData);
-			
+				
 			var exitTime : Date = new Date();
-			
+				
 			CurUserData.instance.userData.exitTime = exitTime.toString();
-			
+				
 			String(CurUserData.instance.userData.gold), String(CurUserData.instance.userData.totalStar), String(CurUserData.instance.userData.heart)
 			
 			var itemDataJson : String = "{" + "\"gold\":" + String(CurUserData.instance.userData.gold) + ",\"star\":" +  String(CurUserData.instance.userData.totalStar) +
@@ -107,7 +107,8 @@ package
 				",\"backGoundSound\":" + "\"" + CurUserData.instance.userData.backGoundSound + "\"" +
 				",\"effectSound\":" + "\"" + CurUserData.instance.userData.effectSound + "\"" + 
 				",\"permitPush\":" + "\"" + CurUserData.instance.userData.permitPush + "\"" + 
-				",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + "}";
+				",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + 
+				",\"startTimeExpPotion\":" + "\"" + CurUserData.instance.userData.startTimeExpPotion + "\"" +  "}";
 			
 			trace(itemDataJson);
 			
@@ -117,7 +118,10 @@ package
 			
 			trace(missonDataJson);
 			
-			KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
+			if(TitleScene.sTitleViewLoadFlag == true)
+				KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);	
+			else
+				notSaveExit();
 		}
 		
 		/**
@@ -126,6 +130,18 @@ package
 		private function onSaveData(event:StatusEvent):void
 		{
 			//데이터 성공적으로 저장 후 게임 종료
+			AniPang.exitFlag = true;
+			dispose();
+			Extension.instance.exitDialog();
+			NativeApplication.nativeApplication.exit();
+		}
+		
+		/**
+		 * 유저데이터 저장 안하고 종료
+		 */		
+		private function notSaveExit():void
+		{
+			//유저데이터 저장 안하고 종료
 			AniPang.exitFlag = true;
 			dispose();
 			Extension.instance.exitDialog();

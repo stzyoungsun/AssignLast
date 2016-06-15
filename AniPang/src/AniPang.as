@@ -11,6 +11,8 @@ package
 	
 	import gamescene.TitleScene;
 	
+	import object.specialItem.ExpPotion;
+	
 	import scene.SceneManager;
 	
 	import sound.SoundManager;
@@ -18,6 +20,8 @@ package
 	import starling.core.Starling;
 	
 	import user.CurUserData;
+	
+	import util.EventManager;
 	
 	[SWF(width="600", height="999", frameRate="60", backgroundColor="#ffffff")]
 	public class AniPang extends Sprite
@@ -36,7 +40,11 @@ package
 		public static var exitFlag : Boolean = false;
 		private static var _heartTimer : Number = HEART_TIME;
 		
-		private var _prevTimer : int = 0;
+		private var _prevHeartTimer : int = 0;
+		
+		public static var prevExpTimer : int = 0;
+		
+		public static var evnetValue : int;
 		public function AniPang()
 		{
 			super();
@@ -58,7 +66,7 @@ package
 			addEventListener(flash.events.Event.DEACTIVATE, deactivateListener);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
-			_prevTimer = getTimer();
+			_prevHeartTimer = getTimer();
 		}
 		
 		/**
@@ -66,13 +74,31 @@ package
 		 */		
 		private function onEnterFrame(event:Event):void
 		{
-			var curTimer : int = getTimer();
+			evnetValue = EventManager.timeEventcheck();
+				
+			if(ExpPotion.expPotionFlag == true)
+			{
+				var curExptTimer : int = getTimer();
+				
+				if(curExptTimer - prevExpTimer > 1000)
+				{
+					ExpPotion.remainSec--;
+					prevExpTimer = getTimer();
+				}
+				
+				if(ExpPotion.remainSec <= 0)
+				{
+					ExpPotion.expPotionStop();
+				}
+			}
+			
+			var curHeartTimer : int = getTimer();
 			if(CurUserData.instance.userData.heart >= MAX_HEART) return;
 				
-			if(curTimer - _prevTimer > 1000)
+			if(curHeartTimer - _prevHeartTimer > 1000)
 			{
 				_heartTimer--;
-				_prevTimer = getTimer();
+				_prevHeartTimer = getTimer();
 				
 				if(_heartTimer == 0)
 				{
@@ -80,7 +106,6 @@ package
 					_heartTimer = HEART_TIME;		
 				}
 			}
-			
 		}
 		
 		private function deactivateListener(event:flash.events.Event):void
@@ -108,18 +133,20 @@ package
 												",\"backGoundSound\":" + "\"" + CurUserData.instance.userData.backGoundSound + "\"" +
 												",\"effectSound\":" + "\"" + CurUserData.instance.userData.effectSound + "\"" + 
 												",\"permitPush\":" + "\"" + CurUserData.instance.userData.permitPush + "\"" + 
-												",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + "}";
+												",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + 
+												",\"startTimeExpPotion\":" + "\"" + CurUserData.instance.userData.startTimeExpPotion + "\"" +  "}";
+					
 					//유저의 일일 미션 데이터 저장
 					var missonDataJson : String = "{" + "\"today_GameCount\":" + String(CurUserData.instance.userData.today_GameCount) + 
 						",\"today_MaxScore\":" +  String(CurUserData.instance.userData.today_MaxScore) +",\"today_UseItemCount\":" + String(CurUserData.instance.userData.today_UseItemCount) + 
 						",\"today_CompleteString\":" + "\"" + CurUserData.instance.userData.today_CompleteString + "\"" + "}";
+					
 					//카톡 서버의 데이터 저장
 					KakaoExtension.instance.saveUserData(itemDataJson, missonDataJson, CurUserData.instance.userData.exitTime);
 					//위에서 계산한 타이머가 0이 아니고 유저가 환경 설정에서 푸시를 허락 했으면 푸시 예약
-					if(pushTimer > 0 && CurUserData.instance.userData.permitPush == true)
+					if(pushTimer > 0 && CurUserData.instance.userData.permitPush == "ON")
 						Extension.instance.push("애니팡", "하트가 가득 찾어요~ 어서와서 하트를 써주세요~", pushTimer, true);
 				}
-					
 				Starling.current.stop(true);
 			}
 		}
@@ -137,6 +164,10 @@ package
 			{
 				SoundManager.getInstance().playLoopedPlaying();
 				CurUserData.instance.initData(false, true);
+				
+				//메모리핵 프로그램이 있는지 검사 합니다
+				//존재 한다면 프로그램을 강제 종료 합니다.
+				Extension.instance.noCheat();
 			}
 			//로컬 푸시알람 중지
 			if(CurUserData.instance.userData.permitPush == true)
@@ -151,7 +182,6 @@ package
 				SceneManager.instance.sceneChange();
 				exitFlag = false;
 			}
-			
 		}
 		
 		/** 

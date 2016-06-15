@@ -107,7 +107,8 @@ package gamescene
 				",\"backGoundSound\":" + "\"" + CurUserData.instance.userData.backGoundSound + "\"" +
 				",\"effectSound\":" + "\"" + CurUserData.instance.userData.effectSound + "\"" + 
 				",\"permitPush\":" + "\"" + CurUserData.instance.userData.permitPush + "\"" + 
-				",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + "}";
+				",\"attendCnt\":" + CurUserData.instance.userData.attendCnt + 
+				",\"startTimeExpPotion\":" + "\"" + CurUserData.instance.userData.startTimeExpPotion + "\"" +  "}";
 			
 			trace(itemDataJson);
 			
