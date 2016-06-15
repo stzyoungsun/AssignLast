@@ -14,7 +14,7 @@ package user
 		public var curMaxScore : int = 0;
 		
 		//일반 적인 유저 데이터
-		public var gold : int = 100000;  //테스트용
+		public var gold : int = 5000;  //테스트용
 		public var heart : int = 1;
 		public var lv : int = 0;
 		public var remainStar : int = 0;
@@ -34,6 +34,9 @@ package user
 		
 		//출석 데이터
 		public var attendCnt : int = 0;
+		
+		//경험치 물약 시작 시간
+		public var startTimeExpPotion : String;
 		
 		//유저 접속 시간
 		public var exitTime : String;

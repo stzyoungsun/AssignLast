@@ -82,6 +82,7 @@ package user
 				_userData.effectSound = "ON";
 				_userData.permitPush = "ON";
 				_userData.attendCnt = 0;
+				_userData.startTimeExpPotion = "null";
 			}
 			
 			else
@@ -96,6 +97,7 @@ package user
 				_userData.effectSound = userItemData.effectSound;
 				_userData.permitPush = userItemData.permitPush;
 				_userData.attendCnt = userItemData.attendCnt;
+				userData.startTimeExpPotion = userItemData.startTimeExpPotion;
 			}
 			//유저 종료 시간
 			_userData.exitTime = extension[6];
