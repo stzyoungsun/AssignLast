@@ -36,15 +36,15 @@ package UI.window
 			_userRankNum.format.size =  AniPang.stageHeight/15;
 			_userRankNum.format.bold = true;
 			
-			_userImage.x = _userRankNum.x + AniPang.stageWidth/8;
+			_userImage.x = _userRankNum.x + AniPang.stageWidth/6.5;
 			_userImage.y = y;
 			_userImage.width = AniPang.stageHeight/9;
 			_userImage.height = AniPang.stageHeight/9;
 			
-			_userDataTextField.x = _userImage.x + _userImage.width*1.4;
+			_userDataTextField.x = _userImage.x + _userImage.width*1.5;
 			_userDataTextField.y = y;
 			_userDataTextField.format.color = 0xffffff;
-			_userDataTextField.format.size =  AniPang.stageHeight/30;
+			_userDataTextField.format.size =  AniPang.stageHeight/40;
 			_userDataTextField.format.bold = true;
 			_userDataTextField.format.horizontalAlign = Align.LEFT;
 			

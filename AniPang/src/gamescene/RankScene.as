@@ -177,9 +177,18 @@ package gamescene
 						
 					case _prevButton:
 					{
-						_nextButton.visible = true;
-						_start -= 5;
-						_end -= 5;
+						if(_nextButton.visible == false)
+						{
+							_nextButton.visible = true;
+							_end = _start;
+							_start -= 5;
+						}
+						
+						else
+						{
+							_start -= 5;
+							_end -= 5;
+						}
 						
 						if(_start <= 0)
 						{
