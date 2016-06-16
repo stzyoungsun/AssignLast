@@ -171,12 +171,14 @@ package gamescene
 			{
 				case GAME_STATE_START:
 				{
+					//게임 시작 시퀀스
 					startingGame();
 					break;
 				}
 					
 				case GAME_STATE_LASTPANG:
-				{
+				{		
+					//라스트 팡 시퀀스
 					lastPang();
 					break;
 				}
@@ -190,7 +192,7 @@ package gamescene
 		{
 			var curLastPangTimer : int = getTimer();
 			var specialPos : Point = settingLastPang();
-			
+			//게임 종료 시점 기준으로 특스불럭이 존재 하지 않으면
 			if(specialPos == null)
 			{
 				if(curLastPangTimer - _prevLastPangTimer > 2000)
@@ -201,6 +203,7 @@ package gamescene
 					addChild(_endClip);
 				}
 			}
+			//특스 불럭이 존재 하면
 			else
 			{
 				if(checkFull() == true)
