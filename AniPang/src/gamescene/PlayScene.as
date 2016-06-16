@@ -1,5 +1,6 @@
 package gamescene
 {
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
 	import Animation.EndClip;
@@ -39,6 +40,9 @@ package gamescene
 
 	public class PlayScene extends Sprite
 	{
+		private static const GAME_STATE_START : int = 0;
+		private static const GAME_STATE_LASTPANG : int = 1;
+		private static const GAME_STATE_END : int = 2;
 		//파이어팡이 등장하는 블록 제거 개수
 		private static const FIRE_DRAW_CONUT : Number = 50;
 		
@@ -61,6 +65,8 @@ package gamescene
 		private var _preHintTimer : Number = 0;
 		//배경 화면 이미지
 		private var _backGround : Image;
+		//라스트 팡 발생시
+		private var _lastpangBackImage : Image;
 		//게임 판 이미지
 		private var _gameWindowImage : Image;
 		//게임 판의 스프라이트
@@ -81,20 +87,31 @@ package gamescene
 		//블록이 살아 졌을 경우 true
 		private var _findFlag : Boolean  = false;
 		
-		private static var _pauseFlag : Boolean = false;
+		//게임 상태 
+		private var _gameState : int;
+		//라스트 팡 터지는 시간 조절 하는 변수
+		private var _prevLastPangTimer : int;
 		
+		private static var _pauseFlag : Boolean = false;
+		private static var _timeOutFlag : Boolean = false;
 		/**
 		 * 실제 게임의 화면인 플레이 씬
 		 */		
 		public function PlayScene()
 		{
 			_pauseFlag = true;
+			_timeOutFlag = false;
 			
 			_gameViewAtlas = TextureManager.getInstance().atlasTextureDictionary["gameView.png"];
 			
 			_backGround = new Image(TextureManager.getInstance().textureDictionary["back.png"]);
 			_backGround.width = AniPang.stageWidth;
 			_backGround.height = AniPang.stageHeight;
+			
+			_lastpangBackImage = new Image(TextureManager.getInstance().textureDictionary["lastPangBack.png"]);
+			_lastpangBackImage.width = AniPang.stageWidth;
+			_lastpangBackImage.height = AniPang.stageHeight;
+			_lastpangBackImage.visible = false;
 			
 			_gameWindow = new Sprite();
 			_gameWindow.x = 0;
@@ -127,6 +144,10 @@ package gamescene
 			
 			SoundManager.getInstance().stopLoopedPlaying();
 			SoundManager.getInstance().play("anipang_ingame.mp3", true);
+			
+			_gameState = GAME_STATE_START;
+			
+			addChild(_lastpangBackImage);
 		}
 		
 		/**
@@ -146,6 +167,101 @@ package gamescene
 			_scoreTextField.text = UtilFunction.makeCurrency(String(ScoreManager.instance.scoreCnt));
 			drawFirePang();
 			
+			switch(_gameState)
+			{
+				case GAME_STATE_START:
+				{
+					startingGame();
+					break;
+				}
+					
+				case GAME_STATE_LASTPANG:
+				{
+					lastPang();
+					break;
+				}
+			}	
+		}
+		
+		/** 
+		 * 게임 진행이 끝나고 라스트 팡 시쿼스
+		 */		
+		private function lastPang():void
+		{
+			var curLastPangTimer : int = getTimer();
+			var specialPos : Point = settingLastPang();
+			
+			if(specialPos == null)
+			{
+				if(curLastPangTimer - _prevLastPangTimer > 2000)
+				{
+					_gameState = GAME_STATE_END;
+					_endClip = new EndClip(AniPang.stageWidth/2 - AniPang.stageWidth/4, AniPang.stageHeight/2 - AniPang.stageWidth/6, AniPang.stageWidth/2, AniPang.stageWidth/2);
+					_endClip.addEventListener("RESULT", onResult);
+					addChild(_endClip);
+				}
+			}
+			else
+			{
+				if(checkFull() == true)
+				{
+					_prevLastPangTimer = getTimer();
+					
+					switch(_cellArray[specialPos.y][specialPos.x].cellType)
+					{
+						case Block.BLOCK_RANDOM:
+						{
+							_cellArray[specialPos.y][specialPos.x].cellType = Block.BLOCK_PANG;
+							_cellArray[specialPos.y][specialPos.x].block.showIdleState();
+							clickedRandomBlock();
+							break;
+						}
+							
+						case Block.BLOCK_FIRE:
+						{
+							_cellArray[specialPos.y][specialPos.x].cellType = Block.BLOCK_PANG;
+							_cellArray[specialPos.y][specialPos.x].block.showIdleState();
+							clickedFireBlock(_cellArray[specialPos.y][specialPos.x]);
+							break;
+						}
+					}
+				}
+				
+				if(curLastPangTimer - _prevLastPangTimer > 100)
+				{
+					if(_lastpangBackImage.visible == false)
+						_lastpangBackImage.visible = true;
+					else
+						_lastpangBackImage.visible = false;
+					
+					_prevLastPangTimer = getTimer();
+				}
+			}
+			
+			//위쪽 라인이 비었을 경우
+			var rowValue : int = checkEmpty();
+			if(rowValue != -1)
+			{
+				//새로운 블록 생성
+				createRandomBlock(rowValue);
+			}
+			
+			//블록에 빈공간이 있을 경우 다운
+			if(checkFull() == false)
+				downMovingBlock();
+					
+				//블록에 빈공간이 없을 경우 제거 할 블록 체크
+			else
+			{
+				pangCheck();
+			}
+		}
+		
+		/**
+		 * 게임의 시퀀스
+		 */		
+		private function startingGame():void
+		{
 			//한 번의 움직으로 팡이 가능여부 판단
 			if(BlockTypeSetting.checkPossiblePang(_cellArray) == true)
 			{
@@ -157,13 +273,13 @@ package gamescene
 					ScoreManager.instance.comboCnt = 0;
 					BlockTypeSetting.hintPang.block.showCryState();
 				}
-				
+					
 				else
 				{
 					BlockTypeSetting.hintPang.block.showIdleState();
 				}	
 			}
-			//한 번의 움직으로 팡이 가능 한 경우가 없으면
+				//한 번의 움직으로 팡이 가능 한 경우가 없으면
 			else
 			{
 				//모든 불록이 가득 찰 경우
@@ -190,9 +306,21 @@ package gamescene
 				//블록에 빈공간이 있을 경우 다운
 				if(checkFull() == false)
 					downMovingBlock();
+				
 				//블록에 빈공간이 없을 경우 제거 할 블록 체크
 				else
+				{
 					pangCheck();
+				}
+			}
+		
+			if(_timeOutFlag == true)
+			{
+				if(checkFull() == true)
+				{
+					_prevLastPangTimer = getTimer();
+					_gameState = GAME_STATE_LASTPANG;
+				}
 			}
 		}
 		
@@ -332,6 +460,8 @@ package gamescene
 		 */		
 		private function onBlockClicked(event : TouchEvent) : void
 		{
+			if(_timeOutFlag == true) return;
+			
 			var touch : Touch = event.getTouch(_gameWindow);
 			
 			if(touch)
@@ -428,11 +558,13 @@ package gamescene
 		private function clickedFireBlock(cell : Cell):void
 		{
 			_preHintTimer = getTimer();
-			var randomValue : int = UtilFunction.random(1,7,1);
 			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
 			{
-				_cellArray[cell.cellY][i].cellType = Block.BLOCK_PANG;
-				_cellArray[i][cell.cellX].cellType = Block.BLOCK_PANG;
+				if(_cellArray[cell.cellY][i].cellType != Block.BLOCK_RANDOM && _cellArray[cell.cellY][i].cellType != Block.BLOCK_FIRE)
+					_cellArray[cell.cellY][i].cellType = Block.BLOCK_PANG;
+				
+				if(_cellArray[i][cell.cellX].cellType != Block.BLOCK_RANDOM && _cellArray[i][cell.cellX].cellType != Block.BLOCK_FIRE)
+					_cellArray[i][cell.cellX].cellType = Block.BLOCK_PANG;
 			}
 		}
 		
@@ -677,11 +809,42 @@ package gamescene
 		 */		
 		private function onTimeout() : void
 		{
-			_pauseFlag = true;
-			_endClip = new EndClip(AniPang.stageWidth/2 - AniPang.stageWidth/4, AniPang.stageHeight/2 - AniPang.stageWidth/6, AniPang.stageWidth/2, AniPang.stageWidth/2);
-			_endClip.addEventListener("RESULT", onResult);
+			_lastpangBackImage.visible = true;
+			_timer.visible = false;
 			
-			addChild(_endClip);
+			_timeOutFlag = true;
+			_pauseFlag = true;
+			_prevLastPangTimer = getTimer();
+			
+			var lastPangTextField : TextField = new TextField(_timer.width, _timer.height);
+			lastPangTextField.x = _timer.x;
+			lastPangTextField.y = _timer.y;
+			lastPangTextField.text = "라스트 팡 발동 중";
+			lastPangTextField.format.color = 0xCD1039;
+			lastPangTextField.format.size = _timer.height/2;
+			lastPangTextField.format.bold = true;
+			
+			SoundManager.getInstance().play("lastpang.mp3", false);
+			
+			addChild(lastPangTextField);
+		}
+		
+		/**
+		 * 현재 게임 화면에서 라스트 팡에서 터트릴 특수 팡을 찾습니다.
+		 */		
+		private function settingLastPang():Point
+		{
+			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
+			{
+				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
+				{
+					if(_cellArray[i][j].cellType == Block.BLOCK_RANDOM || _cellArray[i][j].cellType == Block.BLOCK_FIRE)
+					{
+						return new Point(j, i);
+					}
+				}
+			}
+			return null;
 		}
 		
 		/**

@@ -266,6 +266,11 @@ package util
 					
 					while(tempCellPos > 0)
 					{
+						if(cellArray[curCellVector[i].cellY][tempCellPos].cellType == Block.BLOCK_RANDOM ||cellArray[curCellVector[i].cellY][tempCellPos].cellType == Block.BLOCK_FIRE) 
+						{
+							tempCellPos--;
+							continue;
+						}
 						cellArray[curCellVector[i].cellY][tempCellPos].cellType = Block.BLOCK_PANG;
 						tempCellPos--;
 					}
@@ -274,6 +279,11 @@ package util
 					
 					while(tempCellPos < Cell.MAX_ROW)
 					{
+						if(cellArray[curCellVector[i].cellY][tempCellPos].cellType == Block.BLOCK_RANDOM ||cellArray[curCellVector[i].cellY][tempCellPos].cellType == Block.BLOCK_FIRE)
+						{
+							tempCellPos++;
+							continue;
+						}
 						cellArray[curCellVector[i].cellY][tempCellPos].cellType = Block.BLOCK_PANG;
 						tempCellPos++;
 					}		
@@ -289,6 +299,11 @@ package util
 					
 					while(tempCellPos > 0)
 					{
+						if(cellArray[tempCellPos][curCellVector[i].cellX].cellType == Block.BLOCK_RANDOM ||cellArray[tempCellPos][curCellVector[i].cellX].cellType == Block.BLOCK_FIRE)
+						{
+							tempCellPos--;
+							continue;
+						}
 						cellArray[tempCellPos][curCellVector[i].cellX].cellType = Block.BLOCK_PANG;
 						tempCellPos--;
 					}
@@ -296,6 +311,11 @@ package util
 					tempCellPos = curCellVector[i].cellY;
 					while(tempCellPos < Cell.MAX_COL)
 					{
+						if(cellArray[tempCellPos][curCellVector[i].cellX].cellType == Block.BLOCK_RANDOM ||cellArray[tempCellPos][curCellVector[i].cellX].cellType == Block.BLOCK_FIRE)
+						{
+							tempCellPos++;
+							continue;
+						}
 						cellArray[tempCellPos][curCellVector[i].cellX].cellType = Block.BLOCK_PANG;
 						tempCellPos++;
 					}
