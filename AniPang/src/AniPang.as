@@ -164,7 +164,6 @@ package
 			{
 				SoundManager.getInstance().playLoopedPlaying();
 				CurUserData.instance.initData(false, true);
-				
 				//메모리핵 프로그램이 있는지 검사 합니다
 				//존재 한다면 프로그램을 강제 종료 합니다.
 				Extension.instance.noCheat();

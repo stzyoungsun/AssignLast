@@ -311,8 +311,9 @@
 
 
 
+
 <extensions>
-        <extensionID>com.lpesign.Extension</extensionID>
         <extensionID>com.lpesign.KakaoExtension</extensionID>
+        <extensionID>com.lpesign.Extension</extensionID>
     </extensions>
 </application>
