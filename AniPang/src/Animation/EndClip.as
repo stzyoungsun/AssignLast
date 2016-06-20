@@ -54,7 +54,6 @@ package Animation
 			
 			if(curTimer - _prevTimer > 1000 && curTimer - _prevTimer < 3000 && _textImage.visible == false)
 			{
-				SoundManager.getInstance().stopLoopedPlaying();
 				SoundManager.getInstance().play("timeover.mp3", false);
 				
 				_AniImage.texture = _iconAtals.getTexture("timeoverAni2")

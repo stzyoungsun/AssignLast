@@ -812,6 +812,8 @@ package gamescene
 		 */		
 		private function onTimeout() : void
 		{
+			SoundManager.getInstance().stopLoopedPlaying();
+
 			_lastpangBackImage.visible = true;
 			_timer.visible = false;
 			

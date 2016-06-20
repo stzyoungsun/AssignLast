@@ -4,6 +4,7 @@ package object.Block
 	
 	import sound.SoundManager;
 	
+	import starling.core.Starling;
 	import starling.display.MovieClip;
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -39,7 +40,6 @@ package object.Block
 		private var _faceFlag : Boolean = false;
 		private var _drawFlag : Boolean = false;
 		
-		private var _pangStartFlag : Boolean = false;
 		private var _animationFlag : Boolean = false;
 		private var _cell : Cell; 
 		
@@ -78,7 +78,6 @@ package object.Block
 				AnimationPang();
 			else
 			{
-				_pangStartFlag = false;
 				_animationFlag = false;
 				this.stop();
 			}
@@ -150,25 +149,24 @@ package object.Block
 					
 				case BLOCK_PANG:
 				{
-					if(_pangStartFlag == false)
-					{
-						this.fps = 10;
-						_pangStartFlag = true;
-						ScoreManager.instance.scoreCnt = 10;
-						ScoreManager.instance.pangCount = 1;
-						ScoreManager.instance.destoryBlockCount = 1;
-						
-						this.parent.dispatchEvent(new Event("hintInit"));
-						SoundManager.getInstance().play("pang.mp3", false);
-					}
-					
-					if(this.currentFrame >= 2)
-					{
-						_cell.cellType = BLOCK_REMOVE;
-					}
+					this.fps = 10;
+					addEventListener(starling.events.Event.COMPLETE, onAnimationComplete);
 					break;
 				}
 			}
+		}
+		
+		private function onAnimationComplete():void
+		{
+			removeEventListener(starling.events.Event.COMPLETE, onAnimationComplete);
+			ScoreManager.instance.scoreCnt = 10;
+			ScoreManager.instance.pangCount = 1;
+			ScoreManager.instance.destoryBlockCount = 1;
+			
+			this.parent.dispatchEvent(new Event("hintInit"));
+			SoundManager.getInstance().play("pang.mp3", false);
+			this.stop();
+			_cell.cellType = BLOCK_REMOVE;
 		}
 		
 		/**
@@ -177,6 +175,7 @@ package object.Block
 		 */		
 		private function drawBlock() : void
 		{
+			this.texture = _frames[0];
 			
 			var frameCount : int = _frames.length;
 			
@@ -185,7 +184,7 @@ package object.Block
 				this.addFrame(_frames[this.numFrames]);
 			}
 			
-			while(this.numFrames >   _frames.length)
+			while(this.numFrames > _frames.length)
 			{
 				this.removeFrameAt(frameCount++);
 			}
@@ -194,7 +193,7 @@ package object.Block
 			{
 				this.setFrameTexture(i, _frames[i]);
 			}
-			this.texture = _frames[0];
+			
 			_drawFlag = false;
 			this.play();
 		}

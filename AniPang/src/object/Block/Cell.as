@@ -133,7 +133,6 @@ package object.Block
 					_block.visible = false;
 					break
 				}
-					
 			}
 		}
 		
