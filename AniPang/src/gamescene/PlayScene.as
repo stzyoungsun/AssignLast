@@ -397,6 +397,23 @@ package gamescene
 		}
 		
 		/**
+		 * 모든 블록들이 가득 차있는 경우 판단
+		 * return 가득 차 있을 경우 true
+		 */		
+		private function checkRemove():Boolean
+		{
+			for(var i : int = 1; i < Cell.MAX_COL-1; i++)
+			{
+				for(var j : int = 1; j < Cell.MAX_ROW-1; j++)
+				{
+					if(_cellArray[i][j].cellType == Block.BLOCK_REMOVE)
+						return false;
+				}
+			}
+			return true;
+		}
+		
+		/**
  		 * 위쪽 라인이 비었을 경우 체크
 		 * @return 위쪽 라인이 비었을 경우 true
 		 */		
@@ -464,7 +481,8 @@ package gamescene
 		private function onBlockClicked(event : TouchEvent) : void
 		{
 			if(_timeOutFlag == true) return;
-			
+			if(checkRemove() == true) return;
+				
 			var touch : Touch = event.getTouch(_gameWindow);
 			
 			if(touch)
